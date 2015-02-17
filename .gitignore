@@ -1,2 +1,8 @@
 .DS_Store
 node_modules
+
+# VirtualEnv (Python)
+bin/
+include/
+lib/
+
