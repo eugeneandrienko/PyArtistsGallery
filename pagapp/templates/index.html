@@ -2,23 +2,26 @@
 
 {% block navbar %}
 <div class="navbar navbar-default navbar-fixed-top navbar-inverse">
-    <div class="container">
+    <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-fixed-top .navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <p class="navbar-brand">{{ title }}</p>
+            <a class="navbar-brand" href="#">{{ title }}</a>
         </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="https://github.com/blueimp/Bootstrap-Image-Gallery/tags">Download</a></li>
-                <li><a href="https://github.com/blueimp/Bootstrap-Image-Gallery">Source Code</a></li>
-                <li><a href="https://github.com/blueimp/Bootstrap-Image-Gallery/blob/master/README.md">Documentation</a></li>
-                <li><a href="https://blueimp.net">&copy; Sebastian Tschan</a></li>
-            </ul>
-        </div>
+
+        {% if user_logged_in %}
+        <button type="button" class="btn btn-primary navbar-btn navbar-right">Upload art</button>
+        {% else %}
+        <form class="navbar-form navbar-right">
+            <div class="form-group">  <!-- TODO: fix inputs' width -->
+                <label class="sr-only" for="pagLogin">Login name</label>
+                <input type="text" class="form-control" id="pagLogin" placeholder="Login name">
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="pagPassword">Password</label>
+                <input type="password" class="form-control" id="pagPassword" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-default">Sign in</button>
+        </form>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
