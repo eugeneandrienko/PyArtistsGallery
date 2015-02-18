@@ -6,4 +6,5 @@ from pagapp import app
 @app.route('/index')
 def index():
     return render_template("index.html",
-                           title="Test title")
+                           title="Test title",
+                           user_logged_in=False)
