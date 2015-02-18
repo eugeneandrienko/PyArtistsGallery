@@ -2,16 +2,30 @@
 
 {% block navbar %}
 <div class="navbar navbar-default navbar-fixed-top navbar-inverse">
-    <div class="container-fluid">
+    <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">{{ title }}</a>
         </div>
 
         {% if user_logged_in %}
-        <button type="button" class="btn btn-primary navbar-btn navbar-right">Upload art</button>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href='#' class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                    Actions
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu"> <!-- TODO: change color of dropdown menu -->
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">New album</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Change password</a></li>
+                    <li role="presentation" class="divider"></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Logout</a></li>
+                </ul>
+            </li>
+            <li><button type="button" class="btn btn-primary navbar-btn">Upload art</button></li>
+        </ul>
         {% else %}
         <form class="navbar-form navbar-right">
-            <div class="form-group">  <!-- TODO: fix inputs' width -->
+            <div class="form-group">
                 <label class="sr-only" for="pagLogin">Login name</label>
                 <input type="text" class="form-control" id="pagLogin" placeholder="Login name">
             </div>
