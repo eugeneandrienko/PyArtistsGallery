@@ -14,6 +14,6 @@ def index():
             user_logged_in = True
 
     return render_template("index.html",
-                           title="Test title",
+                           title=app.config['GALLERY_TITLE'],
                            form=form,
                            user_logged_in=user_logged_in)

@@ -1,6 +1,8 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+GALLERY_TITLE = 'TEST TITLE'
+
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'eWax6eighodie7aiFeed'
 
