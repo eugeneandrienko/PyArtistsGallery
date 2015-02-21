@@ -1,3 +1,4 @@
+import hashlib
 from pagapp import db
 
 
@@ -15,3 +16,11 @@ class Users(db.Model):
     def __repr__(self):
         return 'Nickname: {}, pwd: {}, salt: {}'.format(
             self.nickname, self.password, self.salt)
+
+    def check_password(self, pwd):
+        hashed_pwd = hashlib.sha512(
+            pwd.encode('utf-8') + self.salt.encode('utf-8')).hexdigest()
+        if hashed_pwd == self.password:
+            return True
+        else:
+            return False

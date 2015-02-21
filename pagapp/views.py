@@ -1,7 +1,6 @@
 from flask import render_template
-from pagapp import app, models
-from .login_form import LoginForm
-import hashlib
+from pagapp import app
+from pagapp.login_form import LoginForm
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -10,15 +9,8 @@ def index():
     user_logged_in = False
     form = LoginForm()
 
-    users = models.Users.query.all()
     if form.validate_on_submit():
-        for user in users:
-            hashed_pwd = hashlib.sha512(
-                form.password.data.encode('utf-8') +
-                user.salt.encode('utf-8')).hexdigest()
-            if hashed_pwd == user.password:
-                user_logged_in = True
-                break
+        user_logged_in = True
 
     return render_template("index.html",
                            title=app.config['GALLERY_TITLE'],
