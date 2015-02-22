@@ -8,6 +8,10 @@ class LoginForm(Form):
     login = StringField('login', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
 
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+        self.user = None
+
     def validate(self):
         rv = Form.validate(self)
         if not rv:
@@ -22,3 +26,6 @@ class LoginForm(Form):
 
         self.user = user
         return True
+
+    def get_logged_in_user(self):
+        return self.user

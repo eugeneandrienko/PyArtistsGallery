@@ -1,0 +1,26 @@
+{% extends "bootstrap_base_t.html" %}
+
+{% block navbar %}
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/index">{{ title }} : Login</a>
+        </div>
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block mainpage %}
+<form class="form" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        <label class="sr-only" for="pagLogin">Login name</label>
+        {{ form.login(**{'type': 'text', 'class': 'form-control', 'id': 'pagLogin', 'placeholder': 'Login'}) }}
+    </div>
+    <div class="form-group">
+        <label class="sr-only" for="pagPassword">Password</label>
+        {{ form.password(**{'class': 'form-control', 'id': 'pagPassword', 'placeholder': 'Password'}) }}
+    </div>
+    <button type="submit" class="btn btn-success">Sign in</button>
+</form>
+{% endblock mainpage %}

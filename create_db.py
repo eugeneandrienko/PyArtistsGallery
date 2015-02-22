@@ -12,6 +12,7 @@ salt = uuid.uuid4().hex
 hashed_pwd = hashlib.sha512(PASSWORD.encode('utf-8') + salt.encode('utf-8')).hexdigest()
 admin_user = models.Users(USER,
                           hashed_pwd,
-                          salt)
+                          salt,
+                          True)
 db.session.add(admin_user)
 db.session.commit()

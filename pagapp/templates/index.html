@@ -1,4 +1,4 @@
-{% extends "bootstrap_base_t.html" %}
+{% extends "blueimp_base_t.html" %}
 
 {% block navbar %}
 <div class="navbar navbar-default navbar-fixed-top navbar-inverse">
@@ -7,7 +7,7 @@
             <a class="navbar-brand" href="#">{{ title }}</a>
         </div>
 
-        {% if user_logged_in %}
+        {% if current_user.is_authenticated() %}
         {% include 'navcontent_user_lgdin.html' %}
         {% else %}
         {% include 'navcontent_user_notin.html' %}
@@ -16,7 +16,7 @@
 </div>
 {% endblock navbar %}
 
-{% block mainpage %}
+{% block gallery_mainpage %}
 <div class="container">
     <h1>Bootstrap Image Gallery Demo</h1>
     <blockquote>
@@ -51,4 +51,4 @@
     <div id="links"></div>
     <br>
 </div>
-{% endblock mainpage %}
+{% endblock gallery_mainpage %}
