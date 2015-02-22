@@ -1,0 +1,9 @@
+/* fix for navbar-fixed-top, which overlay my other content
+ * http://stackoverflow.com/questions/10336194/twitter-bootstrap-top-nav-bar-blocking-top-content-of-the-page
+ * http://getbootstrap.com/components/#navbar-fixed-top
+ */
+@media (max-width: 768px) {
+    body {
+        padding-top: 110px;
+    }
+}
