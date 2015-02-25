@@ -1,0 +1,33 @@
+{% extends "bootstrap_base_t.html" %}
+
+{% block navbar %}
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/index">{{ title }}/Change password</a>
+        </div>
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block mainpage %}
+<form class="form" method="POST">
+{{ form.hidden_tag() }}
+
+<div class="row">
+    <div class="container col-sm-8 col-xs-12 col-sm-offset-2">
+        <div class="jumbotron">
+            <div class="form-group">
+                <label class="sr-only" for="pagLogin">Login name</label>
+                {{ form.login(**{'type': 'text', 'class': 'form-control', 'id': 'pagLogin', 'placeholder': 'Login'}) }}
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="pagPassword">Password</label>
+                {{ form.password(**{'class': 'form-control', 'id': 'pagPassword', 'placeholder': 'Password'}) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+</form>
+{% endblock mainpage %}
