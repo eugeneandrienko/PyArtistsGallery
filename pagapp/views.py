@@ -2,7 +2,8 @@ from flask import render_template, redirect, url_for, flash
 from pagapp import app
 from pagapp import lm
 from pagapp.login_form import LoginForm
-from flask.ext.login import login_user, logout_user
+from pagapp.passwd_form import PasswdForm
+from flask.ext.login import login_user, logout_user, login_required
 from pagapp.models import Users
 
 
@@ -13,6 +14,16 @@ def load_user(id):
     except:
         result = None
     return result
+
+
+@app.route('/passwd', methods=['GET', 'POST'])
+@login_required
+def passwd():
+    form = PasswdForm()
+
+    return render_template("passwd.html",
+                           title=app.config['GALLERY_TITLE'],
+                           form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
