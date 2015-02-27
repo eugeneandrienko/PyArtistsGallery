@@ -24,11 +24,13 @@ def passwd():
     if form.validate_on_submit():
         current_user.set_new_password(form.get_new_password())
         flash('Password successfully changed')
-    elif form.old_password is not None or form.new_password is not None or form.new_password2 is not None:
+    elif form.old_password.data is not None \
+        or form.new_password.data is not None \
+        or form.new_password2.data is not None:
         # if some text entered in form, but we are here and not in
         # /index page -- login seems failed and we should show warning
         # message to user
-        flash('Cannot change password -- something goes wrong!')
+        flash('Cannot change password - something goes wrong!')
 
     return render_template("passwd.html",
                            title=app.config['GALLERY_TITLE'],
