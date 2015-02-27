@@ -15,4 +15,10 @@ admin_user = models.Users(USER,
                           salt,
                           True)
 db.session.add(admin_user)
+
+test_album = models.Albums('test_album',
+                           'Test Album',
+                           'This is a test album just for test')
+db.session.add(test_album)
+
 db.session.commit()

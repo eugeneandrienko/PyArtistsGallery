@@ -4,7 +4,7 @@ from pagapp import lm
 from pagapp.login_form import LoginForm
 from pagapp.passwd_form import PasswdForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from pagapp.models import Users
+from pagapp.models import Users, Albums
 
 
 @lm.user_loader
@@ -65,4 +65,4 @@ def logout():
 def index():
     return render_template("index.html",
                            title=app.config['GALLERY_TITLE'],
-                           albums=['test1', 'test2', 'test3'])
+                           albums=Albums().get_albums_list())

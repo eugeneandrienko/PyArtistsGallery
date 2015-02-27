@@ -47,3 +47,33 @@ class Users(db.Model):
         self.password = hashed_pwd
         self.salt = salt
         db.session.commit()
+
+
+class Albums(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    url_part = db.Column(db.String(), index=True, unique=True, nullable=False)
+    album_name = db.Column(db.String(), index=True, unique=False, nullable=False)
+    album_description = db.Column(db.String(), index=True, unique=False, nullable=True)
+
+    def __init__(self, url_part, album_name, album_description):
+        self.url_part = url_part
+        self.album_name = album_name
+        self.album_description = album_description
+
+    def __repr__(self):
+        return 'URL part: {}, Album: {}, Description: {}'.format(
+            self.url_part,
+            self.album_name,
+            self.album_description)
+
+    def get_albums_list(self):
+        result = {}
+        for album in self.query.all():
+            result.update(
+                {
+                    'url_part': album.get_urlpart(),
+                    'album_name': album.get_name(),
+                    'album_description': self.get_description()
+                 }
+            )
+        return result

@@ -16,8 +16,8 @@
                 <ul class="dropdown-menu" role="menu">
                     {% for album in albums %}
                     <li role="presentation" class="dropdown">
-                    <a role="menuitem" tabindex="-1" href="#">
-                        {{ album }}
+                    <a role="menuitem" tabindex="-1" href="{{ album.url_part }}">
+                        {{ album.album_name }}
                     </a>
                     </li>
                     {% endfor %}
