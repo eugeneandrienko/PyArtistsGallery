@@ -1,4 +1,5 @@
 import hashlib
+import uuid
 from pagapp import db
 
 
@@ -38,3 +39,11 @@ class Users(db.Model):
             return True
         else:
             return False
+
+    def set_new_password(self, pwd):
+        salt = uuid.uuid4().hex
+        hashed_pwd = hashlib.sha512(
+            pwd.encode('utf-8') + salt.encode('utf-8')).hexdigest()
+        self.password = hashed_pwd
+        self.salt = salt
+        db.session.commit()
