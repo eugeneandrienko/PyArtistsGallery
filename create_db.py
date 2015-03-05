@@ -20,5 +20,9 @@ test_album = models.Albums('test_album',
                            'Test Album',
                            'This is a test album just for test')
 db.session.add(test_album)
+test_album = models.Albums('test_album2',
+                           'Test Album 2',
+                           'This is a test album #2 just for test #2')
+db.session.add(test_album)
 
 db.session.commit()

@@ -65,4 +65,4 @@ def logout():
 def index():
     return render_template("index.html",
                            title=app.config['GALLERY_TITLE'],
-                           albums=Albums().get_albums_list())
+                           albums=Albums.get_albums_list())
