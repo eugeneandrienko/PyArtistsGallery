@@ -60,6 +60,19 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/album/<albumurl>')
+def album(albumurl):
+    album_id = Albums.query.filter_by(
+        url_part=albumurl).first()
+
+
+@app.route('/manage_albums')
+@login_required
+def manage_albums():
+    return render_template('manage_albums.html',
+                           title=app.config['GALLERY_TITLE'])
+
+
 @app.route('/')
 @app.route('/index')
 def index():
