@@ -4,7 +4,7 @@ from pagapp import lm
 from pagapp.login_form import LoginForm
 from pagapp.passwd_form import PasswdForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from pagapp.models import Users, Albums
+from pagapp.models import Users, Albums, Pictures
 
 
 @lm.user_loader
@@ -67,14 +67,17 @@ def album(albumurl):
     return render_template('album.html',
                            title=app.config['GALLERY_TITLE'],
                            album_name=album.album_name,
-                           albums=Albums.get_albums_list())
+                           album_description=album.album_description,
+                           albums=Albums.get_albums_list(),
+                           pics=Pictures.query.filter_by(album_id=album.id))
 
 
 @app.route('/manage_albums')
 @login_required
 def manage_albums():
     return render_template('manage_albums.html',
-                           title=app.config['GALLERY_TITLE'])
+                           title=app.config['GALLERY_TITLE'],
+                           albums=Albums.get_albums_list())
 
 
 @app.route('/')
