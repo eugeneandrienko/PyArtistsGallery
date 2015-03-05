@@ -3,6 +3,7 @@
 from pagapp import db, models
 import hashlib
 import uuid
+import datetime
 
 USER = 'root'
 PASSWORD = 'toor'
@@ -24,5 +25,8 @@ test_album = models.Albums('test_album2',
                            'Test Album 2',
                            'This is a test album #2 just for test #2')
 db.session.add(test_album)
+
+test_pic = models.Pictures(1, 1, datetime.datetime.now(), '/test.img', '/test_thumb.img', 'Test Name')
+db.session.add(test_pic)
 
 db.session.commit()
