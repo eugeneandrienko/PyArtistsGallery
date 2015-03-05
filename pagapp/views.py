@@ -62,8 +62,12 @@ def logout():
 
 @app.route('/album/<albumurl>')
 def album(albumurl):
-    album_id = Albums.query.filter_by(
+    album = Albums.query.filter_by(
         url_part=albumurl).first()
+    return render_template('album.html',
+                           title=app.config['GALLERY_TITLE'],
+                           album_name=album.album_name,
+                           albums=Albums.get_albums_list())
 
 
 @app.route('/manage_albums')
