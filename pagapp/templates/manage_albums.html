@@ -11,4 +11,45 @@
 {% endblock navbar %}
 
 {% block mainpage %}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <table style="width:100%">
+            {% for message in messages %}
+                <tr><td>
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button data-dismiss="alert" type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ message }}
+                </div>
+                </td></tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endwith %}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <form class="form" method="POST">
+            {{ newalb_form.hidden_tag() }}
+            <div class="row">
+                <div class="container col-xs-4">
+                    <div class="form-group">
+                        <label class="sr-only" for="pagNewAlbum">New album name</label>
+                        {{ newalb_form.new_album(**{'type': 'text', 'class': 'form-control', 'id': 'pagNewAlbum',
+                        'placeholder': 'New album name'}) }}
+                    </div>
+                </div>
+                <div class="container col-xs-2">
+                    <button type="submit" class="btn btn-default">Create new album</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+    </div>
+</div>
 {% endblock mainpage %}

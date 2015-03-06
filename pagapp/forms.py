@@ -62,7 +62,7 @@ class PasswdForm(Form):
         return self.new_password.data
 
 
-class ManageAlbumsForm(Form):
+class NewAlbumForm(Form):
     new_album = StringField('login', validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
