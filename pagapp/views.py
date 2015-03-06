@@ -1,8 +1,7 @@
 from flask import render_template, redirect, url_for, flash
 from pagapp import app
 from pagapp import lm
-from pagapp.login_form import LoginForm
-from pagapp.passwd_form import PasswdForm
+from pagapp.forms import LoginForm, PasswdForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from pagapp.models import Users, Albums, Pictures
 
