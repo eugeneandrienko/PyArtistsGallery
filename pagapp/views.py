@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash
 from pagapp import app
 from pagapp import lm
-from pagapp.forms import LoginForm, PasswdForm, NewAlbumForm
+from pagapp.forms import LoginForm, PasswdForm, NewAlbumForm, EditAlbumForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from pagapp.models import Users, Albums, Pictures
 
@@ -75,11 +75,14 @@ def album(albumurl):
 @login_required
 def manage_albums():
     newalb_form = NewAlbumForm()
+    editalb_form = EditAlbumForm()
+    editalb_form.album_select.choices = [('1', '1'), ('2', '2')]
     if newalb_form.validate_on_submit():
         pass
     return render_template('manage_albums.html',
                            title=app.config['GALLERY_TITLE'],
                            newalb_form=newalb_form,
+                           editalb_form=editalb_form,
                            albums=Albums.get_albums_list())
 
 
