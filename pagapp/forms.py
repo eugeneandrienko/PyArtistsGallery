@@ -84,6 +84,7 @@ class NewAlbumForm(Form):
 
 class EditAlbumForm(Form):
     album_select = SelectField('album_select', [])
+    album_new_name = StringField('album_new_name')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
