@@ -66,24 +66,31 @@
                     </div>
                 </div>
                 <div class="container col-xs-12 col-sm-3">
-                    <button type="submit" class="btn btn-danger">Delete album</button>
+                    <button type="submit" class="btn btn-danger" name="btn" value="Delete">Delete album</button>
                 </div>
             </div>
             <div class="row">
                 <div class="container col-xs-12 col-sm-9">
                     <div class="form-group">
-                        <label class="sr-only" for="pagEditName">Enter name for current album here</label>
-                        {{ editalb_form.album_new_name(**{'class': 'form-control', 'id': 'pagEditName'}) }}
+                        <label class="sr-only" for="pagEditName">Enter name for selected album here</label>
+                        {{ editalb_form.album_new_name(**{'class': 'form-control', 'id': 'pagEditName',
+                        'placeholder': 'Enter new name for selected album here'}) }}
                     </div>
                 </div>
                 <div class="container col-xs-12 col-sm-3">
-                    <button type="submit" class="btn btn-default">Edit album's name</button>
+                    <button type="submit" class="btn btn-default" name="btn" value="Edit">Save new name</button>
                 </div>
             </div>
             <div class="row">
                 <div class="container col-xs-12 col-sm-9">
+                    <div class="form-group">
+                        <label class="sr-only" for="pagDescr">Enter description for current album here</label>
+                        {{ editalb_form.album_description(**{'class': 'form-control', 'id': 'pagDescr',
+                        'placeholder': 'Enter description for current album here'}) }}
+                    </div>
                 </div>
                 <div class="container col-xs-12 col-sm-3">
+                    <button type="submit" class="btn btn-default" name="btn" value="Save">Save</button>
                 </div>
             </div>
         </form>

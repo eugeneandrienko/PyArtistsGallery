@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, flash
+from flask import request
 from pagapp import app
 from pagapp import lm
 from pagapp.forms import LoginForm, PasswdForm, NewAlbumForm, EditAlbumForm
@@ -79,6 +80,11 @@ def manage_albums():
     editalb_form.album_select.choices = [('1', '1'), ('2', '2')]
     if newalb_form.validate_on_submit():
         pass
+    if editalb_form.validate_on_submit():
+        if request.form['btn'] == 'Delete':
+            print("Test passed")
+        elif request.form['btn'] == 'Edit':
+            print("Test passed #2")
     return render_template('manage_albums.html',
                            title=app.config['GALLERY_TITLE'],
                            newalb_form=newalb_form,

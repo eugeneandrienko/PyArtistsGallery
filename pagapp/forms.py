@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form
 from flask.ext.login import current_user
-from wtforms import StringField, PasswordField, SelectField
+from wtforms import StringField, PasswordField, SelectField, TextAreaField
 from wtforms.validators import DataRequired
 from pagapp.models import Users
 from pagapp.models import Albums
@@ -85,6 +85,7 @@ class NewAlbumForm(Form):
 class EditAlbumForm(Form):
     album_select = SelectField('album_select', [])
     album_new_name = StringField('album_new_name')
+    album_description = TextAreaField('album_description')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
