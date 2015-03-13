@@ -11,5 +11,10 @@
             <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout">Logout</a></li>
         </ul>
     </li>
-    <li><button type="button" class="btn btn-primary navbar-btn">Upload art</button></li>
+    <li>
+        <form class="form" method="POST">
+            {{ fake_form.hidden_tag() }}
+            <button type="submit" class="btn btn-primary navbar-btn">Upload art</button>
+        </form>
+    </li>
 </ul>

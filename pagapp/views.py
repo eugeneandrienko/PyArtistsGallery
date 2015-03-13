@@ -3,6 +3,7 @@ from flask import request
 from pagapp import app
 from pagapp import lm
 from pagapp.forms import LoginForm, PasswdForm, NewAlbumForm, EditAlbumForm
+from pagapp.forms import GotoUploadFakeForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from pagapp.models import Users, Albums, Pictures
 
@@ -60,16 +61,20 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/album/<albumurl>')
+@app.route('/album/<albumurl>', methods=['GET', 'POST'])
 def album(albumurl):
+    fake_form = GotoUploadFakeForm()
     album = Albums.query.filter_by(
         url_part=albumurl).first()
+    if fake_form.validate_on_submit():
+        return redirect(url_for('upload'))
     return render_template('album.html',
                            title=app.config['GALLERY_TITLE'],
                            album_name=album.album_name,
                            album_description=album.album_description,
                            albums=Albums.get_albums_list(),
-                           pics=Pictures.query.filter_by(album_id=album.id))
+                           pics=Pictures.query.filter_by(album_id=album.id),
+                           fake_form=fake_form)
 
 
 @app.route('/manage_albums', methods=['GET', 'POST'])
@@ -92,9 +97,20 @@ def manage_albums():
                            albums=Albums.get_albums_list())
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/upload')
+@login_required
+def upload():
+    return render_template('upload.html',
+                           title=app.config['GALLERY_TITLE'])
+
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
+    fake_form = GotoUploadFakeForm()
+    if fake_form.validate_on_submit():
+        return redirect(url_for('upload'))
     return render_template("index.html",
                            title=app.config['GALLERY_TITLE'],
-                           albums=Albums.get_albums_list())
+                           albums=Albums.get_albums_list(),
+                           fake_form=fake_form)
