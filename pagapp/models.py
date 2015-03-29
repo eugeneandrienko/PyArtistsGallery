@@ -1,5 +1,6 @@
 import hashlib
 import uuid
+
 from pagapp import db
 
 
@@ -20,13 +21,15 @@ class Users(db.Model):
         return 'Nickname: {}, pwd: {}, salt: {}'.format(
             self.nickname, self.password, self.salt)
 
-    def is_authenticated(self):
+    @staticmethod
+    def is_authenticated():
         return True
 
     def is_active(self):
         return self.active
 
-    def is_anonymous(self):
+    @staticmethod
+    def is_anonymous():
         return False
 
     def get_id(self):
@@ -52,8 +55,10 @@ class Users(db.Model):
 class Albums(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url_part = db.Column(db.String(), index=True, unique=True, nullable=False)
-    album_name = db.Column(db.String(), index=True, unique=False, nullable=False)
-    album_description = db.Column(db.String(), index=True, unique=False, nullable=True)
+    album_name = db.Column(db.String(), index=True, unique=False,
+                           nullable=False)
+    album_description = db.Column(db.String(), index=True, unique=False,
+                                  nullable=True)
 
     def get_url_part(self):
         return self.url_part
@@ -98,7 +103,8 @@ class Pictures(db.Model):
     upload_date = db.Column(db.DateTime(), index=True, nullable=False)
     uploader_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    def __init__(self, album_id, uploader_id, upload_date, path_to_image, path_to_thumb, name=''):
+    def __init__(self, album_id, uploader_id, upload_date, path_to_image,
+                 path_to_thumb, name=''):
         self.album_id = album_id
         self.path_to_image = path_to_image
         self.path_to_thumb = path_to_thumb
@@ -107,9 +113,10 @@ class Pictures(db.Model):
         self.uploader_id = uploader_id
 
     def __repr__(self):
-        return 'Album ID: {}, Uploader ID: {}, Date: {}, Path: {}|{}, Name: {}'.format(
-            str(self.album_id), str(self.uploader_id),
-            str(self.upload_date),
-            self.path_to_image,
-            self.path_to_thumb,
-            self.name)
+        return 'Album ID: {}, Uploader ID: {}, Date: {}, Path: {}|{}, ' \
+               'Name: {}'.format(str(self.album_id),
+                                 str(self.uploader_id),
+                                 str(self.upload_date),
+                                 self.path_to_image,
+                                 self.path_to_thumb,
+                                 self.name)

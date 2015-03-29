@@ -1,26 +1,65 @@
 from flask import render_template, redirect, url_for, flash
 from flask import request
+from flask_login import login_user, logout_user, login_required, current_user
+from sqlalchemy.orm.exc import ObjectDeletedError
+
 from pagapp import app
 from pagapp import lm
-from pagapp.forms import LoginForm, PasswdForm, NewAlbumForm, EditAlbumForm
+from pagapp.forms import LoginForm, ChPasswdForm, AddAlbumForm, EditAlbumForm
 from pagapp.forms import GotoUploadFakeForm
-from flask.ext.login import login_user, logout_user, login_required, current_user
 from pagapp.models import Users, Albums, Pictures
 
 
+
+# List of views:
+# User related:
+#      /login
+#      /chpasswd
+#      /logout
+#  Album-related:
+#      /album/<albumurl>
+#      /manage_albums
+#  Picture-related:
+#      /upload
+#      /manage_pics  # TODO: incomplete!
+#  Common:
+#      /index
+#      /
+
+
+#
+# User related views:
+#  and one service function for Flask-Login
+#
+
 @lm.user_loader
-def load_user(id):
+def load_user(uid):
     try:
-        result = Users.query.get(int(id))
-    except:
+        result = Users.query.get(int(uid))
+    except ObjectDeletedError:
         result = None
     return result
 
 
-@app.route('/passwd', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        login_user(form.get_logged_in_user())
+        return redirect(url_for('index'))
+    elif form.login.data is not None or form.password.data is not None:
+        flash('Login failed! Please double check your login name and password.')
+
+    return render_template("login.html",
+                           title=app.config['GALLERY_TITLE'],
+                           form=form)
+
+
+@app.route('/chpasswd', methods=['GET', 'POST'])
 @login_required
 def passwd():
-    form = PasswdForm()
+    form = ChPasswdForm()
 
     if form.validate_on_submit():
         current_user.set_new_password(form.get_new_password())
@@ -39,21 +78,6 @@ def passwd():
                            form=form)
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-
-    if form.validate_on_submit():
-        login_user(form.get_logged_in_user())
-        return redirect(url_for('index'))
-    elif form.login.data is not None or form.password.data is not None:
-        flash('Login failed! Please double check your login name and password.')
-
-    return render_template("login.html",
-                           title=app.config['GALLERY_TITLE'],
-                           form=form)
-
-
 @app.route('/logout')
 @login_required
 def logout():
@@ -61,17 +85,21 @@ def logout():
     return redirect(url_for('index'))
 
 
+#
+# Album-related views:
+#
+
 @app.route('/album/<albumurl>', methods=['GET', 'POST'])
 def album(albumurl):
     fake_form = GotoUploadFakeForm()
-    album = Albums.query.filter_by(
+    matched_album = Albums.query.filter_by(
         url_part=albumurl).first()
     if fake_form.validate_on_submit():
         return redirect(url_for('upload'))
     return render_template('album.html',
                            title=app.config['GALLERY_TITLE'],
-                           album_name=album.album_name,
-                           album_description=album.album_description,
+                           album_name=matched_album.album_name,
+                           album_description=matched_album.album_description,
                            albums=Albums.get_albums_list(),
                            pics=Pictures.query.filter_by(album_id=album.id),
                            fake_form=fake_form)
@@ -80,7 +108,7 @@ def album(albumurl):
 @app.route('/manage_albums', methods=['GET', 'POST'])
 @login_required
 def manage_albums():
-    newalb_form = NewAlbumForm()
+    newalb_form = AddAlbumForm()
     editalb_form = EditAlbumForm()
     editalb_form.album_select.choices = [('1', '1'), ('2', '2')]
     if newalb_form.validate_on_submit():
@@ -97,12 +125,20 @@ def manage_albums():
                            albums=Albums.get_albums_list())
 
 
+#
+# Picture-related views:
+#
+
 @app.route('/upload')
 @login_required
 def upload():
     return render_template('upload.html',
                            title=app.config['GALLERY_TITLE'])
 
+
+#
+# Common views and main view:
+#
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
