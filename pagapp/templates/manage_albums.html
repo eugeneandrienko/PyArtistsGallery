@@ -11,22 +11,7 @@
 {% endblock navbar %}
 
 {% block mainpage %}
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <table style="width:100%">
-            {% for message in messages %}
-                <tr><td>
-                <div class="alert alert-warning alert-dismissible" role="alert">
-                    <button data-dismiss="alert" type="button" class="close" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {{ message }}
-                </div>
-                </td></tr>
-            {% endfor %}
-        </table>
-    {% endif %}
-{% endwith %}
+{% include 'flashed_messages.html' %}
 
 <div class="panel panel-default">
     <div class="panel-heading">

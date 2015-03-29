@@ -7,7 +7,6 @@ from pagapp.models import Users
 from pagapp.models import Albums
 
 
-
 # Contents of this module:
 #
 # User-related forms:

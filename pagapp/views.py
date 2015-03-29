@@ -10,7 +10,6 @@ from pagapp.forms import GotoUploadFakeForm
 from pagapp.models import Users, Albums, Pictures
 
 
-
 # List of views:
 # User related:
 #      /login
