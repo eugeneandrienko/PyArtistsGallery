@@ -5,7 +5,8 @@ from sqlalchemy.orm.exc import ObjectDeletedError
 
 from pagapp import app
 from pagapp import lm
-from pagapp.forms import LoginForm, ChPasswdForm, AddAlbumForm, EditAlbumForm
+from pagapp.forms import LoginForm, ChPasswdForm
+from pagapp.forms import AddAlbumForm, EditAlbumForm, DeleteAlbumForm
 from pagapp.forms import GotoUploadFakeForm
 from pagapp.models import Users, Albums, Pictures
 
@@ -100,7 +101,8 @@ def album(albumurl):
                            album_name=matched_album.album_name,
                            album_description=matched_album.album_description,
                            albums=Albums.get_albums_list(),
-                           pics=Pictures.query.filter_by(album_id=album.id),
+                           pics=Pictures.query.filter_by(album_id=
+                                                         matched_album.id),
                            fake_form=fake_form)
 
 
@@ -109,7 +111,9 @@ def album(albumurl):
 def manage_albums():
     newalb_form = AddAlbumForm()
     editalb_form = EditAlbumForm()
+    delalb_form = DeleteAlbumForm()
     editalb_form.album_select.choices = [('1', '1'), ('2', '2')]
+    delalb_form.album_select.choices = [('1', '1'), ('2', '2')]
     if newalb_form.validate_on_submit():
         pass
     if editalb_form.validate_on_submit():
@@ -121,6 +125,7 @@ def manage_albums():
                            title=app.config['GALLERY_TITLE'],
                            newalb_form=newalb_form,
                            editalb_form=editalb_form,
+                           delalb_form=delalb_form,
                            albums=Albums.get_albums_list())
 
 

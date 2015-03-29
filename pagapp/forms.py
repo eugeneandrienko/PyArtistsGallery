@@ -112,15 +112,13 @@ class AddAlbumForm(Form):
         album = Albums.query.filter_by(
             album_name=self.new_album.data)
 
-        if album is None:
-            return True
+        if album is not None:
+            return False
 
-        return False
+        return True
 
 
 class EditAlbumForm(Form):
-    # TODO: check given album name for existece in DB.
-    # TODO: check given new album name for non-existence in DB.
     album_select = SelectField('album_select', [])
     album_new_name = StringField('album_new_name')
     album_description = TextAreaField('album_description')
@@ -128,13 +126,41 @@ class EditAlbumForm(Form):
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
 
+    def validate(self):
+        rv = Form.validate(self)
+        if not rv:
+            return False
+
+        album = Albums.query.filter_by(
+            album_name=self.album_select)
+        if album is None:
+            return False
+
+        new_album = Albums.query.filter_by(
+            album_name=self.album_new_name)
+        if new_album is not None:
+            return False
+
+        return True
+
 
 class DeleteAlbumForm(Form):
-    # TODO: check given album name for existence in DB.
     album_select = SelectField('album_select', [])
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
+
+    def validate(self):
+        rv = Form.validate(self)
+        if not rv:
+            return False
+
+        album = Albums.query.filter_by(
+            album_name=self.album_select)
+        if album is None:
+            return False
+
+        return True
 
 
 #

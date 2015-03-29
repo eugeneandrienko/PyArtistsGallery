@@ -84,12 +84,12 @@
     </div>
     <div class="panel-body">
         <form class="form" method="POST">
-            {{ editalb_form.hidden_tag() }}
+            {{ delalb_form.hidden_tag() }}
             <div class="row">
                 <div class="container col-xs-12 col-sm-9">
                     <div class="form-group">
                         <label class="sr-only" for="pagSelAlbum">Select album name</label>
-                        {{editalb_form.album_select(**{'class': 'form-control', 'id': 'pagSelAlbum'}) }}
+                        {{delalb_form.album_select(**{'class': 'form-control', 'id': 'pagSelAlbum'}) }}
                     </div>
                 </div>
                 <div class="container col-xs-12 col-sm-3">
