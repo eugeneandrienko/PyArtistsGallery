@@ -50,9 +50,7 @@
                         {{editalb_form.album_select(**{'class': 'form-control', 'id': 'pagSelAlbum'}) }}
                     </div>
                 </div>
-                <div class="container col-xs-12 col-sm-3">
-                    <button type="submit" class="btn btn-danger" name="btn" value="Delete">Delete album</button>
-                </div>
+                <div class="container col-xs-12 col-sm-3"></div>
             </div>
             <div class="row">
                 <div class="container col-xs-12 col-sm-9">
@@ -62,9 +60,7 @@
                         'placeholder': 'Enter new name for selected album here'}) }}
                     </div>
                 </div>
-                <div class="container col-xs-12 col-sm-3">
-                    <button type="submit" class="btn btn-default" name="btn" value="Edit">Save new name</button>
-                </div>
+                <div class="container col-xs-12 col-sm-3"></div>
             </div>
             <div class="row">
                 <div class="container col-xs-12 col-sm-9">
@@ -76,6 +72,28 @@
                 </div>
                 <div class="container col-xs-12 col-sm-3">
                     <button type="submit" class="btn btn-default" name="btn" value="Save">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Delete album</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form" method="POST">
+            {{ editalb_form.hidden_tag() }}
+            <div class="row">
+                <div class="container col-xs-12 col-sm-9">
+                    <div class="form-group">
+                        <label class="sr-only" for="pagSelAlbum">Select album name</label>
+                        {{editalb_form.album_select(**{'class': 'form-control', 'id': 'pagSelAlbum'}) }}
+                    </div>
+                </div>
+                <div class="container col-xs-12 col-sm-3">
+                    <button type="submit" class="btn btn-danger" name="btn" value="Delete">Delete album</button>
                 </div>
             </div>
         </form>
