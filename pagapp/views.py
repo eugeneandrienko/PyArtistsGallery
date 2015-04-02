@@ -114,8 +114,15 @@ def manage_albums():
     delalb_form = DeleteAlbumForm()
     editalb_form.album_select.choices = [('1', '1'), ('2', '2')]
     delalb_form.album_select.choices = [('1', '1'), ('2', '2')]
+
     if newalb_form.validate_on_submit():
-        pass
+        flash('Album ' + newalb_form.get_new_album_name() +
+              ' successfully created.')
+    elif newalb_form.get_new_album_name() is not None:
+        flash("Cannot create album " +
+              newalb_form.get_new_album_name() +
+              ": it is already exists!")
+
     if editalb_form.validate_on_submit():
         if request.form['btn'] == 'Delete':
             print("Test passed")

@@ -3,15 +3,18 @@ from wtforms.validators import DataRequired
 from flask_wtf import Form
 from flask_login import current_user
 
+from pagapp import db
 from pagapp.models import Users
 from pagapp.models import Albums
+
+import re
 
 
 # Contents of this module:
 #
 # User-related forms:
-# LoginForm: draws login form for /login path.
-# Methods: validate() - custom, checks what given user is present
+#   LoginForm: draws login form for /login path.
+#              Methods: validate() - custom, checks what given user is present
 #                                    in db and given password is valid.
 #                       get_logged_in_user() - return models.Users object for
 #                                              logged in user.
@@ -99,7 +102,8 @@ class ChPasswdForm(Form):
 
 
 class AddAlbumForm(Form):
-    new_album = StringField('login', validators=[DataRequired()])
+    new_album = StringField('new_album', validators=[DataRequired()])
+    new_album_description = TextAreaField('new_album_description')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -110,12 +114,23 @@ class AddAlbumForm(Form):
             return False
 
         album = Albums.query.filter_by(
-            album_name=self.new_album.data)
+            album_name=self.new_album.data).first()
 
         if album is not None:
             return False
 
+        new_album = Albums(
+            re.sub(r'[^\w]', '',
+                   self.new_album.data.lower()),
+            self.new_album.data,
+            self.new_album_description.data)
+        db.session.add(new_album)
+        db.session.commit()
+
         return True
+
+    def get_new_album_name(self):
+        return self.new_album.data
 
 
 class EditAlbumForm(Form):
