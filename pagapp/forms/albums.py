@@ -125,6 +125,7 @@ class EditAlbumDescForm(Form):
 
 class DeleteAlbumForm(Form):
     album_select = SelectField('album_select', [])
+    submit_button = SubmitField('Delete album')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -139,8 +140,13 @@ class DeleteAlbumForm(Form):
             return False
 
         album = Albums.query.filter_by(
-            album_name=self.album_select)
+            album_name=self.album_select.data).first()
         if album is None:
             return False
 
+        db.session.delete(album)
+        db.session.commit()
         return True
+
+    def get_album_name(self):
+        return self.album_select.data

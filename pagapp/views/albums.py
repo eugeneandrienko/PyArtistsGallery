@@ -64,10 +64,20 @@ def manage_albums():
             flash("Album " +
                   editalbdesc_form.get_album_name() +
                   " successfully edited")
-        elif editalbdesc_form.get_album_name() is not None:
+        else:
             flash("Cannot save " +
                   editalbdesc_form.get_album_name() +
                   " album!")
+
+    if delalb_form.submit_button.data is True:
+        if delalb_form.validate():
+            flash("Album " +
+                  delalb_form.get_album_name() +
+                  " successfully deleted")
+        else:
+            flash("Cannot delete album " +
+                  delalb_form.get_album_name() +
+                  "!")
 
     return render_template('manage_albums.html',
                            title=app.config['GALLERY_TITLE'],
