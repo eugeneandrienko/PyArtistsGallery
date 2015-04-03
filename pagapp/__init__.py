@@ -11,4 +11,6 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
-# DO NOT DELETE THE NEXT TWO LINES:
+import views
+
+views.warning_killer()
