@@ -22,8 +22,6 @@ import re
 #                 Methods: validate() - custom, checks what current user is in
 #                                       DB and what given current password is
 #                                       in DB and new password is valid.
-#                          get_new_password() - returns new password, given by
-#                                               user.
 # Album-related forms:
 #   NewAlbumForm: draws form for new album creation.
 #                 Methods: validate() - custom, checks what given album name
@@ -90,10 +88,9 @@ class ChPasswdForm(Form):
         if self.new_password.data != self.new_password2.data:
             return False
 
-        return True
+        current_user.set_new_password(self.new_password.data)
 
-    def get_new_password(self):
-        return self.new_password.data
+        return True
 
 
 #
