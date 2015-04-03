@@ -64,11 +64,11 @@ class EditAlbumForm(Form):
     album_description = TextAreaField('album_description')
 
     def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
         albums_names_arr = []
         for album in Albums.get_albums_list():
             albums_names_arr.append((album['album_name'], album['album_name']))
         self.album_select.choices = albums_names_arr
-        Form.__init__(self, *args, **kwargs)
 
     def validate(self):
         rv = Form.validate(self)
@@ -93,11 +93,11 @@ class DeleteAlbumForm(Form):
     album_select = SelectField('album_select', [])
 
     def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
         albums_names_arr = []
         for album in Albums.get_albums_list():
             albums_names_arr.append((album['album_name'], album['album_name']))
         self.album_select.choices = albums_names_arr
-        Form.__init__(self, *args, **kwargs)
 
     def validate(self):
         rv = Form.validate(self)
