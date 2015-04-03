@@ -2,7 +2,8 @@ import re
 import random
 import string
 
-from wtforms import StringField, SelectField, TextAreaField
+# TODO: use SubmitField everywhere!!!
+from wtforms import StringField, SelectField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired
 from flask_wtf import Form
 from pagapp import db
@@ -28,6 +29,7 @@ class AlbumForm():
 class AddAlbumForm(Form):
     new_album = StringField('new_album', validators=[DataRequired()])
     new_album_description = TextAreaField('new_album_description')
+    submit_button = SubmitField('Create new album')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -58,10 +60,10 @@ class AddAlbumForm(Form):
         return self.new_album.data
 
 
-class EditAlbumForm(Form):
+class EditAlbumNameForm(Form):
     album_select = SelectField('album_select', [])
-    album_new_name = StringField('album_new_name')
-    album_description = TextAreaField('album_description')
+    album_name = StringField('album_name', validators=[DataRequired()])
+    submit_button = SubmitField('Save')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -75,18 +77,50 @@ class EditAlbumForm(Form):
         if not rv:
             return False
 
-        album = Albums.query.filter_by(
-            album_name=self.album_select.data,
-            album_description=self.album_description.data
-        ).first()
+        album = Albums.query.filter_by(album_name=self.album_select.data
+                                       ).first()
         if album is None:
             return False
 
-        album.set_new_album_name(self.album_new_name.data)
+        album.set_new_album_name(self.album_name.data)
+        db.session.commit()
+        return True
+
+    def get_old_album_name(self):
+        return self.album_select.data
+
+    def get_album_name(self):
+        return self.album_name.data
+
+
+class EditAlbumDescForm(Form):
+    album_select = SelectField('album_select', [])
+    album_description = TextAreaField('album_description')
+    submit_button = SubmitField('Save')
+
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+        albums_names_arr = []
+        for album in Albums.get_albums_list():
+            albums_names_arr.append((album['album_name'], album['album_name']))
+        self.album_select.choices = albums_names_arr
+
+    def validate(self):
+        rv = Form.validate(self)
+        if not rv:
+            return False
+
+        album = Albums.query.filter_by(album_name=self.album_select.data
+                                       ).first()
+        if album is None:
+            return False
+
         album.set_new_album_descr(self.album_description.data)
         db.session.commit()
-
         return True
+
+    def get_album_name(self):
+        return self.album_select.data
 
 
 class DeleteAlbumForm(Form):

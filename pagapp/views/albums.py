@@ -2,8 +2,8 @@ from flask import render_template, redirect, url_for, flash
 from flask_login import login_required
 
 from pagapp import app
-from pagapp.forms.albums import AlbumForm, AddAlbumForm, EditAlbumForm, \
-    DeleteAlbumForm
+from pagapp.forms.albums import AlbumForm, AddAlbumForm, \
+    EditAlbumNameForm, EditAlbumDescForm, DeleteAlbumForm
 from pagapp.forms.pictures import PictureForm
 from pagapp.forms.common import GotoUploadFakeForm
 
@@ -32,26 +32,47 @@ def album(albumurl):
 @login_required
 def manage_albums():
     alb_form = AlbumForm()
-    newalb_form = AddAlbumForm()
-    editalb_form = EditAlbumForm()
-    delalb_form = DeleteAlbumForm()
+    # FIXME: select fields do not update when new album added, or old album edited\deleted.
+    newalb_form = AddAlbumForm(prefix='newalb_form')
+    editalbname_form = EditAlbumNameForm(prefix='editalbname_form')
+    editalbdesc_form = EditAlbumDescForm(prefix='editalbdesc_form')
+    delalb_form = DeleteAlbumForm(prefix='delalb_form')
 
-    if newalb_form.validate_on_submit():
-        flash('Album ' + newalb_form.get_new_album_name() +
-              ' successfully created.')
-    elif newalb_form.get_new_album_name() is not None:
-        flash("Cannot create album " +
-              newalb_form.get_new_album_name() +
-              ": it is already exists!")
+    if newalb_form.submit_button.data is True:
+        if newalb_form.validate():
+            flash('Album ' +
+                  newalb_form.get_new_album_name() +
+                  ' successfully created.')
+        else:
+            flash("Cannot create album " +
+                  newalb_form.get_new_album_name() +
+                  ": it is already exists!")
 
-    if editalb_form.validate_on_submit():
-        pass
-    else:
-        flash("")
+    if editalbname_form.submit_button.data is True:
+        if editalbname_form.validate():
+            flash("Album " +
+                  editalbname_form.get_old_album_name() +
+                  " renamed to " +
+                  editalbname_form.get_album_name())
+        else:
+            flash("Cannot rename " +
+                  editalbname_form.get_old_album_name() +
+                  " !")
+
+    if editalbdesc_form.submit_button.data is True:
+        if editalbdesc_form.validate():
+            flash("Album " +
+                  editalbdesc_form.get_album_name() +
+                  " successfully edited")
+        elif editalbdesc_form.get_album_name() is not None:
+            flash("Cannot save " +
+                  editalbdesc_form.get_album_name() +
+                  " album!")
 
     return render_template('manage_albums.html',
                            title=app.config['GALLERY_TITLE'],
                            newalb_form=newalb_form,
-                           editalb_form=editalb_form,
+                           editalbname_form=editalbname_form,
+                           editalbdesc_form=editalbdesc_form,
                            delalb_form=delalb_form,
                            albums=alb_form.get_album_list())
