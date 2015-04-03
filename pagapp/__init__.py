@@ -11,6 +11,6 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
-import views
+import pagapp.views
 
 views.warning_killer()
