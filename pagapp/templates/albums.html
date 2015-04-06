@@ -1,0 +1,41 @@
+{% extends "blueimp_base_t.html" %}
+
+{% block navbar %}
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/index">{{ title }}/{{ album_name }}</a>
+        </div>
+
+        {% include 'album_dropdown.html' %}
+
+        {% if current_user.is_authenticated() %}
+        {% include 'navcontent_user_lgdin.html' %}
+        {% else %}
+        {% include 'navcontent_user_notin.html' %}
+        {% endif %}
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block gallery_mainpage %}
+<div class="container">
+    <h1>{{ album_name }}</h1>
+    <blockquote>
+        <p>{{ album_description }}</p>
+    </blockquote>
+    <br>
+
+    <div id="links"></div>
+    {% if current_user.is_authenticated() %}
+        {% include 'manage_pictures.html' %}
+    {% else %}
+        {% for picture in pics %}
+            <a href="{{ picture.path_to_image }}" title="{{ picture.name }}" data-gallery>
+                <img src="{{ picture.path_to_thumb }}" alt="{{ picture.name }}">
+            </a>
+        {% endfor %}
+    {% endif %}
+    <br>
+</div>
+{% endblock gallery_mainpage %}
