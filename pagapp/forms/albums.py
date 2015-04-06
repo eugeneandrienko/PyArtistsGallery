@@ -67,6 +67,9 @@ class EditAlbumNameForm(Form):
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
+        self.update_select_choices()
+
+    def update_select_choices(self):
         albums_names_arr = []
         for album in Albums.get_albums_list():
             albums_names_arr.append((album['album_name'], album['album_name']))
@@ -84,6 +87,7 @@ class EditAlbumNameForm(Form):
 
         album.set_new_album_name(self.album_name.data)
         db.session.commit()
+        self.update_select_choices()
         return True
 
     def get_old_album_name(self):
@@ -100,6 +104,9 @@ class EditAlbumDescForm(Form):
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
+        self.update_select_choices()
+
+    def update_select_choices(self):
         albums_names_arr = []
         for album in Albums.get_albums_list():
             albums_names_arr.append((album['album_name'], album['album_name']))
@@ -117,6 +124,7 @@ class EditAlbumDescForm(Form):
 
         album.set_new_album_descr(self.album_description.data)
         db.session.commit()
+        self.update_select_choices()
         return True
 
     def get_album_name(self):
@@ -129,6 +137,9 @@ class DeleteAlbumForm(Form):
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
+        self.update_select_choices()
+
+    def update_select_choices(self):
         albums_names_arr = []
         for album in Albums.get_albums_list():
             albums_names_arr.append((album['album_name'], album['album_name']))
@@ -146,6 +157,7 @@ class DeleteAlbumForm(Form):
 
         db.session.delete(album)
         db.session.commit()
+        self.update_select_choices()
         return True
 
     def get_album_name(self):

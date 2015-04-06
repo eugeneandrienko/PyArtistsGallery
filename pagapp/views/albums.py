@@ -31,8 +31,6 @@ def album(albumurl):
 @app.route('/manage_albums', methods=['GET', 'POST'])
 @login_required
 def manage_albums():
-    alb_form = AlbumForm()
-    # FIXME: select fields do not update when new album added, or old album edited\deleted.
     newalb_form = AddAlbumForm(prefix='newalb_form')
     editalbname_form = EditAlbumNameForm(prefix='editalbname_form')
     editalbdesc_form = EditAlbumDescForm(prefix='editalbdesc_form')
@@ -43,6 +41,9 @@ def manage_albums():
             flash('Album ' +
                   newalb_form.get_new_album_name() +
                   ' successfully created.')
+            editalbname_form.update_select_choices()
+            editalbdesc_form.update_select_choices()
+            delalb_form.update_select_choices()
         else:
             flash("Cannot create album " +
                   newalb_form.get_new_album_name() +
@@ -54,6 +55,8 @@ def manage_albums():
                   editalbname_form.get_old_album_name() +
                   " renamed to " +
                   editalbname_form.get_album_name())
+            editalbdesc_form.update_select_choices()
+            delalb_form.update_select_choices()
         else:
             flash("Cannot rename " +
                   editalbname_form.get_old_album_name() +
@@ -64,6 +67,8 @@ def manage_albums():
             flash("Album " +
                   editalbdesc_form.get_album_name() +
                   " successfully edited")
+            editalbname_form.update_select_choices()
+            delalb_form.update_select_choices()
         else:
             flash("Cannot save " +
                   editalbdesc_form.get_album_name() +
@@ -74,10 +79,14 @@ def manage_albums():
             flash("Album " +
                   delalb_form.get_album_name() +
                   " successfully deleted")
+            editalbname_form.update_select_choices()
+            editalbdesc_form.update_select_choices()
         else:
             flash("Cannot delete album " +
                   delalb_form.get_album_name() +
                   "!")
+
+    alb_form = AlbumForm()
 
     return render_template('manage_albums.html',
                            title=app.config['GALLERY_TITLE'],
