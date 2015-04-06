@@ -1,0 +1,149 @@
+{% extends "bootstrap_base_t.html" %}
+
+{% block navbar %}
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse"
+     role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/index">{{ title }}/Manage albums</a>
+        </div>
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block mainpage %}
+{% include 'flashed_messages.html' %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Add new album</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form" method="POST">
+            {{ newalb_form.hidden_tag() }}
+            <div class="row">
+                <div class="container col-xs-12 col-sm-9">
+                    <div class="form-group">
+                        <label class="sr-only" for="pagNewAlbum">New album name</label>
+                        {{ newalb_form.new_album(**{
+                        'type': 'text',
+                        'class': 'form-control',
+                        'id': 'pagNewAlbum',
+                        'placeholder': 'New album name'}) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="container col-xs-12 col-sm-9">
+                    <div class="form-group">
+                        <label class="sr-only" for="pagNewAlbDesc">Description</label>
+                        {{ newalb_form.new_album_description(**{
+                        'class': 'form-control',
+                        'id': 'pagNewAlbDesc',
+                        'placeholder': 'Enter description for new album here'}) }}
+                    </div>
+                </div>
+                <div class="container col-xs-12 col-sm-3">
+                    {{ newalb_form.submit_button(**{'class': 'btn btn-default'}) }}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Edit album's name</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form" method="POST">
+            {{ editalbname_form.hidden_tag() }}
+            <div class="row">
+                <div class="container col-xs-12 col-sm-9">
+                    <div class="form-group">
+                        <label class="sr-only" for="pagSelAlbum">Select album name</label>
+                        {{editalbname_form.album_select(**{
+                        'class': 'form-control',
+                        'id': 'pagSelAlbum'}) }}
+                    </div>
+                </div>
+                <div class="container col-xs-12 col-sm-3"></div>
+            </div>
+            <div class="row">
+                <div class="container col-xs-12 col-sm-9">
+                    <div class="form-group">
+                        <label class="sr-only" for="pagDescr">Enter description for current album here</label>
+                        {{ editalbname_form.album_name(**{
+                        'class': 'form-control',
+                        'id': 'pagDescr',
+                        'placeholder': 'Enter new name for current album here'}) }}
+                    </div>
+                </div>
+                <div class="container col-xs-12 col-sm-3">
+                    {{ editalbname_form.submit_button(**{'class': 'btn btn-default'}) }}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Edit album's description</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form" method="POST">
+            {{ editalbdesc_form.hidden_tag() }}
+            <div class="row">
+                <div class="container col-xs-12 col-sm-9">
+                    <div class="form-group">
+                        <label class="sr-only" for="pagSelAlbum">Select album name</label>
+                        {{editalbdesc_form.album_select(**{
+                        'class': 'form-control',
+                        'id': 'pagSelAlbum'}) }}
+                    </div>
+                </div>
+                <div class="container col-xs-12 col-sm-3"></div>
+            </div>
+            <div class="row">
+                <div class="container col-xs-12 col-sm-9">
+                    <div class="form-group">
+                        <label class="sr-only" for="pagDescr">Enter description for current album here</label>
+                        {{ editalbdesc_form.album_description(**{
+                        'class': 'form-control',
+                        'id': 'pagDescr',
+                        'placeholder': 'Enter description for current album here'}) }}
+                    </div>
+                </div>
+                <div class="container col-xs-12 col-sm-3">
+                    {{ editalbdesc_form.submit_button(**{'class': 'btn btn-default'}) }}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Delete album</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form" method="POST">
+            {{ delalb_form.hidden_tag() }}
+            <div class="row">
+                <div class="container col-xs-12 col-sm-9">
+                    <div class="form-group">
+                        <label class="sr-only" for="pagSelAlbum">Select album name</label>
+                        {{delalb_form.album_select(**{
+                        'class': 'form-control',
+                        'id': 'pagSelAlbum'}) }}
+                    </div>
+                </div>
+                <div class="container col-xs-12 col-sm-3">
+                    {{ delalb_form.submit_button(**{'class': 'btn btn-danger'}) }}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock mainpage %}

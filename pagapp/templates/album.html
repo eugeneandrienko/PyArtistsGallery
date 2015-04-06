@@ -1,0 +1,69 @@
+{% extends "blueimp_base_t.html" %}
+
+{% block navbar %}
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/index">{{ title }}/{{ album_name }}</a>
+        </div>
+
+        {% include 'album_dropdown.html' %}
+
+        {% if current_user.is_authenticated() %}
+        {% include 'navcontent_user_lgdin.html' %}
+        {% else %}
+        {% include 'navcontent_user_notin.html' %}
+        {% endif %}
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block gallery_mainpage %}
+<div class="container">
+    <h1>{{ album_name }}</h1>
+    <blockquote>
+        <p>{{ album_description }}</p>
+    </blockquote>
+    <br>
+
+    <div id="links"></div>
+    {% if current_user.is_authenticated() %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Edit pictures in selected album</h3>
+            </div>
+            <div class="panel-body">
+                <form class="form" method="POST">
+                    {{ editpics_form.hidden_tag() }}
+                    <div class="row">
+                        <div class="container col-xs-12 col-sm-9">
+                            <div class="form-group">
+                                <label class="sr-only" for="pagSelPic">Select picture name</label>
+                                {{ editpics_form.pic_select(**{'class': 'form-control', 'id': 'pagSelPic'}) }}
+                            </div>
+                        </div>
+                        <div class="container col-xs-12 col-sm-3">
+                            <!-- picture -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="container col-xs-12 col-sm-9">
+                            <!-- picture desc -->
+                        </div>
+                        <div class="container col-xs-12 col-sm-3">
+                            <button type="submit" class="btn btn-default" name="btn" value="Save">Save new name</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        {% for picture in pics %}
+            <a href="{{ picture.path_to_image }}" title="{{ picture.name }}" data-gallery>
+                <img src="{{ picture.path_to_thumb }}" alt="{{ picture.name }}">
+            </a>
+        {% endfor %}
+    {% endif %}
+    <br>
+</div>
+{% endblock gallery_mainpage %}

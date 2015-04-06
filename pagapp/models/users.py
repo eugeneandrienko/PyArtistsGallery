@@ -1,5 +1,6 @@
 import hashlib
 import uuid
+
 from pagapp import db
 
 
@@ -20,13 +21,15 @@ class Users(db.Model):
         return 'Nickname: {}, pwd: {}, salt: {}'.format(
             self.nickname, self.password, self.salt)
 
-    def is_authenticated(self):
+    @staticmethod
+    def is_authenticated():
         return True
 
     def is_active(self):
         return self.active
 
-    def is_anonymous(self):
+    @staticmethod
+    def is_anonymous():
         return False
 
     def get_id(self):
@@ -46,4 +49,3 @@ class Users(db.Model):
             pwd.encode('utf-8') + salt.encode('utf-8')).hexdigest()
         self.password = hashed_pwd
         self.salt = salt
-        db.session.commit()
