@@ -7,5 +7,6 @@ from pagapp import app
 @app.route('/upload')
 @login_required
 def upload():
-    return render_template('upload.html',
-                           title=app.config['GALLERY_TITLE'])
+    return render_template(
+        'upload.html',
+        title=app.config['GALLERY_TITLE'])

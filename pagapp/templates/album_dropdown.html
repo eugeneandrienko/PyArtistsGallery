@@ -9,7 +9,7 @@
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
-            {% for album in albums %}
+            {% for album in albums.get_albums_list() %}
                 <li role="presentation" class="dropdown">
                     <a role="menuitem" tabindex="-1" href="/album/{{ album.url_part }}">
                         {{ album.album_name }}

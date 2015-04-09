@@ -5,19 +5,17 @@ import uuid
 import datetime
 
 from pagapp import db
-from pagapp.models.users import Users
-from pagapp.models.albums import Albums
-from pagapp.models.pictures import Pictures
+from pagapp.models import Users, Albums, Pictures
 
 
-USER = 'root'
-PASSWORD = 'toor'
+_USER = 'root'
+_PASSWORD = 'toor'
 
 db.create_all()
 salt = uuid.uuid4().hex
-hashed_pwd = hashlib.sha512(PASSWORD.encode('utf-8') +
+hashed_pwd = hashlib.sha512(_PASSWORD.encode('utf-8') +
                             salt.encode('utf-8')).hexdigest()
-admin_user = Users(USER,
+admin_user = Users(_USER,
                    hashed_pwd,
                    salt,
                    True)

@@ -1,4 +1,4 @@
-from pagapp.models.pictures import Pictures
+from pagapp.models import Pictures
 
 
 class PictureForm():

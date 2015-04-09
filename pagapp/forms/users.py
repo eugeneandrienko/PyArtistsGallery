@@ -4,7 +4,7 @@ from flask_wtf import Form
 from flask_login import current_user, login_user
 
 from pagapp import db
-from pagapp.models.users import Users
+from pagapp.models import Users
 
 
 class LoginForm(Form):
@@ -32,7 +32,7 @@ class LoginForm(Form):
         return True
 
 
-class ChPasswdForm(Form):
+class ChangePasswordForm(Form):
     old_password = PasswordField('old_password', validators=[DataRequired()])
     new_password = PasswordField('new_password', validators=[DataRequired()])
     new_password2 = PasswordField('new_password2', validators=[DataRequired()])
@@ -45,7 +45,6 @@ class ChPasswdForm(Form):
         if not rv:
             return False
 
-        # Check - is logged in user is inside db and active
         if current_user is None:
             return False
 
@@ -57,5 +56,4 @@ class ChPasswdForm(Form):
 
         current_user.set_new_password(self.new_password.data)
         db.session.commit()
-
         return True

@@ -1,11 +1,11 @@
+from sqlalchemy.orm.exc import ObjectDeletedError
 from flask import render_template, redirect, url_for, flash
 from flask_login import logout_user, login_required
-from sqlalchemy.orm.exc import ObjectDeletedError
 
 from pagapp import app
 from pagapp import lm
-from pagapp.forms.users import LoginForm, ChPasswdForm
-from pagapp.models.users import Users
+from pagapp.forms import LoginForm, ChangePasswordForm
+from pagapp.models import Users
 
 
 @lm.user_loader
@@ -19,37 +19,40 @@ def load_user(uid):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
+    login_form = LoginForm()
 
-    if form.validate_on_submit():
+    if login_form.validate_on_submit():
         return redirect(url_for('index'))
-    elif form.login.data is not None or form.password.data is not None:
+    elif (login_form.login.data is not None or
+          login_form.password.data is not None):
         flash('Login failed! Please double check your login name and password.')
 
-    return render_template("login.html",
-                           title=app.config['GALLERY_TITLE'],
-                           form=form)
+    return render_template(
+        "login.html",
+        title=app.config['GALLERY_TITLE'],
+        form=login_form)
 
 
 @app.route('/chpasswd', methods=['GET', 'POST'])
 @login_required
-def passwd():
-    form = ChPasswdForm()
+def change_password():
+    change_password_form = ChangePasswordForm()
 
-    if form.validate_on_submit():
+    if change_password_form.validate_on_submit():
         flash('Password successfully changed')
-    elif (form.old_password.data is not None
-          or form.new_password.data is not None
-          or form.new_password2.data is not None
+    elif (change_password_form.old_password.data is not None
+          or change_password_form.new_password.data is not None
+          or change_password_form.new_password2.data is not None
           ):
-        # if some text entered in form, but we are here and not in
-        # /index page -- login seems failed and we should show warning
-        # message to user
+        # If some text entered in change_password_form, but we are here
+        # and not in /index page -- login seems failed and we should show
+        # warning message to user.
         flash('Cannot change password - something goes wrong!')
 
-    return render_template("passwd.html",
-                           title=app.config['GALLERY_TITLE'],
-                           form=form)
+    return render_template(
+        "passwd.html",
+        title=app.config['GALLERY_TITLE'],
+        form=change_password_form)
 
 
 @app.route('/logout')

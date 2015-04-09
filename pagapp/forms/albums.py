@@ -6,23 +6,21 @@ import string
 from wtforms import StringField, SelectField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired
 from flask_wtf import Form
+
 from pagapp import db
-from pagapp.models.albums import Albums
+from pagapp.models import Albums
 
 
 class AlbumForm():
     matched_album = None
 
-    def __init__(self, albumurl=None):
-        if albumurl is not None:
+    def __init__(self, album_url=None):
+        if album_url is not None:
             self.matched_album = Albums.query.filter_by(
-                url_part=albumurl).first()
-
-    def get_matched_album(self):
-        return self.matched_album
+                url_part=album_url).first()
 
     @staticmethod
-    def get_album_list():
+    def get_albums_list():
         return Albums.get_albums_list()
 
 
@@ -56,9 +54,6 @@ class AddAlbumForm(Form):
 
         return True
 
-    def get_new_album_name(self):
-        return self.new_album.data
-
 
 class EditAlbumNameForm(Form):
     album_select = SelectField('album_select', [])
@@ -70,31 +65,25 @@ class EditAlbumNameForm(Form):
         self.update_select_choices()
 
     def update_select_choices(self):
-        albums_names_arr = []
+        albums_names_array = []
         for album in Albums.get_albums_list():
-            albums_names_arr.append((album['album_name'], album['album_name']))
-        self.album_select.choices = albums_names_arr
+            albums_names_array.append((album['album_name'], album['album_name']))
+        self.album_select.choices = albums_names_array
 
     def validate(self):
         rv = Form.validate(self)
         if not rv:
             return False
 
-        album = Albums.query.filter_by(album_name=self.album_select.data
-                                       ).first()
+        album = Albums.query.filter_by(
+            album_name=self.album_select.data).first()
         if album is None:
             return False
 
-        album.set_new_album_name(self.album_name.data)
+        album.album_name = self.album_name.data
         db.session.commit()
         self.update_select_choices()
         return True
-
-    def get_old_album_name(self):
-        return self.album_select.data
-
-    def get_album_name(self):
-        return self.album_name.data
 
 
 class EditAlbumDescForm(Form):
@@ -107,28 +96,25 @@ class EditAlbumDescForm(Form):
         self.update_select_choices()
 
     def update_select_choices(self):
-        albums_names_arr = []
+        albums_names_array = []
         for album in Albums.get_albums_list():
-            albums_names_arr.append((album['album_name'], album['album_name']))
-        self.album_select.choices = albums_names_arr
+            albums_names_array.append((album['album_name'], album['album_name']))
+        self.album_select.choices = albums_names_array
 
     def validate(self):
         rv = Form.validate(self)
         if not rv:
             return False
 
-        album = Albums.query.filter_by(album_name=self.album_select.data
-                                       ).first()
+        album = Albums.query.filter_by(
+            album_name=self.album_select.data).first()
         if album is None:
             return False
 
-        album.set_new_album_descr(self.album_description.data)
+        album.album_description = self.album_description.data
         db.session.commit()
         self.update_select_choices()
         return True
-
-    def get_album_name(self):
-        return self.album_select.data
 
 
 class DeleteAlbumForm(Form):
@@ -140,10 +126,10 @@ class DeleteAlbumForm(Form):
         self.update_select_choices()
 
     def update_select_choices(self):
-        albums_names_arr = []
+        albums_names_array = []
         for album in Albums.get_albums_list():
-            albums_names_arr.append((album['album_name'], album['album_name']))
-        self.album_select.choices = albums_names_arr
+            albums_names_array.append((album['album_name'], album['album_name']))
+        self.album_select.choices = albums_names_array
 
     def validate(self):
         rv = Form.validate(self)
@@ -159,6 +145,3 @@ class DeleteAlbumForm(Form):
         db.session.commit()
         self.update_select_choices()
         return True
-
-    def get_album_name(self):
-        return self.album_select.data
