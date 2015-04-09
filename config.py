@@ -1,3 +1,10 @@
+"""PyArtistsGallery configuration.
+
+List of options:
+GALLERY_TITLE -- title of the gallery, which shown on every page.
+SQLALCHEMY_DATABASE_URI -- absolute path to SQLite database.
+"""
+
 import os
 
 

@@ -1,3 +1,10 @@
+"""Set of forms for providing user-related features.
+
+List of forms:
+LoginForm -- providing login form for administrator.
+ChangePasswordForm -- providing form for password change.
+"""
+
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 from flask_wtf import Form
@@ -8,14 +15,27 @@ from pagapp.models import Users
 
 
 class LoginForm(Form):
+    """Form, where user can enter login and password.
+
+    Form provides two fields: for login and for password and validates
+    given user's credentials.
+    """
+
     login = StringField('login', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
+        """Extends default constructor with addition for flask_login"""
         Form.__init__(self, *args, **kwargs)
         self.user = None
 
     def validate(self):
+        """Overrides default validator -- checks given login and password.
+
+        This validator checks given login for existense in database and made
+        same check for given password.
+        If all is OK, this validator lets the user come in.
+        """
         rv = Form.validate(self)
         if not rv:
             return False
@@ -33,14 +53,18 @@ class LoginForm(Form):
 
 
 class ChangePasswordForm(Form):
+    """Form for changing password for current user."""
+
     old_password = PasswordField('old_password', validators=[DataRequired()])
     new_password = PasswordField('new_password', validators=[DataRequired()])
     new_password2 = PasswordField('new_password2', validators=[DataRequired()])
 
-    def __init__(self, *args, **kwargs):
-        Form.__init__(self, *args, **kwargs)
-
     def validate(self):
+        """Overrides default validator -- this can change user password.
+
+        This validator checks given user password and change it to new if
+        all is OK.
+        """
         rv = Form.validate(self)
         if not rv:
             return False

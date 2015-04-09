@@ -1,15 +1,28 @@
+"""Functions, which serve album-related URLs.
+
+List of functions:
+album -- renders album's page.
+manage_albums -- renders page for managing albums.
+"""
+
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_required
 
 from pagapp import app
 from pagapp.forms import AlbumForm, AddAlbumForm, \
-    EditAlbumNameForm, EditAlbumDescForm, DeleteAlbumForm
+    EditAlbumNameForm, EditAlbumDescriptionForm, DeleteAlbumForm
 from pagapp.forms import PictureForm
 from pagapp.forms import GotoUploadFakeForm
 
 
 @app.route('/album/<album_url>', methods=['GET', 'POST'])
 def album(album_url):
+    """Renders page for album with given album's URL.
+
+    Argument:
+    album_url -- unique string, by which album can be accessed via web
+    interface.
+    """
     fake_form = GotoUploadFakeForm()
     album_form = AlbumForm(album_url)
     picture_form = PictureForm()
@@ -31,9 +44,10 @@ def album(album_url):
 @app.route('/manage_albums', methods=['GET', 'POST'])
 @login_required
 def manage_albums():
+    """Renders page for managing all created albums."""
     new_album_form = AddAlbumForm(prefix='new_album_form')
     edit_album_name_form = EditAlbumNameForm(prefix='edit_album_name_form')
-    edit_album_description_form = EditAlbumDescForm(
+    edit_album_description_form = EditAlbumDescriptionForm(
         prefix='edit_album_description_form')
     delete_album_form = DeleteAlbumForm(prefix='delete_album_form')
 

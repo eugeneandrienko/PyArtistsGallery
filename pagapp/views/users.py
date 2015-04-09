@@ -1,3 +1,11 @@
+"""Functions, which serve user-related URLs.
+
+List of functions:
+login -- renders login page.
+change_password -- renders page for password changing.
+logout -- performs user logout.
+"""
+
 from sqlalchemy.orm.exc import ObjectDeletedError
 from flask import render_template, redirect, url_for, flash
 from flask_login import logout_user, login_required
@@ -8,17 +16,13 @@ from pagapp.forms import LoginForm, ChangePasswordForm
 from pagapp.models import Users
 
 
-@lm.user_loader
-def load_user(uid):
-    try:
-        result = Users.query.get(int(uid))
-    except ObjectDeletedError:
-        result = None
-    return result
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """Renders login page.
+
+    Function renders login page and raised messages for user if (s)he
+    successfully logged in or not.
+    """
     login_form = LoginForm()
 
     if login_form.validate_on_submit():
@@ -36,6 +40,11 @@ def login():
 @app.route('/chpasswd', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    """Renders page for password changing.
+
+    Function renders page for password changing and raised messages for user
+    if (s)he failed process (or not).
+    """
     change_password_form = ChangePasswordForm()
 
     if change_password_form.validate_on_submit():
@@ -58,5 +67,15 @@ def change_password():
 @app.route('/logout')
 @login_required
 def logout():
+    """Performs user logout if (s)he go to corresponding URL."""
     logout_user()
     return redirect(url_for('index'))
+
+
+@lm.user_loader
+def load_user(uid):
+    try:
+        result = Users.query.get(int(uid))
+    except ObjectDeletedError:
+        result = None
+    return result
