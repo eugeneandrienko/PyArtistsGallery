@@ -9,7 +9,7 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="/index">{{ title }}/Change password</a>
         </div>
-        <button type="submit" class="btn btn-success navbar-btn navbar-right">Change password</button>
+        {{ form.submit_button(**{'class': 'btn btn-success navbar-btn navbar-right'}) }}
     </div>
 </div>
 {% endblock navbar %}

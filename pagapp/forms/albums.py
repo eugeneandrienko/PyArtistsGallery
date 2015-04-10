@@ -2,7 +2,6 @@ import re
 import random
 import string
 
-# TODO: use SubmitField everywhere!!!
 from wtforms import StringField, SelectField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired
 from flask_wtf import Form

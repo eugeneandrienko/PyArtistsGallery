@@ -14,7 +14,7 @@
     <li>
         <form class="form" method="POST">
             {{ fake_form.hidden_tag() }}
-            <button type="submit" class="btn btn-primary navbar-btn">Upload art</button>
+            {{ fake_form.submit_button(**{'class': 'btn btn-primary navbar-btn'}) }}
         </form>
     </li>
 </ul>
