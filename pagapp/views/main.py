@@ -20,7 +20,7 @@ def index():
     album_form = AlbumForm()
     fake_form = GotoUploadFakeForm()
 
-    if fake_form.validate_on_submit():
+    if fake_form.validate_on_submit() is True:
         return redirect(url_for('upload'))
 
     return render_template(

@@ -44,7 +44,7 @@ class LoginForm(Form):
             nickname=self.login.data).first()
         if user is None:
             return False
-        if not user.check_password(self.password.data):
+        if user.check_password(self.password.data) is False:
             return False
 
         self.user = user
@@ -72,7 +72,7 @@ class ChangePasswordForm(Form):
         if current_user is None:
             return False
 
-        if not current_user.check_password(self.old_password.data):
+        if current_user.check_password(self.old_password.data) is False:
             return False
 
         if self.new_password.data != self.new_password2.data:

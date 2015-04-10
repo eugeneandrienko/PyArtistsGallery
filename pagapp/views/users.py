@@ -25,7 +25,7 @@ def login():
     """
     login_form = LoginForm()
 
-    if login_form.validate_on_submit():
+    if login_form.validate_on_submit() is True:
         return redirect(url_for('index'))
     elif (login_form.login.data is not None or
           login_form.password.data is not None):
@@ -47,12 +47,11 @@ def change_password():
     """
     change_password_form = ChangePasswordForm()
 
-    if change_password_form.validate_on_submit():
+    if change_password_form.validate_on_submit() is True:
         flash('Password successfully changed')
-    elif (change_password_form.old_password.data is not None
-          or change_password_form.new_password.data is not None
-          or change_password_form.new_password2.data is not None
-          ):
+    elif None not in (change_password_form.old_password.data,
+                      change_password_form.new_password.data,
+                      change_password_form.new_password2.data):
         # If some text entered in change_password_form, but we are here
         # and not in /index page -- login seems failed and we should show
         # warning message to user.
