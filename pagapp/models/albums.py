@@ -29,16 +29,22 @@ class Albums(db.Model):
         """Saves album data in internal structures.
 
         This constructor overrides default and saves given album's data
-        in internal structures.
+        in internal structures. Raises TypeError exception if receives
+        argument with wrong type.
 
         Arguments:
         url_part -- part of URL for accessing the album via web interface.
         album_name -- name of the album.
         album_description -- description of the album.
         """
-        self.url_part = url_part
-        self.album_name = album_name
-        self.album_description = album_description
+        if isinstance(url_part, str) and \
+                isinstance(album_name, str) and \
+                isinstance(album_description, str):
+            self.url_part = url_part
+            self.album_name = album_name
+            self.album_description = album_description
+        else:
+            raise TypeError('Wrong arguments for Albums constructor!')
 
     def __repr__(self):
         """Prints instance contents in debug session."""

@@ -23,4 +23,5 @@ lm.login_view = 'login'
 
 import pagapp.views
 
+
 views.warning_killer()

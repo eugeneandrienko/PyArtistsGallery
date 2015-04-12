@@ -4,6 +4,8 @@ List of classes:
 Pictures -- contains description of "pictures" table.
 """
 
+import datetime
+
 from pagapp import db
 
 
@@ -42,12 +44,20 @@ class Pictures(db.Model):
         path_to_thumbnail -- path to file with thumbnail for picture.
         name -- name of the picture.
         """
-        self.album_id = album_id
-        self.path_to_image = path_to_image
-        self.path_to_thumbnail = path_to_thumbnail
-        self.name = name
-        self.upload_date = upload_date
-        self.uploader_id = uploader_id
+        if isinstance(album_id, int) and \
+                isinstance(path_to_image, str) and \
+                isinstance(path_to_thumbnail, str) and \
+                isinstance(name, str) and \
+                isinstance(upload_date, datetime.datetime) and \
+                isinstance(uploader_id, int):
+            self.album_id = album_id
+            self.path_to_image = path_to_image
+            self.path_to_thumbnail = path_to_thumbnail
+            self.name = name
+            self.upload_date = upload_date
+            self.uploader_id = uploader_id
+        else:
+            raise TypeError('Wrong arguments for Pictures constructor!')
 
     def __repr__(self):
         """Prints instance contents in debug session."""
