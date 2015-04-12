@@ -37,14 +37,9 @@ class Albums(db.Model):
         album_name -- name of the album.
         album_description -- description of the album.
         """
-        if isinstance(url_part, str) and \
-                isinstance(album_name, str) and \
-                isinstance(album_description, str):
-            self.url_part = url_part
-            self.album_name = album_name
-            self.album_description = album_description
-        else:
-            raise TypeError('Wrong arguments for Albums constructor!')
+        self.url_part = url_part
+        self.album_name = album_name
+        self.album_description = album_description
 
     def __repr__(self):
         """Prints instance contents in debug session."""

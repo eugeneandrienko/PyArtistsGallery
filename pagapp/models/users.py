@@ -36,16 +36,10 @@ class Users(db.Model):
         salt -- salt for password.
         active -- user status.
         """
-        if isinstance(nickname, str) and \
-                isinstance(password, str) and \
-                isinstance(salt, str) and \
-                isinstance(active, bool):
-            self.nickname = nickname
-            self.password = password
-            self.salt = salt
-            self.active = active
-        else:
-            raise TypeError("Wrong arguments for Users constructor!")
+        self.nickname = nickname
+        self.password = password
+        self.salt = salt
+        self.active = active
 
     def __repr__(self):
         """Prints instance contents in debug session."""
