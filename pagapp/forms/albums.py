@@ -97,11 +97,9 @@ class EditAlbumNameForm(Form):
 
     def update_select_choices(self):
         """Updater for album's select field."""
-        albums_names_array = []
-        for album in Albums.get_albums_list():
-            albums_names_array.append((album['album_name'],
-                                       album['album_name']))
-        self.album_select.choices = albums_names_array
+        self.album_select.choices = \
+            [(album['album_name'],
+              album['album_name']) for album in Albums.get_albums_list()]
 
     def validate(self):
         """Extended form validator -- changing name of selected album."""
@@ -134,11 +132,9 @@ class EditAlbumDescriptionForm(Form):
 
     def update_select_choices(self):
         """Updater for album's select field."""
-        albums_names_array = []
-        for album in Albums.get_albums_list():
-            albums_names_array.append((album['album_name'],
-                                       album['album_name']))
-        self.album_select.choices = albums_names_array
+        self.album_select.choices = \
+            [(album['album_name'],
+              album['album_name']) for album in Albums.get_albums_list()]
 
     def validate(self):
         """Extended form validator -- changing description of album."""
@@ -170,11 +166,9 @@ class DeleteAlbumForm(Form):
 
     def update_select_choices(self):
         """Updater for album's select field."""
-        albums_names_array = []
-        for album in Albums.get_albums_list():
-            albums_names_array.append((album['album_name'],
-                                       album['album_name']))
-        self.album_select.choices = albums_names_array
+        self.album_select.choices = \
+            [(album['album_name'],
+              album['album_name']) for album in Albums.get_albums_list()]
 
     def validate(self):
         """Extended form validator -- deleting selected album."""

@@ -50,7 +50,7 @@ class Albums(db.Model):
 
     @classmethod
     def get_albums_list(cls):
-        """Special classmethod, returns list of albums.
+        """Special method of class, it returns list of albums.
 
         Return value:
         List of albums from database. This list contains dictionaries -- one
@@ -58,12 +58,7 @@ class Albums(db.Model):
         Format: ({'url_part': album's URL, 'album_name': name,
         'album_description': description}, {...}, ...).
         """
-        result = []
-        for album in cls.query.all():
-            result.append(
-                {
-                    'url_part': album.url_part,
-                    'album_name': album.album_name,
-                    'album_description': album.album_description
-                })
-        return result
+        return [{'url_part': album.url_part,
+                 'album_name': album.album_name,
+                 'album_description': album.album_description
+                 } for album in cls.query.all()]

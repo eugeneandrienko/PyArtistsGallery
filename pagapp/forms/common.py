@@ -10,12 +10,10 @@ from wtforms import SubmitField
 
 class GotoUploadFakeForm(Form):
     """Fake service form for handling submit button presses.
-
+    
     Fake form, which using for redirections to /upload.
     Usual <a href="..." role="button" ...>...</a> buttons
     do not work inside bootstrap's nav bar.
     """
+    
     submit_button = SubmitField('Upload art')
-
-    def __init__(self, *args, **kwargs):
-        Form.__init__(self, *args, **kwargs)

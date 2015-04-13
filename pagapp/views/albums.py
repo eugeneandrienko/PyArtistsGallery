@@ -27,7 +27,7 @@ def album(album_url):
     album_form = AlbumForm(album_url)
     picture_form = PictureForm()
 
-    if fake_form.validate_on_submit():
+    if fake_form.validate_on_submit() is True:
         return redirect(url_for('upload'))
 
     return render_template(
@@ -52,7 +52,7 @@ def manage_albums():
     delete_album_form = DeleteAlbumForm(prefix='delete_album_form')
 
     if new_album_form.submit_button.data is True:
-        if new_album_form.validate():
+        if new_album_form.validate() is True:
             flash('Album ' +
                   new_album_form.new_album.data +
                   ' successfully created.')
@@ -65,7 +65,7 @@ def manage_albums():
                   ": it is already exists!")
 
     if edit_album_name_form.submit_button.data is True:
-        if edit_album_name_form.validate():
+        if edit_album_name_form.validate() is True:
             flash("Album " +
                   edit_album_name_form.album_select.data +
                   " renamed to " +
@@ -78,7 +78,7 @@ def manage_albums():
                   " !")
 
     if edit_album_description_form.submit_button.data is True:
-        if edit_album_description_form.validate():
+        if edit_album_description_form.validate() is True:
             flash("Album " +
                   edit_album_description_form.album_select.data +
                   " successfully edited")
@@ -90,7 +90,7 @@ def manage_albums():
                   " album!")
 
     if delete_album_form.submit_button.data is True:
-        if delete_album_form.validate():
+        if delete_album_form.validate() is True:
             flash("Album " +
                   delete_album_form.album_select.data +
                   " successfully deleted")

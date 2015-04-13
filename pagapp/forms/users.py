@@ -5,7 +5,6 @@ LoginForm -- providing login form for administrator.
 ChangePasswordForm -- providing form for password change.
 """
 
-from wtforms import StringField, PasswordField
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 from flask_wtf import Form
@@ -46,7 +45,7 @@ class LoginForm(Form):
             nickname=self.login.data).first()
         if user is None:
             return False
-        if not user.check_password(self.password.data):
+        if user.check_password(self.password.data) is False:
             return False
 
         self.user = user
@@ -75,7 +74,7 @@ class ChangePasswordForm(Form):
         if current_user is None:
             return False
 
-        if not current_user.check_password(self.old_password.data):
+        if current_user.check_password(self.old_password.data) is False:
             return False
 
         if self.new_password.data != self.new_password2.data:
