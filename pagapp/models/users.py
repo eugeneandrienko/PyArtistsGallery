@@ -1,3 +1,9 @@
+"""Description of "users" table from database.
+
+List of classes:
+Users -- contains description of "users" table.
+"""
+
 import hashlib
 import uuid
 
@@ -5,6 +11,16 @@ from pagapp import db
 
 
 class Users(db.Model):
+    """Class with description of "users" table.
+
+    Table "users" contains next fields:
+    id -- user unique ID.
+    nickname -- user login.
+    password -- hashed user password.
+    salt -- salt for password.
+    active -- status of user (is (s)he active or not).
+    """
+
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(64), index=True, unique=True, nullable=False)
     password = db.Column(db.String(), index=True, unique=True, nullable=False)
@@ -12,12 +28,21 @@ class Users(db.Model):
     active = db.Column(db.Boolean(), index=True)
 
     def __init__(self, nickname, password, salt, active):
+        """Saves user data in internal structures:
+
+        Arguments:
+        nickname -- user login.
+        password -- hashed user password.
+        salt -- salt for password.
+        active -- user status.
+        """
         self.nickname = nickname
         self.password = password
         self.salt = salt
         self.active = active
 
     def __repr__(self):
+        """Prints instance contents in debug session."""
         return 'Nickname: {}, pwd: {}, salt: {}'.format(
             self.nickname, self.password, self.salt)
 
@@ -35,17 +60,27 @@ class Users(db.Model):
     def get_id(self):
         return str(self.id)
 
-    def check_password(self, pwd):
-        hashed_pwd = hashlib.sha512(
-            pwd.encode('utf-8') + self.salt.encode('utf-8')).hexdigest()
-        if hashed_pwd == self.password:
+    def check_password(self, password):
+        """Check, is given plain password equals with saved in database.
+
+        Argument:
+        password -- plain password for comparsion.
+        """
+        hashed_password = hashlib.sha512(
+            password.encode('utf-8') + self.salt.encode('utf-8')).hexdigest()
+        if hashed_password == self.password:
             return True
         else:
             return False
 
-    def set_new_password(self, pwd):
+    def set_new_password(self, password):
+        """Sets and saves new password for current user.
+
+        Argument:
+        password -- new password for user in plain format.
+        """
         salt = uuid.uuid4().hex
-        hashed_pwd = hashlib.sha512(
-            pwd.encode('utf-8') + salt.encode('utf-8')).hexdigest()
-        self.password = hashed_pwd
+        hashed_password = hashlib.sha512(
+            password.encode('utf-8') + salt.encode('utf-8')).hexdigest()
+        self.password = hashed_password
         self.salt = salt
