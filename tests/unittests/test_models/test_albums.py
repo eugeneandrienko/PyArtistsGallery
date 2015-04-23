@@ -15,7 +15,7 @@ class AlbumsTableTestCase(unittest.TestCase):
     Test cases:
     test_service_methods -- tests Albums constructor and __repr__ function,
     which uses for debug purposes.
-    test_get_albums_list --
+    test_get_albums_list -- tests function, which returns list of all albums.
     """
 
     def test_service_methods(self):
