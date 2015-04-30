@@ -1,6 +1,7 @@
 """Tests description of "albums" table in database."""
 
 import unittest
+
 from unittest import mock
 
 from pagapp.models import Albums
