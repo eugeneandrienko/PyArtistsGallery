@@ -65,13 +65,13 @@ class ChangePasswordForm(Form):
         """Overrides default validator -- this can change user password.
 
         This validator checks given user password and change it to new if
-        all is OK.
+        all is OK and user is logged in.
         """
         rv = Form.validate(self)
         if not rv:
             return False
 
-        if current_user is None:
+        if current_user.is_anonymous() is True:
             return False
 
         if current_user.check_password(self.old_password.data) is False:
