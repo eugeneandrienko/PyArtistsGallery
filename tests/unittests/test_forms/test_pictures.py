@@ -13,7 +13,7 @@ class PictureFormTestCase(unittest.TestCase):
     Method should call filter_by() with given album_id parameter.
     """
 
-    @mock.patch('pagapp.models.Pictures.query')
+    @mock.patch('pagapp.forms.pictures.Pictures.query')
     def test_get_pictures(self, mock_query):
         """Test for get_pictures() method.
 

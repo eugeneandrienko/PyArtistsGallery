@@ -27,8 +27,10 @@ class _MockFilterByReturnValue():
         return self.first_return_value
 
 
-class _FormTestCase(unittest.TestCase):
-    """Parent for all tests of flask_wtf.Form and it's children."""
+class _FlaskApplicationContextTextCase(unittest.TestCase):
+    """Parent for all tests of flask_wtf.Form and it's children.
+
+    Make application context for running test."""
 
     def setUp(self):
         self.app = self.create_app()
@@ -54,7 +56,7 @@ class AlbumFormTestCase(unittest.TestCase):
     from database.
     """
 
-    @mock.patch('pagapp.models.Albums.query')
+    @mock.patch('pagapp.forms.albums.Albums.query')
     def test_init(self, mock_query):
         """Tests __init__() method.
 
@@ -81,7 +83,7 @@ class AlbumFormTestCase(unittest.TestCase):
                         msg="filter_by should be called!")
         mock_query.filter_by.assert_called_with(url_part=test_parameter)
 
-    @mock.patch('pagapp.models.Albums.get_albums_list')
+    @mock.patch('pagapp.forms.albums.Albums.get_albums_list')
     def test_get_albums_list(self, mock_get_albums_list):
         """Tests get_albums_list() method.
 
@@ -94,16 +96,16 @@ class AlbumFormTestCase(unittest.TestCase):
                         msg="get_albums_list() should be called!")
 
 
-class AddAlbumFormTestCase(_FormTestCase):
+class AddAlbumFormTestCase(_FlaskApplicationContextTextCase):
     """Test for AddAlbumForm form.
 
     Test cases:
     test_validate -- test for validate() method.
     """
 
-    @mock.patch('pagapp.models.Albums.query')
-    @mock.patch('pagapp.db.session')
-    @mock.patch('flask_wtf.Form.validate')
+    @mock.patch('pagapp.forms.albums.Albums.query')
+    @mock.patch('pagapp.forms.albums.db.session')
+    @mock.patch('pagapp.forms.albums.Form.validate')
     def test_validate(self, mock_validate, mock_session, mock_query):
         """Tests for _validate() method.
 
@@ -137,7 +139,7 @@ class AddAlbumFormTestCase(_FormTestCase):
 
 # EditAlbumNameForm, EditAlbumDescriptionForm and DeleteAlbumForm methods
 # are the same, that's why I test these classes in one TestCase.
-class EditDeleteAlbumFormTestCase(_FormTestCase):
+class EditDeleteAlbumFormTestCase(_FlaskApplicationContextTextCase):
     """Tests for EditAlbumNameForm, EditAlbumDescriptionForm, DeleteAlbumForm.
 
     Test cases:
@@ -146,9 +148,9 @@ class EditDeleteAlbumFormTestCase(_FormTestCase):
     updater.
     """
 
-    @mock.patch('pagapp.models.Albums.query')
-    @mock.patch('pagapp.db.session')
-    @mock.patch('flask_wtf.Form.validate')
+    @mock.patch('pagapp.forms.albums.Albums.query')
+    @mock.patch('pagapp.forms.albums.db.session')
+    @mock.patch('pagapp.forms.albums.Form.validate')
     def test_validate(self, mock_validate, mock_session, mock_query):
         """Test for validate() method.
 
@@ -178,7 +180,7 @@ class EditDeleteAlbumFormTestCase(_FormTestCase):
             self.assertTrue(mock_session.commit.called,
                             msg="db.session.commit() should be called!")
 
-    @mock.patch('pagapp.models.Albums.get_albums_list')
+    @mock.patch('pagapp.forms.albums.Albums.get_albums_list')
     def test_update_select_choices(self, mock_get_albums_list):
         """Test for update_select_choices() method.
 

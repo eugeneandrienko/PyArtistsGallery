@@ -28,8 +28,10 @@ class _MockFilterByReturnValue():
         return self.first_return_value
 
 
-class _FormTestCase(unittest.TestCase):
-    """Parent for all tests of flask_wtf.Form and it's children."""
+class _FlaskApplicationContextTestCase(unittest.TestCase):
+    """Parent for all tests of flask_wtf.Form and it's children.
+
+    Make application context for running test."""
 
     def setUp(self):
         self.lm = LoginManager()
@@ -48,16 +50,16 @@ class _FormTestCase(unittest.TestCase):
         return app
 
 
-class LoginFormTestCase(_FormTestCase):
+class LoginFormTestCase(_FlaskApplicationContextTestCase):
     """Tests for LoginForm class.
 
     Test case:
     test_validate(): tests for validate() method.
     """
 
-    @mock.patch('pagapp.models.Users.query')
-    @mock.patch('pagapp.models.Users.check_password')
-    @mock.patch('flask_wtf.Form.validate')
+    @mock.patch('pagapp.forms.users.Users.query')
+    @mock.patch('pagapp.forms.users.Users.check_password')
+    @mock.patch('pagapp.forms.users.Form.validate')
     def test_validate(self, mock_validate, mock_check_password, mock_query):
         """Tests for _validate() method.
 
@@ -88,15 +90,15 @@ class LoginFormTestCase(_FormTestCase):
                         msg="User is exists and has right password.")
 
 
-class ChangePasswordFormTestCase(_FormTestCase):
+class ChangePasswordFormTestCase(_FlaskApplicationContextTestCase):
     """Tests for ChangePasswordForm class.
 
     Test cases:
     test_validate(): test for validate() method.
     """
 
-    @mock.patch('flask_wtf.Form.validate')
-    @mock.patch('pagapp.models.Users.check_password')
+    @mock.patch('pagapp.forms.users.Form.validate')
+    @mock.patch('pagapp.forms.users.Users.check_password')
     def test_validate(self, mock_check_password, mock_validate):
         """Test for validate() method in ChangePasswordForm class.
 
