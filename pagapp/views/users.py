@@ -27,8 +27,7 @@ def login():
 
     if login_form.validate_on_submit() is True:
         return redirect(url_for('index'))
-    elif (login_form.login.data is not None or
-          login_form.password.data is not None):
+    elif (login_form.login.data, login_form.password.data) != (None, None):
         flash('Login failed! Please double check your login name and password.')
 
     return render_template(
@@ -49,9 +48,9 @@ def change_password():
 
     if change_password_form.validate_on_submit() is True:
         flash('Password successfully changed')
-    elif None not in (change_password_form.old_password.data,
-                      change_password_form.new_password.data,
-                      change_password_form.new_password2.data):
+    elif (change_password_form.old_password.data,
+          change_password_form.new_password.data,
+          change_password_form.new_password2.data) != (None, None, None):
         # If some text entered in change_password_form, but we are here
         # and not in /index page -- login seems failed and we should show
         # warning message to user.

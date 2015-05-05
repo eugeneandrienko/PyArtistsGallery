@@ -25,7 +25,7 @@ from pagapp.models import Albums
 class AlbumForm():
     """Service form -- using for obtaining all existing albums."""
 
-    matched_album = None
+    _matched_album = None
 
     def __init__(self, album_url=None):
         """Performs search of given album's URL.
@@ -37,8 +37,12 @@ class AlbumForm():
         album_url -- album's URL as it given in database.
         """
         if album_url is not None:
-            self.matched_album = Albums.query.filter_by(
+            self._matched_album = Albums.query.filter_by(
                 url_part=album_url).first()
+
+    @property
+    def matched_album(self):
+        return self._matched_album
 
     @staticmethod
     def get_albums_list():
@@ -57,7 +61,11 @@ class AddAlbumForm(Form):
 
     new_album = StringField('new_album', validators=[DataRequired()])
     new_album_description = TextAreaField('new_album_description')
-    submit_button = SubmitField('Create new album')
+    _submit_button = SubmitField('Create new album')
+
+    @property
+    def submit_button(self):
+        return self._submit_button.data
 
     def validate(self):
         """Extended form validator -- adds new album to database if all ok."""

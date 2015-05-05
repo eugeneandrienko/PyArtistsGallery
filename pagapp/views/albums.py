@@ -27,7 +27,7 @@ def album(album_url):
     album_form = AlbumForm(album_url)
     picture_form = PictureForm()
 
-    if fake_form.validate_on_submit() is True:
+    if fake_form.validate_on_submit():
         return redirect(url_for('upload'))
 
     return render_template(
@@ -45,13 +45,14 @@ def album(album_url):
 @login_required
 def manage_albums():
     """Renders page for managing all created albums."""
+    # TODO: rewrite /manage_albums page and this code!
     new_album_form = AddAlbumForm(prefix='new_album_form')
     edit_album_name_form = EditAlbumNameForm(prefix='edit_album_name_form')
     edit_album_description_form = EditAlbumDescriptionForm(
         prefix='edit_album_description_form')
     delete_album_form = DeleteAlbumForm(prefix='delete_album_form')
 
-    if new_album_form.submit_button.data is True:
+    if new_album_form.submit_button is True:
         if new_album_form.validate() is True:
             flash('Album ' +
                   new_album_form.new_album.data +

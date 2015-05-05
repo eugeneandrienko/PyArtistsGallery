@@ -33,7 +33,7 @@ class LoginForm(Form):
     def validate(self):
         """Overrides default validator -- checks given login and password.
 
-        This validator checks given login for existense in database and made
+        This validator checks given login for existence in database and made
         same check for given password.
         If all is OK, this validator lets the user come in.
         """
@@ -71,7 +71,7 @@ class ChangePasswordForm(Form):
         if not rv:
             return False
 
-        if current_user.is_anonymous() is True:
+        if current_user.is_anonymous():
             return False
 
         if current_user.check_password(self.old_password.data) is False:
