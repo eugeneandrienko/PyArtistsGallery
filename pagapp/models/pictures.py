@@ -30,26 +30,31 @@ class Pictures(db.Model):
     upload_date = db.Column(db.DateTime(), index=True, nullable=False)
     uploader_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    def __init__(self, album_id, uploader_id, upload_date, path_to_image,
-                 path_to_thumbnail, name=''):
+    def __init__(self, row_data):
         """Saves picture data in internal structures.
 
         Overrides default form constructor.
 
-        Arguments:
-        album_id -- id of album, which contains picture.
-        uploader_id -- id of user, who uploaded picture.
-        upload_date -- date, when picture was uploaded.
-        path_to_image -- path to file with picture.
-        path_to_thumbnail -- path to file with thumbnail for picture.
-        name -- name of the picture.
+        Argument:
+        row_data -- dictionary with picture's data. Dictionary
+        should has the next fields:
+            album_id -- id of album, which contains picture.
+            uploader_id -- id of user, who uploaded picture.
+            upload_date -- date, when picture was uploaded.
+            path_to_image -- path to file with picture.
+            path_to_thumbnail -- path to file with thumbnail for picture.
+            name -- name of the picture. If name is omitted - empty string
+        should be inserted.
         """
-        self.album_id = album_id
-        self.path_to_image = path_to_image
-        self.path_to_thumbnail = path_to_thumbnail
-        self.name = name
-        self.upload_date = upload_date
-        self.uploader_id = uploader_id
+        self.album_id = row_data['album_id']
+        self.path_to_image = row_data['path_to_image']
+        self.path_to_thumbnail = row_data['path_to_thumbnail']
+        self.upload_date = row_data['upload_date']
+        self.uploader_id = row_data['uploader_id']
+        try:
+            self.name = row_data['name']
+        except KeyError:
+            self.name = ''
 
     def __repr__(self):
         """Prints instance contents in debug session."""

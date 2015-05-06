@@ -1,4 +1,4 @@
-#!bin/python
+#!virtualenv/bin/python
 
 import hashlib
 import uuid
@@ -30,8 +30,12 @@ test_album = Albums('test_album2',
                     'This is a test album #2 just for test #2')
 db.session.add(test_album)
 
-test_pic = Pictures(1, 1, datetime.datetime.now(), '/test.img',
-                    '/test_thumb.img', 'Test Name')
+test_pic = Pictures({'album_id': 1,
+                     'uploader_id': 1,
+                     'upload_date': datetime.datetime.now(),
+                     'path_to_image': '/test.img',
+                     'path_to_thumbnail': '/test_thumb.img',
+                     'name': 'Test Name'})
 db.session.add(test_pic)
 
 db.session.commit()
