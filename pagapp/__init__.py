@@ -23,3 +23,5 @@ lm.login_view = 'login'
 
 from pagapp.views.main import *
 from pagapp.views.users import *
+from pagapp.views.albums import *
+from pagapp.views.upload import *

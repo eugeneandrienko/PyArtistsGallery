@@ -11,7 +11,7 @@ from flask_wtf import Form
 from flask_login import current_user, login_user
 
 from pagapp import db
-from pagapp.models import Users
+from pagapp.models.users import Users
 
 
 class LoginForm(Form):

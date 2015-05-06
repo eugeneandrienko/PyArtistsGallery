@@ -5,10 +5,10 @@
  inside album with given album ID.
  """
 
-from pagapp.models import Pictures
+from pagapp.models.pictures import Pictures
 
 
-class PictureForm():
+class PictureForm:
     """Service form for obtaining list of pictures within given album."""
 
     @staticmethod

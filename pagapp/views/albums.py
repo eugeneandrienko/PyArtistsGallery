@@ -9,10 +9,10 @@ from flask import render_template, redirect, url_for, flash
 from flask_login import login_required
 
 from pagapp import app
-from pagapp.forms import AlbumForm, AddAlbumForm, \
+from pagapp.forms.albums import AlbumForm, AddAlbumForm, \
     EditAlbumNameForm, EditAlbumDescriptionForm, DeleteAlbumForm
-from pagapp.forms import PictureForm
-from pagapp.forms import GotoUploadFakeForm
+from pagapp.forms.pictures import PictureForm
+from pagapp.forms.common import GotoUploadFakeForm
 
 
 @app.route('/album/<album_url>', methods=['GET', 'POST'])

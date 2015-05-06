@@ -4,8 +4,6 @@ List of classes:
 Pictures -- contains description of "pictures" table.
 """
 
-import datetime
-
 from pagapp import db
 
 

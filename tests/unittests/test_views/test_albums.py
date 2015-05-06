@@ -7,7 +7,7 @@ from unittest import mock
 
 from pagapp.views.albums import album
 from pagapp.views.albums import manage_albums
-from pagapp.models import Albums
+from pagapp.models.albums import Albums
 
 
 class _FlaskApplicationContextTextCase(unittest.TestCase):

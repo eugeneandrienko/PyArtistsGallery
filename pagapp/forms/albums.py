@@ -19,10 +19,10 @@ from wtforms.validators import DataRequired
 from flask_wtf import Form
 
 from pagapp import db
-from pagapp.models import Albums
+from pagapp.models.albums import Albums
 
 
-class AlbumForm():
+class AlbumForm:
     """Service form -- using for obtaining all existing albums."""
 
     _matched_album = None

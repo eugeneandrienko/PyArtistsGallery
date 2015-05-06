@@ -2,7 +2,7 @@
 
 import unittest
 
-from pagapp.forms import PictureForm
+from pagapp.forms.pictures import PictureForm
 from unittest import mock
 
 

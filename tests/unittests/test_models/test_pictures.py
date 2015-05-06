@@ -3,7 +3,7 @@
 import datetime
 import unittest
 
-from pagapp.models import Pictures
+from pagapp.models.pictures import Pictures
 
 
 class PicturesTableTestCase(unittest.TestCase):

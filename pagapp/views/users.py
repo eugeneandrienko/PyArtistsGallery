@@ -12,8 +12,8 @@ from flask_login import logout_user, login_required
 
 from pagapp import app
 from pagapp import lm
-from pagapp.forms import LoginForm, ChangePasswordForm
-from pagapp.models import Users
+from pagapp.forms.users import LoginForm, ChangePasswordForm
+from pagapp.models.users import Users
 
 
 @app.route('/login', methods=['GET', 'POST'])

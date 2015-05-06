@@ -204,7 +204,7 @@ class UsersTestCase(_FlaskApplicationContextTextCase):
         self.assertTrue(mock_url_for.called,
                         msg="url_for() should be called!")
 
-    @mock.patch('pagapp.models.Users.query')
+    @mock.patch('pagapp.models.users.Users.query')
     def test_load_user(self, mock_query):
         """Test for load_user() function.
 

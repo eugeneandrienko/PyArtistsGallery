@@ -7,8 +7,8 @@ from flask import Flask
 from flask_login import LoginManager, AnonymousUserMixin
 from flask_login import login_user
 
-from pagapp.forms import LoginForm, ChangePasswordForm
-from pagapp.models import Users
+from pagapp.forms.users import LoginForm, ChangePasswordForm
+from pagapp.models.users import Users
 
 
 class _MockFilterByReturnValue():

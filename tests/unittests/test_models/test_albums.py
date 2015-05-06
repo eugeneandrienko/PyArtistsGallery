@@ -4,7 +4,7 @@ import unittest
 
 from unittest import mock
 
-from pagapp.models import Albums
+from pagapp.models.albums import Albums
 
 # For test_get_albums_list() method.
 COUNT_OF_FAKE_ALBUMS = 5
@@ -53,7 +53,7 @@ class AlbumsTableTestCase(unittest.TestCase):
                               *wrong_arguments,
                               msg="TypeError raises if argument(s) wrong!")
 
-    @mock.patch('pagapp.models.Albums.query')
+    @mock.patch('pagapp.models.albums.Albums.query')
     def test_get_albums_list(self, mock_query):
         """Tests method, which should return list of all albums.
 

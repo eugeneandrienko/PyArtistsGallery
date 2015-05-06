@@ -5,9 +5,9 @@ import unittest
 from unittest import mock
 from flask import Flask
 
-from pagapp.forms import AlbumForm, AddAlbumForm, \
+from pagapp.forms.albums import AlbumForm, AddAlbumForm, \
     EditAlbumNameForm, EditAlbumDescriptionForm, DeleteAlbumForm
-from pagapp.models import Albums
+from pagapp.models.albums import Albums
 
 
 class _MockFilterByReturnValue():

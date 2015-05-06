@@ -5,7 +5,9 @@ import uuid
 import datetime
 
 from pagapp import db
-from pagapp.models import Users, Albums, Pictures
+from pagapp.models.albums import Albums
+from pagapp.models.pictures import Pictures
+from pagapp.models.users import Users
 
 
 _USER = 'root'

@@ -4,7 +4,7 @@ import hashlib
 import uuid
 import unittest
 
-from pagapp.models import Users
+from pagapp.models.users import Users
 
 
 class UsersTableTestCase(unittest.TestCase):
