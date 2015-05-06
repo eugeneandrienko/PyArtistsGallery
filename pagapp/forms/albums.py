@@ -61,11 +61,7 @@ class AddAlbumForm(Form):
 
     new_album = StringField('new_album', validators=[DataRequired()])
     new_album_description = TextAreaField('new_album_description')
-    _submit_button = SubmitField('Create new album')
-
-    @property
-    def submit_button(self):
-        return self._submit_button.data
+    submit_button = SubmitField('Create new album')
 
     def validate(self):
         """Extended form validator -- adds new album to database if all ok."""

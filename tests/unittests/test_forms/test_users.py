@@ -18,14 +18,14 @@ class _MockFilterByReturnValue():
     We use this method inside code of our application.
     """
 
-    first_return_value = None
+    _first_return_value = None
 
     def __init__(self, first_return_value=None):
-        self.first_return_value = first_return_value
+        self._first_return_value = first_return_value
 
     def first(self):
         """Special method, which uses inside code of out application."""
-        return self.first_return_value
+        return self._first_return_value
 
 
 class _FlaskApplicationContextTestCase(unittest.TestCase):

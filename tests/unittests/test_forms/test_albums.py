@@ -17,14 +17,14 @@ class _MockFilterByReturnValue():
     We use this method inside code of our application.
     """
 
-    first_return_value = None
+    _first_return_value = None
 
     def __init__(self, first_return_value=None):
-        self.first_return_value = first_return_value
+        self._first_return_value = first_return_value
 
     def first(self):
         """Special method, which uses inside code of out application."""
-        return self.first_return_value
+        return self._first_return_value
 
 
 class _FlaskApplicationContextTextCase(unittest.TestCase):
@@ -52,6 +52,7 @@ class AlbumFormTestCase(unittest.TestCase):
 
     Test cases:
     test_init -- tests __init__() method.
+    test_matched_album -- test for matched_album() property.
     test_get_albums_list -- tests method, which should return all albums
     from database.
     """
@@ -82,6 +83,20 @@ class AlbumFormTestCase(unittest.TestCase):
         self.assertTrue(mock_query.filter_by.called,
                         msg="filter_by should be called!")
         mock_query.filter_by.assert_called_with(url_part=test_parameter)
+
+
+    @mock.patch('pagapp.forms.albums.Albums.query')
+    def test_matched_album(self, mock_query):
+        """Test for matched_album property.
+
+        Test case:
+        This property should return self._matched_album field in any cases.
+        """
+        matched_album = 'test123'
+        mock_query.filter_by.return_value = _MockFilterByReturnValue(
+            first_return_value=matched_album)
+        test_album = AlbumForm('test')
+        self.assertEqual(test_album.matched_album, matched_album)
 
     @mock.patch('pagapp.forms.albums.Albums.get_albums_list')
     def test_get_albums_list(self, mock_get_albums_list):
