@@ -14,7 +14,3 @@ from pagapp.views import users
 
 
 __all__ = ['albums', 'main', 'upload', 'users']
-
-
-def warning_killer():
-    pass

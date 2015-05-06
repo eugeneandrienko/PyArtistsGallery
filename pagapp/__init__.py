@@ -21,7 +21,5 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
-import pagapp.views
-
-
-views.warning_killer()
+from pagapp.views.main import *
+from pagapp.views.users import *
