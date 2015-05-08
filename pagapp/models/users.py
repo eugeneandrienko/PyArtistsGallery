@@ -7,7 +7,7 @@ Users -- contains description of "users" table.
 import hashlib
 import uuid
 
-from pagapp import db
+from pagapp.models import db
 
 
 class Users(db.Model):

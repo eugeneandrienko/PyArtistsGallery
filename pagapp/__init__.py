@@ -1,27 +1,14 @@
-"""Package with all, what necessary for gallery.
+"""Main gallery package with different blueprints.
 
-Contains description of application database, different
-forms for gallery pages and handlers for various URLs.
+Contains description of application database and different
+blueprints for Web-interface.
 
-List of modules:
-forms -- contains forms for gallery pages.
-models -- contains descriptions of tables for database.
-views -- contains handler for application URLs.
+Contents:
+admin_panel -- blueprint with administrator's panel.
+models -- description of application database.
+public_pages -- public pages, like list of albums, pictures in
+selected album and etc.
+create_pagapp.py -- function for application deploying.
+support_functions.py -- different functions, which are widely using
+in application.
 """
-
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-
-
-app = Flask(__name__)
-app.config.from_object('config')
-db = SQLAlchemy(app)
-lm = LoginManager()
-lm.init_app(app)
-lm.login_view = 'login'
-
-from pagapp.views.main import *
-from pagapp.views.users import *
-from pagapp.views.albums import *
-from pagapp.views.upload import *

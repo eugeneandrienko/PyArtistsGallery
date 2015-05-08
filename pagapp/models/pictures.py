@@ -4,7 +4,7 @@ List of classes:
 Pictures -- contains description of "pictures" table.
 """
 
-from pagapp import db
+from pagapp.models import db
 
 
 class Pictures(db.Model):

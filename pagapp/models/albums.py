@@ -4,7 +4,7 @@ List of classes:
 Albums -- contains description of "albums" table.
 """
 
-from pagapp import db
+from pagapp.models import db
 
 
 class Albums(db.Model):

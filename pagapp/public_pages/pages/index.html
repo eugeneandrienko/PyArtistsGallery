@@ -1,0 +1,50 @@
+{% extends "blueimp_base_t.html" %}
+
+{% block navbar %}
+<div class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">{{ title }}</a>
+        </div>
+
+        <ul class="nav navbar-nav navbar-left">
+            <li class="dropdown">
+                <a href='#' class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                    Albums
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    {% for album in albums %}
+                        <li role="presentation" class="dropdown">
+                            <a role="menuitem" tabindex="-1" href="/album/{{ album.url_part }}">
+                                {{ album.album_name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+
+        <a class="btn btn-default navbar-btn navbar-right" href={{url_for("public_pages.login")}}>
+            Admin panel
+        </a>
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block mainpage %}
+{% include "flash.html" %}
+
+<div class="container">
+    <h1>Bootstrap Image Gallery Demo</h1>
+    <blockquote>
+        <p>Bootstrap Image Gallery is an extension to <a href="https://blueimp.github.io/Gallery/">blueimp Gallery</a>, a touch-enabled, responsive and customizable image &amp; video gallery.<br>It displays images and videos in the modal dialog of the <a href="http://getbootstrap.com/">Bootstrap</a> framework, features swipe, mouse and keyboard navigation, transition effects, fullscreen support and on-demand content loading and can be extended to display additional content types.</p>
+    </blockquote>
+    <br>
+    <!-- The container for the list of example images -->
+    <div id="links"></div>
+    <br>
+</div>
+
+{{ super() }}
+{% endblock mainpage %}
