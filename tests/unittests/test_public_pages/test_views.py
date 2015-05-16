@@ -1,0 +1,325 @@
+"""Tests for views for public pages."""
+
+import unittest
+
+from jinja2 import TemplateNotFound
+from unittest.mock import patch
+from unittest.mock import MagicMock
+
+from pagapp.public_pages.views import index, album, login
+
+
+class IndexTestCase(unittest.TestCase):
+    """Tests for index() function."""
+
+    @patch('pagapp.public_pages.views.render_template')
+    def test_index(self, mock_render_template):
+        """Test for index() function.
+
+        Test case:
+        We should return result of render_template() call if
+        render_template() did not returns any exception.
+        """
+        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        path_to_albums = 'pagapp.public_pages.views.Albums'
+        with patch(path_to_current_app) as mock_current_app, \
+                patch(path_to_albums) as mock_albums:
+            test_render_template = 'render_template'
+            mock_render_template.return_value = test_render_template
+            mock_current_app.config['GALLERY_TITLE'] = 'test'
+            mock_albums.get_albums_list.return_value = 'test'
+            self.assertEqual(index(), test_render_template,
+                             msg="render_template() should be called!")
+
+    @patch('pagapp.public_pages.views.abort')
+    @patch('pagapp.public_pages.views.render_template')
+    def test_index_no_template(self, mock_render_template, mock_abort):
+        """Test for index() function.
+
+        Test case:
+        If render_template() raise TemplateNotFound - function
+        should call abort(404) function.
+        """
+        test_abort = 'test_abort'
+        mock_abort.return_value = test_abort
+        mock_render_template.side_effect = TemplateNotFound(name='test')
+        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        path_to_albums = 'pagapp.public_pages.views.Albums'
+        with patch(path_to_current_app) as mock_current_app, \
+                patch(path_to_albums) as mock_albums:
+            mock_current_app.config['GALLERY_TITLE'] = 'test'
+            mock_albums.get_albums_list.return_value = 'test'
+            index()
+            self.assertTrue(mock_abort.called,
+                            msg="abort(404) should be called!")
+
+
+class AlbumTestCase(unittest.TestCase):
+    """Tests for album() function."""
+
+    @patch('pagapp.public_pages.views.render_template')
+    def test_album(self, mock_render_template):
+        """Test for album() function.
+
+        Test case:
+        If album with given album_url is exists - function should
+        return render_template() result.
+        """
+        test_album_url = 'album_url'
+        test_filter_by = 'test_filter_by'
+        mock_filter_by_result = MagicMock()
+        mock_filter_by_result.first.result_value = test_filter_by
+
+        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        path_to_pictures = 'pagapp.public_pages.views.Pictures'
+        path_to_albums = 'pagapp.public_pages.views.Albums'
+        with patch(path_to_current_app) as mock_current_app, \
+                patch(path_to_pictures) as mock_pictures, \
+                patch(path_to_albums) as mock_albums:
+            mock_current_app.config['GALLERY_TITLE'] = 'test title'
+            mock_current_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+            mock_albums.query.filter_by.return_value = mock_filter_by_result
+            mock_pictures.query.filter_by.return_value = test_filter_by
+
+            test_render_template_result = 'render_template_result'
+            mock_render_template.return_value = test_render_template_result
+            self.assertEqual(album(test_album_url), test_render_template_result,
+                             msg="render_template() should be called!")
+
+    @patch('pagapp.public_pages.views.abort')
+    @patch('pagapp.public_pages.views.render_template')
+    def test_album_no_template(self, mock_render_template, mock_abort):
+        """Test for album() function.
+
+        Test case:
+        If album is exists but HTML template does not exists - function
+        should call abort(404).
+        """
+        test_album_url = 'album_url'
+        test_filter_by = 'test_filter_by'
+        mock_filter_by_result = MagicMock()
+        mock_filter_by_result.first.result_value = test_filter_by
+
+        path_to_albums = 'pagapp.public_pages.views.Albums'
+        path_to_pictures = 'pagapp.public_pages.views.Pictures'
+        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        with patch(path_to_albums) as mock_albums, \
+                patch(path_to_pictures) as mock_pictures, \
+                patch(path_to_current_app) as mock_current_app:
+            mock_current_app.config['GALLERY_TITLE'] = 'test title'
+            mock_current_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+            mock_albums.query.filter_by.return_value = mock_filter_by_result
+            mock_pictures.query.filter_by.return_value = test_filter_by
+
+            mock_render_template.side_effect = TemplateNotFound(name='test')
+            album(test_album_url)
+            self.assertTrue(mock_abort.called, msg="abort() not called!")
+
+    @patch('pagapp.public_pages.views.url_for')
+    @patch('pagapp.public_pages.views.redirect')
+    @patch('pagapp.public_pages.views.flash')
+    def test_album_not_exists(self, mock_flash, mock_redirect, mock_url_for):
+        """Test for album() function.
+
+        Test case:
+        If album with given album_url does not exists - function should
+        catch AttributeError exception and call flash() and redirect()
+        function.
+        """
+        test_album_url = 'album_url'
+        test_filter_by = 'test_filter_by'
+        mock_filter_by_result = MagicMock()
+        mock_filter_by_result.first.result_value = test_filter_by
+
+        path_to_albums = 'pagapp.public_pages.views.Albums'
+        path_to_pictures = 'pagapp.public_pages.views.Pictures'
+        with patch(path_to_albums) as mock_albums, \
+                patch(path_to_pictures) as mock_pictures:
+            mock_albums.query.filter_by.return_value = mock_filter_by_result
+            mock_pictures.query.filter_by.return_value = test_filter_by
+            mock_albums.query.filter_by.side_effect = AttributeError()
+
+            redirect_result = 'test redirect'
+            url_for_result = 'test url for'
+            mock_redirect.return_value = redirect_result
+            mock_url_for.return_value = url_for_result
+
+            self.assertEqual(album(test_album_url), redirect_result,
+                             msg="redirect() should be called!")
+            self.assertTrue(mock_flash.called, msg="flash() does not called!")
+
+
+class LoginTestCase(unittest.TestCase):
+    """Tests for login() function."""
+
+    @patch('pagapp.public_pages.views.redirect')
+    @patch('pagapp.public_pages.views.url_for')
+    @patch('pagapp.public_pages.views.login_user')
+    @patch('pagapp.public_pages.views.request')
+    def test_login(self, mock_request, mock_login_user, mock_url_for,
+                   mock_redirect):
+        """Test for login() function.
+
+        Test case:
+        If request.method equals with 'POST' and login form validated
+        successfully - login_user() should be called and function
+        should return result of redirect() call.
+        """
+        mock_filter_by_result = MagicMock()
+        mock_filter_by_result.first.return_value = 'test'
+
+        with patch('pagapp.public_pages.views.Users') as mock_users, \
+                patch('pagapp.public_pages.views.LoginForm') as mock_login_form:
+            mock_request.method = 'POST'
+            mock_login_form.return_value.validate.return_value = True
+            mock_login_form.return_value.login.data = 'test'
+
+            mock_users.query.filter_by.return_value = mock_filter_by_result
+
+            redirect_result = 'test redirect'
+            mock_redirect.return_value = redirect_result
+
+            self.assertEqual(login(), redirect_result,
+                             msg="redirect() should be called")
+            self.assertTrue(mock_login_user.called,
+                            msg="login_user() should be called!")
+            self.assertTrue(mock_url_for.called,
+                            msg="url_for() should be called!")
+
+    @patch('pagapp.public_pages.views.render_template')
+    @patch('pagapp.public_pages.views.flash_form_errors')
+    @patch('pagapp.public_pages.views.request')
+    def test_login_not_post(self, mock_request, mock_flash_form_errors,
+                            mock_render_template):
+        """Test for login() function.
+
+        Test case:
+        If request.method not equals with 'POST' - flash_form_errors() should
+        be called. Also function should return render_template() call result.
+        """
+        path_to_users = 'pagapp.public_pages.views.Users'
+        path_to_login_form = 'pagapp.public_pages.views.LoginForm'
+        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        with patch(path_to_users) as mock_users, \
+                patch(path_to_login_form) as mock_login_form, \
+                patch(path_to_current_app) as mock_current_app:
+            mock_filter_by_result = MagicMock()
+            mock_filter_by_result.first.return_value = 'test'
+            mock_users.query.filter_by.return_value = mock_filter_by_result
+
+            mock_request.method = 'GET'
+            mock_login_form.return_value.validate.return_value = True
+            mock_login_form.return_value.login.data = 'test'
+
+            mock_current_app.config['GALLERY_TITLE'] = 'test'
+
+            render_template_result = 'render_template result'
+            mock_render_template.return_value = render_template_result
+            self.assertEqual(login(), render_template_result,
+                             msg="render_template() should be called")
+            self.assertTrue(mock_flash_form_errors.called)
+
+    @patch('pagapp.public_pages.views.render_template')
+    @patch('pagapp.public_pages.views.flash_form_errors')
+    @patch('pagapp.public_pages.views.request')
+    def test_login_not_validate(self, mock_request, mock_flash_form_errors,
+                                mock_render_template):
+        """Test for login() function.
+
+        Test case:
+        If login form does not validate - flash_form_errors() should
+        be called. Also function should return render_template() call result.
+        """
+        path_to_users = 'pagapp.public_pages.views.Users'
+        path_to_login_form = 'pagapp.public_pages.views.LoginForm'
+        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        with patch(path_to_users) as mock_users, \
+                patch(path_to_login_form) as mock_login_form, \
+                patch(path_to_current_app) as mock_current_app:
+            mock_filter_by_result = MagicMock()
+            mock_filter_by_result.first.return_value = 'test'
+            mock_users.query.filter_by.return_value = mock_filter_by_result
+
+            mock_request.method = 'POST'
+            mock_login_form.return_value.validate.return_value = False
+            mock_login_form.return_value.login.data = 'test'
+
+            mock_current_app.config['GALLERY_TITLE'] = 'test'
+
+            render_template_result = 'render_template result'
+            mock_render_template.return_value = render_template_result
+            self.assertEqual(login(), render_template_result,
+                             msg="render_template() should be called")
+            self.assertTrue(mock_flash_form_errors.called)
+
+    @patch('pagapp.public_pages.views.render_template')
+    @patch('pagapp.public_pages.views.flash_form_errors')
+    @patch('pagapp.public_pages.views.request')
+    def test_login_not_post_validate(self, mock_request, mock_flash_form_errors,
+                                     mock_render_template):
+        """Test for login() function.
+
+        Test case:
+        If request.method not equals with 'POST' and login form does not
+        validate - flash_form_errors() should be called. Also function
+        should return render_template() call result.
+        """
+        path_to_users = 'pagapp.public_pages.views.Users'
+        path_to_login_form = 'pagapp.public_pages.views.LoginForm'
+        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        with patch(path_to_users) as mock_users, \
+                patch(path_to_login_form) as mock_login_form, \
+                patch(path_to_current_app) as mock_current_app:
+            mock_filter_by_result = MagicMock()
+            mock_filter_by_result.first.return_value = 'test'
+            mock_users.query.filter_by.return_value = mock_filter_by_result
+
+            mock_request.method = 'GET'
+            mock_login_form.return_value.validate.return_value = False
+            mock_login_form.return_value.login.data = 'test'
+
+            mock_current_app.config['GALLERY_TITLE'] = 'test'
+
+            render_template_result = 'render_template result'
+            mock_render_template.return_value = render_template_result
+            self.assertEqual(login(), render_template_result,
+                             msg="render_template() should be called")
+            self.assertTrue(mock_flash_form_errors.called)
+
+    @patch('pagapp.public_pages.views.abort')
+    @patch('pagapp.public_pages.views.render_template')
+    @patch('pagapp.public_pages.views.flash_form_errors')
+    @patch('pagapp.public_pages.views.request')
+    def test_login_no_template(self, mock_request, mock_flash_form_errors,
+                               mock_render_template, mock_abort):
+        """Test for login() function.
+
+        Test case:
+        If request.method not equals with 'POST' - flash_form_errors() should
+        be called. Also if HTML template not exists abort(404) should be
+        called.
+        """
+        path_to_users = 'pagapp.public_pages.views.Users'
+        path_to_login_form = 'pagapp.public_pages.views.LoginForm'
+        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        with patch(path_to_users) as mock_users, \
+                patch(path_to_login_form) as mock_login_form, \
+                patch(path_to_current_app) as mock_current_app:
+            mock_filter_by_result = MagicMock()
+            mock_filter_by_result.first.return_value = 'test'
+            mock_users.query.filter_by.return_value = mock_filter_by_result
+
+            mock_request.method = 'GET'
+            mock_login_form.return_value.validate.return_value = False
+            mock_login_form.return_value.login.data = 'test'
+
+            mock_current_app.config['GALLERY_TITLE'] = 'test'
+
+            mock_render_template.side_effect = TemplateNotFound(name='test')
+            login()
+            self.assertTrue(mock_abort.called, msg="abort() should be called!")
+            self.assertTrue(mock_flash_form_errors.called)
+
+
+if __name__ == '__main__':
+    unittest.main()

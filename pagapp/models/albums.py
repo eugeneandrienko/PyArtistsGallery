@@ -48,8 +48,8 @@ class Albums(db.Model):
             self.album_name,
             self.album_description)
 
-    @classmethod
-    def get_albums_list(cls):
+    @staticmethod
+    def get_albums_list():
         """Special method of class, it returns list of albums.
 
         Return value:
@@ -61,4 +61,4 @@ class Albums(db.Model):
         return [{'url_part': album.url_part,
                  'album_name': album.album_name,
                  'album_description': album.album_description
-                 } for album in cls.query.all()]
+                 } for album in Albums.query.all()]

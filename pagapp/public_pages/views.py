@@ -75,7 +75,10 @@ def login():
     else:
         flash_form_errors(login_form)
 
-    return render_template(
-        "login.html",
-        title=current_app.config['GALLERY_TITLE'],
-        form=login_form)
+    try:
+        return render_template(
+            "login.html",
+            title=current_app.config['GALLERY_TITLE'],
+            form=login_form)
+    except TemplateNotFound:
+        abort(404)

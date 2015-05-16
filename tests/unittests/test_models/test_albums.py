@@ -2,12 +2,9 @@
 
 import unittest
 
-from unittest import mock
+from unittest.mock import patch
 
 from pagapp.models.albums import Albums
-
-# For test_get_albums_list() method.
-COUNT_OF_FAKE_ALBUMS = 5
 
 
 class AlbumsTableTestCase(unittest.TestCase):
@@ -53,8 +50,8 @@ class AlbumsTableTestCase(unittest.TestCase):
                               *wrong_arguments,
                               msg="TypeError raises if argument(s) wrong!")
 
-    @mock.patch('pagapp.models.albums.Albums.query')
-    def test_get_albums_list(self, mock_query):
+    @patch('pagapp.models.albums.Albums')
+    def test_get_albums_list(self, mock_albums):
         """Tests method, which should return list of all albums.
 
         Test cases:
@@ -62,35 +59,17 @@ class AlbumsTableTestCase(unittest.TestCase):
         There is(are) something album(s) in the database.
         """
         test_album = Albums('fake_url', 'fake_name', 'fake')
-        mock_query.all.return_value = []
+
+        mock_albums.query.all.return_value = []
         result = test_album.get_albums_list()
         self.assertEqual(result, [], msg="Albums list should be empty.")
 
-        expected_value = []
-        all_return_value = []
-        for index, elements_in_database in enumerate(range(
-                COUNT_OF_FAKE_ALBUMS)):
-            expected_value.append(
-                {'url_part': 'test_url' + str(elements_in_database),
-                 'album_name': 'test_album_name' + str(elements_in_database),
-                 'album_description': 'test_album_description' + str(
-                     elements_in_database)})
-
-            mock_album = mock.create_autospec(Albums)
-            (mock_album.url_part,
-             mock_album.album_name,
-             mock_album.album_description) = (expected_value[index]['url_part'],
-                                              expected_value[index][
-                                                  'album_name'],
-                                              expected_value[index][
-                                                  'album_description'])
-            all_return_value.append(mock_album)
-            mock_query.all.return_value = all_return_value
-
-            result = test_album.get_albums_list()
-            self.assertEqual(result, expected_value,
-                             msg="There is should be {} album(s)".format(
-                                 elements_in_database))
+        mock_albums.query.all.return_value = [test_album]
+        result = test_album.get_albums_list()
+        self.assertEqual(result,
+                         [{'url_part': 'fake_url',
+                           'album_name': 'fake_name',
+                           'album_description': 'fake'}])
 
 
 if __name__ == '__main__':
