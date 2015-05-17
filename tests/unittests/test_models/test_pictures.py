@@ -51,8 +51,7 @@ class PicturesTableTestCase(unittest.TestCase):
             'uploader_id': 2,
             'upload_date': datetime.datetime(2009, 1, 2, 12, 14, 22, 34),
             'path_to_image': 'fake_path',
-            'path_to_thumbnail': 'fake_path_thumbnail',
-            'name': ''
+            'path_to_thumbnail': 'fake_path_thumbnail'
         }
         test_picture = Pictures(test_arguments)
         repr_result = test_picture.__repr__()
