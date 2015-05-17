@@ -10,7 +10,6 @@ from flask_login import LoginManager
 
 from pagapp.models.users import Users
 
-
 lm = LoginManager()
 
 

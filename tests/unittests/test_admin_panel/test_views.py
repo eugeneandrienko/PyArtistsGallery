@@ -1,9 +1,9 @@
 """Test for views from admin panel."""
 
 import unittest
+from unittest.mock import patch
 
 from jinja2 import TemplateNotFound
-from unittest.mock import patch
 from flask_login import login_user
 
 from pagapp.models.users import Users

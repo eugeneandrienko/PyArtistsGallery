@@ -1,9 +1,9 @@
 """Tests for forms included in public pages."""
 
 import unittest
-
 from unittest.mock import patch
 from unittest.mock import MagicMock
+
 from flask_wtf.form import ValidationError
 
 from pagapp.public_pages.forms import LoginForm

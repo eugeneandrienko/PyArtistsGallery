@@ -1,7 +1,6 @@
 """Tests for module, within pagapp creates."""
 
 import unittest
-
 from unittest.mock import patch
 from unittest.mock import MagicMock
 

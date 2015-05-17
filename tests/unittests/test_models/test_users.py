@@ -106,5 +106,6 @@ class UsersTableTestCase(unittest.TestCase):
         self.assertEqual(hashed_password, test_user.password,
                          msg="Hashed passwords should be equal!")
 
+
 if __name__ == '__main__':
     unittest.main()

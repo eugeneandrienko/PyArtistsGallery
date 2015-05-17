@@ -86,5 +86,6 @@ class PicturesTableTestCase(unittest.TestCase):
                                                   wrong_arguments)},
                 msg="TypeError raises if argument(s) wrong!")
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -11,10 +11,8 @@ views.py -- views for current blueprint.
 
 from flask import Blueprint
 
-
 public_pages = Blueprint('public_pages', __name__,
                          template_folder='pages',
                          static_folder='../static')
-
 
 from pagapp.public_pages.views import *

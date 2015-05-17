@@ -1,7 +1,6 @@
 """Tests for administrator's functions from admin's panel."""
 
 import unittest
-
 from unittest.mock import patch
 from unittest.mock import MagicMock
 

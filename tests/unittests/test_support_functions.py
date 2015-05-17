@@ -1,10 +1,10 @@
 """Tests for various support functions."""
 
 import unittest
-
-from sqlalchemy.orm.exc import ObjectDeletedError
 from unittest.mock import patch
 from unittest.mock import MagicMock
+
+from sqlalchemy.orm.exc import ObjectDeletedError
 
 from pagapp.support_functions import load_user, flash_form_errors
 

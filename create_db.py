@@ -9,7 +9,6 @@ from pagapp.models.albums import Albums
 from pagapp.models.pictures import Pictures
 from pagapp.models.users import Users
 
-
 _USER = 'root'
 _PASSWORD = 'toor'
 

@@ -1,10 +1,10 @@
 """Tests for admin's panel forms."""
 
 import unittest
-
-from flask_wtf.form import ValidationError
 from unittest.mock import patch
 from unittest.mock import MagicMock
+
+from flask_wtf.form import ValidationError
 
 from pagapp.admin_panel.forms import ChangePasswordForm
 from tests.unittests.flask_test import FlaskApplicationContextTestCase

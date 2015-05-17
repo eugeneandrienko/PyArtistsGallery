@@ -11,9 +11,7 @@ import os
 import random
 import string
 
-
 _BASEDIR = os.path.abspath(os.path.dirname(__file__))
-
 
 GALLERY_TITLE = 'TEST TITLE'
 

@@ -11,11 +11,9 @@ views.py -- views, using in admin panel.
 
 from flask import Blueprint
 
-
 admin_panel = Blueprint('admin_panel', __name__,
                         template_folder='pages',
                         static_folder='../static',
                         url_prefix='/admin')
-
 
 from pagapp.admin_panel.views import *

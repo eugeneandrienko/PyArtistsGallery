@@ -1,10 +1,10 @@
 """Tests for views for public pages."""
 
 import unittest
-
-from jinja2 import TemplateNotFound
 from unittest.mock import patch
 from unittest.mock import MagicMock
+
+from jinja2 import TemplateNotFound
 
 from pagapp.public_pages.views import index, album, login
 
