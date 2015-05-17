@@ -33,5 +33,6 @@ class ChangePasswordForm(Form):
     @staticmethod
     def validate_old_password(form, field):
         """Check, is given current password is not wrong."""
+        del form
         if current_user.check_password(field.data) is False:
             raise ValidationError("Given password is wrong")

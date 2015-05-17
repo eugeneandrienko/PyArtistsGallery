@@ -33,6 +33,7 @@ class LoginForm(Form):
     @staticmethod
     def validate_login(form, field):
         """Login field validator."""
+        del form
         user = Users.query.filter_by(
             nickname=field.data).first()
         if user is None:

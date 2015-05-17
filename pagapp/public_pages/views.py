@@ -31,6 +31,7 @@ def index():
     except TemplateNotFound:
         abort(404)
 
+
 @public_pages.route('/album/<album_url>')
 def album(album_url):
     """Renders page for album with given album's URL.
@@ -57,6 +58,7 @@ def album(album_url):
             pictures=matched_pictures)
     except TemplateNotFound:
         abort(404)
+
 
 @public_pages.route('/login', methods=['GET', 'POST'])
 def login():
