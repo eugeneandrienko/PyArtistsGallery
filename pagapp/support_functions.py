@@ -5,10 +5,14 @@ blueprint or widely use with all blueprints.
 """
 
 from sqlalchemy.orm.exc import ObjectDeletedError
+from sqlalchemy.exc import OperationalError
 from flask import flash
 from flask_login import LoginManager
 
+from pagapp.models.albums import Albums
+from pagapp.models.pictures import Pictures
 from pagapp.models.users import Users
+from pagapp.models.configuration import Configuration
 
 lm = LoginManager()
 
@@ -41,3 +45,31 @@ def flash_form_errors(form):
                 "Error in the %s field - %s" % (getattr(form, field).label.text,
                                                 error),
                 category='warning')
+
+
+def is_first_run():
+    """Is application running first time or not.
+
+    Function returns True if schema is broken.
+    Also. function returns True if some config fields do
+    not filled - in this case we consider, what application
+    run at first time.
+    Function returns False if all configuration fields in database
+    are filled.
+    """
+
+    try:
+        Albums.query.first()
+        Configuration.query.first()
+        Pictures.query.first()
+        Users.query.first()
+    except OperationalError:
+        return True
+
+    if len(Configuration.query.all()) == 0:
+        return True
+
+    if len(Users.query.all()) == 0:
+        return True
+
+    return False

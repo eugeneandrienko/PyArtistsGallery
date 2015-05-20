@@ -7,16 +7,17 @@ Anonymous user should be able to view next pages:
 """
 
 from jinja2 import TemplateNotFound
-from flask import render_template, abort, current_app
+from flask import render_template, abort
 from flask import redirect, url_for, request, flash
 from flask_login import login_user
 
 from pagapp.models.albums import Albums
 from pagapp.models.pictures import Pictures
 from pagapp.models.users import Users
+from pagapp.models.configuration import Configuration
 from pagapp.public_pages import public_pages
 from pagapp.public_pages.forms import LoginForm
-from pagapp.support_functions import flash_form_errors
+from pagapp.support_functions import flash_form_errors, is_first_run
 
 
 @public_pages.route('/')
@@ -24,10 +25,13 @@ from pagapp.support_functions import flash_form_errors
 def index():
     """Renders main page of art gallery."""
     try:
-        return render_template(
-            'index.html',
-            title=current_app.config['GALLERY_TITLE'],
-            albums=Albums.get_albums_list())
+        if is_first_run() is True:
+            return redirect(url_for('service_pages.first_run'))
+        else:
+            return render_template(
+                'index.html',
+                title=Configuration.query.first().gallery_title,
+                albums=Albums.get_albums_list())
     except TemplateNotFound:
         abort(404)
 
@@ -52,7 +56,7 @@ def album(album_url):
     try:
         return render_template(
             'album.html',
-            title=current_app.config['GALLERY_TITLE'],
+            title=Configuration.query.first().gallery_title,
             current_album=matched_album,
             albums=Albums.get_albums_list(),
             pictures=matched_pictures)
@@ -80,7 +84,7 @@ def login():
     try:
         return render_template(
             "login.html",
-            title=current_app.config['GALLERY_TITLE'],
+            title=Configuration.query.first().gallery_title,
             form=login_form)
     except TemplateNotFound:
         abort(404)

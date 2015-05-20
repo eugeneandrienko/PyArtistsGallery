@@ -20,14 +20,19 @@ class IndexTestCase(unittest.TestCase):
         We should return result of render_template() call if
         render_template() did not returns any exception.
         """
-        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        path_to_configuration = 'pagapp.public_pages.views.Configuration'
         path_to_albums = 'pagapp.public_pages.views.Albums'
-        with patch(path_to_current_app) as mock_current_app, \
-                patch(path_to_albums) as mock_albums:
+        path_first_run = 'pagapp.public_pages.views.is_first_run'
+        with patch(path_to_configuration) as mock_configuration, \
+                patch(path_to_albums) as mock_albums, \
+                patch(path_first_run) as mock_first_run:
+            mock_first_result = MagicMock()
+            mock_first_result.gallery_title = 'test'
+            mock_configuration.query.first.return_value = mock_first_result
             test_render_template = 'render_template'
             mock_render_template.return_value = test_render_template
-            mock_current_app.config['GALLERY_TITLE'] = 'test'
             mock_albums.get_albums_list.return_value = 'test'
+            mock_first_run.return_value = False
             self.assertEqual(index(), test_render_template,
                              msg="render_template() should be called!")
 
@@ -43,12 +48,17 @@ class IndexTestCase(unittest.TestCase):
         test_abort = 'test_abort'
         mock_abort.return_value = test_abort
         mock_render_template.side_effect = TemplateNotFound(name='test')
-        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        path_to_configuration = 'pagapp.public_pages.views.Configuration'
         path_to_albums = 'pagapp.public_pages.views.Albums'
-        with patch(path_to_current_app) as mock_current_app, \
-                patch(path_to_albums) as mock_albums:
-            mock_current_app.config['GALLERY_TITLE'] = 'test'
+        path_to_first_run = 'pagapp.public_pages.views.is_first_run'
+        with patch(path_to_albums) as mock_albums, \
+                patch(path_to_configuration) as mock_configuration, \
+                patch(path_to_first_run) as mock_first_run:
+            mock_first_result = MagicMock()
+            mock_first_result.gallery_title = 'test'
+            mock_configuration.query.first.return_value = mock_first_result
             mock_albums.get_albums_list.return_value = 'test'
+            mock_first_run.return_value = False
             index()
             self.assertTrue(mock_abort.called,
                             msg="abort(404) should be called!")
@@ -70,14 +80,15 @@ class AlbumTestCase(unittest.TestCase):
         mock_filter_by_result = MagicMock()
         mock_filter_by_result.first.result_value = test_filter_by
 
-        path_to_current_app = 'pagapp.public_pages.views.current_app'
         path_to_pictures = 'pagapp.public_pages.views.Pictures'
         path_to_albums = 'pagapp.public_pages.views.Albums'
-        with patch(path_to_current_app) as mock_current_app, \
-                patch(path_to_pictures) as mock_pictures, \
-                patch(path_to_albums) as mock_albums:
-            mock_current_app.config['GALLERY_TITLE'] = 'test title'
-            mock_current_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        path_to_configuration = 'pagapp.public_pages.views.Configuration'
+        with patch(path_to_pictures) as mock_pictures, \
+                patch(path_to_albums) as mock_albums, \
+                patch(path_to_configuration) as mock_configuration:
+            mock_first_result = MagicMock()
+            mock_first_result.gallery_title = 'test'
+            mock_configuration.query.first.return_value = mock_first_result
             mock_albums.query.filter_by.return_value = mock_filter_by_result
             mock_pictures.query.filter_by.return_value = test_filter_by
 
@@ -102,14 +113,15 @@ class AlbumTestCase(unittest.TestCase):
 
         path_to_albums = 'pagapp.public_pages.views.Albums'
         path_to_pictures = 'pagapp.public_pages.views.Pictures'
-        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        path_to_configuration = 'pagapp.public_pages.views.Configuration'
         with patch(path_to_albums) as mock_albums, \
                 patch(path_to_pictures) as mock_pictures, \
-                patch(path_to_current_app) as mock_current_app:
-            mock_current_app.config['GALLERY_TITLE'] = 'test title'
-            mock_current_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+                patch(path_to_configuration) as mock_configuration:
             mock_albums.query.filter_by.return_value = mock_filter_by_result
             mock_pictures.query.filter_by.return_value = test_filter_by
+            mock_first_result = MagicMock()
+            mock_first_result.gallery_title = 'test'
+            mock_configuration.query.first.return_value = mock_first_result
 
             mock_render_template.side_effect = TemplateNotFound(name='test')
             album(test_album_url)
@@ -198,20 +210,21 @@ class LoginTestCase(unittest.TestCase):
         be called. Also function should return render_template() call result.
         """
         path_to_users = 'pagapp.public_pages.views.Users'
+        path_to_configuration = 'pagapp.public_pages.views.Configuration'
         path_to_login_form = 'pagapp.public_pages.views.LoginForm'
-        path_to_current_app = 'pagapp.public_pages.views.current_app'
         with patch(path_to_users) as mock_users, \
-                patch(path_to_login_form) as mock_login_form, \
-                patch(path_to_current_app) as mock_current_app:
+                patch(path_to_configuration) as mock_configuration, \
+                patch(path_to_login_form) as mock_login_form:
             mock_filter_by_result = MagicMock()
+            mock_first_result = MagicMock()
             mock_filter_by_result.first.return_value = 'test'
+            mock_first_result.gallery_title = 'test'
             mock_users.query.filter_by.return_value = mock_filter_by_result
+            mock_configuration.query.first.return_value = mock_first_result
 
             mock_request.method = 'GET'
             mock_login_form.return_value.validate.return_value = True
             mock_login_form.return_value.login.data = 'test'
-
-            mock_current_app.config['GALLERY_TITLE'] = 'test'
 
             render_template_result = 'render_template result'
             mock_render_template.return_value = render_template_result
@@ -232,19 +245,20 @@ class LoginTestCase(unittest.TestCase):
         """
         path_to_users = 'pagapp.public_pages.views.Users'
         path_to_login_form = 'pagapp.public_pages.views.LoginForm'
-        path_to_current_app = 'pagapp.public_pages.views.current_app'
+        path_to_configuration = 'pagapp.public_pages.views.Configuration'
         with patch(path_to_users) as mock_users, \
                 patch(path_to_login_form) as mock_login_form, \
-                patch(path_to_current_app) as mock_current_app:
+                patch(path_to_configuration) as mock_configuration:
+            mock_first_result = MagicMock()
             mock_filter_by_result = MagicMock()
             mock_filter_by_result.first.return_value = 'test'
+            mock_first_result.gallery_title = 'test'
             mock_users.query.filter_by.return_value = mock_filter_by_result
+            mock_configuration.query.first.return_value = mock_first_result
 
             mock_request.method = 'POST'
             mock_login_form.return_value.validate.return_value = False
             mock_login_form.return_value.login.data = 'test'
-
-            mock_current_app.config['GALLERY_TITLE'] = 'test'
 
             render_template_result = 'render_template result'
             mock_render_template.return_value = render_template_result
@@ -265,20 +279,21 @@ class LoginTestCase(unittest.TestCase):
         should return render_template() call result.
         """
         path_to_users = 'pagapp.public_pages.views.Users'
+        path_to_configuration = 'pagapp.public_pages.views.Configuration'
         path_to_login_form = 'pagapp.public_pages.views.LoginForm'
-        path_to_current_app = 'pagapp.public_pages.views.current_app'
         with patch(path_to_users) as mock_users, \
-                patch(path_to_login_form) as mock_login_form, \
-                patch(path_to_current_app) as mock_current_app:
+                patch(path_to_configuration) as mock_configuration, \
+                patch(path_to_login_form) as mock_login_form:
             mock_filter_by_result = MagicMock()
+            mock_first_result = MagicMock()
             mock_filter_by_result.first.return_value = 'test'
+            mock_first_result.gallery_title = 'test'
             mock_users.query.filter_by.return_value = mock_filter_by_result
+            mock_configuration.query.first.return_value = mock_first_result
 
             mock_request.method = 'GET'
             mock_login_form.return_value.validate.return_value = False
             mock_login_form.return_value.login.data = 'test'
-
-            mock_current_app.config['GALLERY_TITLE'] = 'test'
 
             render_template_result = 'render_template result'
             mock_render_template.return_value = render_template_result
@@ -300,20 +315,21 @@ class LoginTestCase(unittest.TestCase):
         called.
         """
         path_to_users = 'pagapp.public_pages.views.Users'
+        path_to_configuration = 'pagapp.public_pages.views.Configuration'
         path_to_login_form = 'pagapp.public_pages.views.LoginForm'
-        path_to_current_app = 'pagapp.public_pages.views.current_app'
         with patch(path_to_users) as mock_users, \
                 patch(path_to_login_form) as mock_login_form, \
-                patch(path_to_current_app) as mock_current_app:
+                patch(path_to_configuration) as mock_configuration:
             mock_filter_by_result = MagicMock()
+            mock_first_result = MagicMock()
             mock_filter_by_result.first.return_value = 'test'
+            mock_first_result.gallery_title = 'test'
             mock_users.query.filter_by.return_value = mock_filter_by_result
+            mock_configuration.query.first.return_value = mock_first_result
 
             mock_request.method = 'GET'
             mock_login_form.return_value.validate.return_value = False
             mock_login_form.return_value.login.data = 'test'
-
-            mock_current_app.config['GALLERY_TITLE'] = 'test'
 
             mock_render_template.side_effect = TemplateNotFound(name='test')
             login()

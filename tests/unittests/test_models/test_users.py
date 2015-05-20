@@ -1,7 +1,6 @@
 """Tests description of "users" table in database."""
 
 import hashlib
-import uuid
 import unittest
 
 from pagapp.models.users import Users
@@ -28,23 +27,16 @@ class UsersTableTestCase(unittest.TestCase):
         Constructor should raise TypeError exception if one or more
         parameters are not strings.
         """
-        test_arguments = ('nickname', 'password', 'salt', True)
+        test_arguments = ('nickname', 'password', True)
         test_user = Users(*test_arguments)
-        self.assertTupleEqual(test_arguments,
-                              (test_user.nickname, test_user.password,
-                               test_user.salt, test_user.active),
-                              msg="Login, password and salt should be equal!")
+        self.assertTupleEqual((test_arguments[0], test_arguments[2]),
+                              (test_user.nickname, test_user.active),
+                              msg="Login and password should be equal!")
 
-        repr_result = test_user.__repr__()
-        expected_repr_result = \
-            'Nickname: {}, pwd: {}, salt: {}, active: {}'.format(
-                *test_arguments)
-        self.assertEqual(repr_result, expected_repr_result)
-
-        wrong_arguments_array = [(1, 'password', 'salt', True),
-                                 ('nickname', 1, 'salt', False),
-                                 ('nickname', 'password', 1, True),
-                                 ('nickname', 'password', 'salt', 1)]
+        wrong_arguments_array = [(1, 'password', True),
+                                 ('nickname', 1, False),
+                                 ('nickname', 'password', True),
+                                 ('nickname', 'password', 1)]
         for wrong_arguments in wrong_arguments_array:
             self.assertRaises(TypeError, Users.__init__, *wrong_arguments,
                               msg="TypeError should be raised!")
@@ -60,7 +52,7 @@ class UsersTableTestCase(unittest.TestCase):
         field.
         """
         active_field = True
-        test_user = Users('nickname', 'password', 'salt', active_field)
+        test_user = Users('nickname', 'password', active_field)
         self.assertTrue(test_user.is_authenticated(),
                         msg="User should be authenticated!")
         self.assertFalse(test_user.is_anonymous(),
@@ -78,18 +70,15 @@ class UsersTableTestCase(unittest.TestCase):
         Method check_password() should return True if given plain password
         plus saved salt have match with saved hashed password. And it should
         return False if plain password does not have match.
-        Method check_password() should raise TypeError expection if it get
+        Method check_password() should raise TypeError exception if it get
         non-string object.
         Method set_new_password() should save hashed password and salt in
         internal structures of Users class. Plain password + salt from object
         of Users class should be equal with hashed password from object of
         Users class.
         """
-        salt = uuid.uuid4().hex
         plain_password = 'Very big secret'
-        hashed_password = hashlib.sha512(
-            plain_password.encode('utf-8') + salt.encode('utf-8')).hexdigest()
-        test_user = Users('nickname', hashed_password, salt, True)
+        test_user = Users('nickname', plain_password, True)
 
         self.assertTrue(test_user.check_password(plain_password),
                         msg="Password is valid!")
@@ -98,7 +87,7 @@ class UsersTableTestCase(unittest.TestCase):
         self.assertRaises(TypeError, test_user.check_password, 1,
                           msg="Should raise TypeError if password not string.")
 
-        test_user = Users('nickname', 'fake_password', 'fake_salt', True)
+        test_user = Users('nickname', 'fake_password', True)
         test_user.set_new_password(plain_password)
         hashed_password = hashlib.sha512(
             plain_password.encode('utf-8') +

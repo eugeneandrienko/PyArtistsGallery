@@ -2,6 +2,7 @@
 
 import unittest
 from unittest.mock import patch
+from unittest.mock import MagicMock
 
 from jinja2 import TemplateNotFound
 from flask_login import login_user
@@ -32,16 +33,15 @@ class AdminPanelViewsTestCase(FlaskApplicationContextTestCase):
         redirect_result = 'redirect() test'
         mock_url_for.return_value = 'test'
         mock_redirect.return_value = redirect_result
-        login_user(Users('nickname', 'password', 'salt', True))
+        login_user(Users('nickname', 'password', True))
         self.assertEqual(logout(), redirect_result,
                          msg="redirect() should be called!")
         self.assertTrue(mock_url_for.called)
         self.assertTrue(mock_logout_user.called)
 
     @patch('pagapp.admin_panel.views.abort')
-    @patch('pagapp.admin_panel.views.current_app')
     @patch('pagapp.admin_panel.views.render_template')
-    def test_panel(self, mock_render_template, mock_current_app, mock_abort):
+    def test_panel(self, mock_render_template, mock_abort):
         """Tests for panel() function.
 
         Test cases:
@@ -49,15 +49,19 @@ class AdminPanelViewsTestCase(FlaskApplicationContextTestCase):
         not found - then we should call abort(404).
         In all cases we should call all form controllers.
         """
-        login_user(Users('nickname', 'password', 'salt', True))
+        login_user(Users('nickname', 'password', True))
         render_template_result = 'render_template() result'
         mock_render_template.return_value = render_template_result
-        mock_current_app.config['GALLERY_TITLE'] = 'test'
-        self.assertEqual(panel(), render_template_result,
-                         msg="render_template() should be called!")
+        path_to_configuration = 'pagapp.admin_panel.views.Configuration'
+        path_to_form = 'pagapp.admin_panel.views.ChangePasswordForm'
+        with patch(path_to_configuration) as mock_configuration, \
+                patch(path_to_form) as mock_change_password_form:
+            mock_first_result = MagicMock()
+            mock_first_result.gallery_title = 'test'
+            mock_configuration.query.first.return_value = mock_first_result
+            self.assertEqual(panel(), render_template_result,
+                             msg="render_template() should be called!")
 
-        with patch('pagapp.admin_panel.views.ChangePasswordForm') \
-                as mock_change_password_form:
             mock_render_template.side_effect = TemplateNotFound(name='test')
             panel()
             self.assertTrue(mock_change_password_form.called)

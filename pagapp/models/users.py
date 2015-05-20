@@ -27,18 +27,17 @@ class Users(db.Model):
     salt = db.Column(db.String(), index=True, nullable=False)
     active = db.Column(db.Boolean(), index=True)
 
-    def __init__(self, nickname, password, salt, active):
+    def __init__(self, nickname, password, active):
         """Saves user data in internal structures:
 
         Arguments:
         nickname -- user login.
-        password -- hashed user password.
+        password -- not hashed user password.
         salt -- salt for password.
         active -- user status.
         """
         self.nickname = nickname
-        self.password = password
-        self.salt = salt
+        self.set_new_password(password)
         self.active = active
 
     def __repr__(self):
