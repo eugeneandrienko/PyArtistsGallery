@@ -1,0 +1,19 @@
+Guide: how to create new migration.
+
+1) Write necessary updates in current database models or create new
+database models.
+2) Generate update script via next command:
+ python db_ops.py db migrate
+Script will be found in the next path: migrations/version/<new_database_id>_.py
+3) Modify generated script. Because we use SQLite instead of 'normal'
+database, we should change lines with op.add_table(<tablename>, <args>)/
+op.drop_table(<tablename>, <args>) to lines batch_op.add_table(<args>)/
+batch_op.drop_table(<args>). And add this line to the top of the function:
+ with op.batch_alter_table(<tablename>) as batch_op: .
+4) Add newly created script to git.
+5) Add new database ID to the ./config.py file in the
+SQLALCHEMY_DATABASE_VERSION field.
+
+Optional:
+6) Upgrade developer's database via command:
+ python db_ops.py db upgrade head
