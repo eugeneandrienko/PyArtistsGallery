@@ -16,6 +16,7 @@ class Config:
     _BASEDIR = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
                               os.path.join(_BASEDIR, 'pagapp.db')
+    SQLALCHEMY_DATABASE_VERSION = '2615e2b854'
     STATIC_FOLDER = os.path.join(_BASEDIR, 'static/')
     TEMPLATES_FOLDER = os.path.join(_BASEDIR, 'templates/')
 
