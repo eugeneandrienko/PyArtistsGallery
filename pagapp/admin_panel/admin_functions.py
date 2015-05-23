@@ -49,8 +49,13 @@ def add_new_album(form):
         new_album = Albums(url_part,
                            form.album_name.data,
                            form.album_description.data)
+
         db.session.add(new_album)
         db.session.commit()
         flash("New album successfully added.", category='success')
     else:
         flash_form_errors(form)
+
+    # Clear form input fields to show placeholders.
+    form.album_name.data = ''
+    form.album_description.data = ''
