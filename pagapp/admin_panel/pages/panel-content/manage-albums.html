@@ -1,0 +1,15 @@
+{% set form = panel_forms.add_album_form %}
+<div class="container">
+    <form class="form-inline" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.album_name(class_="form-control", placeholder=form.album_name.description) }}
+        </div>
+        <div class="form-group">
+            {{ form.album_description(class_="form-control", placeholder=form.album_description.description) }}
+        </div>
+        <div class="form-group">
+            {{ form.submit_button(class_="btn btn-default") }}
+        </div>
+    </form>
+</div>
