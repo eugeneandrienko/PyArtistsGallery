@@ -28,6 +28,7 @@ def get_albums_list():
                 'name': album.album_name,
                 'pics_count': Pictures.query.filter_by(
                     album_id=album.id).count(),
+                'description': album.album_description,
                 'delete': u'<b>test</b>'
             } for album in Albums.query.all()
         ]
