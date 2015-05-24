@@ -7,6 +7,7 @@ from pagapp.support_functions import lm
 from pagapp.public_pages import public_pages
 from pagapp.admin_panel import admin_panel
 from pagapp.service_pages import service_pages
+from pagapp.api import api
 
 
 def create_pagapp(path_to_config):
@@ -26,5 +27,6 @@ def create_pagapp(path_to_config):
     app.register_blueprint(public_pages)
     app.register_blueprint(admin_panel)
     app.register_blueprint(service_pages)
+    app.register_blueprint(api)
 
     return app

@@ -1,6 +1,6 @@
 """Blueprint with admin panel.
 
-Contains
+Contains administrator panel.
 
 Contents:
 pages -- HTML code for admin panel.

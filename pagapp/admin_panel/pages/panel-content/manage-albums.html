@@ -13,3 +13,29 @@
         </div>
     </form>
 </div>
+
+<div class="container">
+    <table data-toggle="table"
+           data-url="/api/get-albums-list"
+           data-sort-name="name"
+           data-sort-order="asc"
+           data-striped="true">
+        <thead>
+        <tr>
+            <th class="col-xs-6"
+                data-field="name"
+                data-sortable="true">
+                Album name
+            </th>
+            <th class="col-xs-2"
+                data-field="pics_count"
+                data-sortable="true">
+                Count of pictures
+            </th>
+            <th class="col-xs-4" data-align="center" data-field="delete">Delete album</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<script src="../static/js/bootstrap-table.min.js"></script>
