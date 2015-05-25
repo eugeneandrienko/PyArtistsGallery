@@ -32,51 +32,59 @@
 </div><!-- /.modal -->
 
 {% set form = panel_forms.add_album_form %}
-<div class="container">
-    <form class="form-inline" method="POST">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.album_name(class_="form-control", placeholder=form.album_name.description) }}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="container">
+            <form class="form-inline" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.album_name(class_="form-control", placeholder=form.album_name.description) }}
+                </div>
+                <div class="form-group">
+                    {{ form.album_description(class_="form-control", placeholder=form.album_description.description) }}
+                </div>
+                <div class="form-group">
+                    {{ form.submit_button(class_="btn btn-default") }}
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            {{ form.album_description(class_="form-control", placeholder=form.album_description.description) }}
-        </div>
-        <div class="form-group">
-            {{ form.submit_button(class_="btn btn-default") }}
-        </div>
-    </form>
+    </div>
 </div>
 
-<div class="container">
-    <table id="albums-table"
-           data-toggle="table"
-           data-url="/api/get-albums-list"
-           data-sort-name="name"
-           data-sort-order="asc"
-           data-striped="true">
-        <thead>
-        <tr>
-            <th class="col-xs-3"
-                data-field="name"
-                data-sortable="true">
-                Album name
-            </th>
-            <th class="col-xs-5"
-                data-field="description"
-                data-sortable="true">
-                Album description
-            </th>
-            <th class="col-xs-2"
-                data-field="pics_count"
-                data-sortable="true">
-                Count of pictures
-            </th>
-            <th class="col-xs-2" data-align="center" data-field="actions">
-                Actions
-            </th>
-        </tr>
-        </thead>
-    </table>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="container">
+            <table id="albums-table"
+                   data-toggle="table"
+                   data-url="/api/get-albums-list"
+                   data-sort-name="name"
+                   data-sort-order="asc"
+                   data-striped="true">
+                <thead>
+                <tr>
+                    <th class="col-xs-3"
+                        data-field="name"
+                        data-sortable="true">
+                        Album name
+                    </th>
+                    <th class="col-xs-5"
+                        data-field="description"
+                        data-sortable="true">
+                        Album description
+                    </th>
+                    <th class="col-xs-2"
+                        data-field="pics_count"
+                        data-sortable="true">
+                        Count of pictures
+                    </th>
+                    <th class="col-xs-2" data-align="center" data-field="actions">
+                        Actions
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script src="../static/js/ajax-post.js"></script>
