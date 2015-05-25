@@ -1,3 +1,36 @@
+<div class="modal fade" id="editAlbumModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Edit album</h4>
+      </div>
+      <div class="modal-body">
+          <form>
+              <input type="hidden" id="album-id">
+              <div class="form-group">
+                  <label for="album-name" class="control-label">
+                      Album name:
+                  </label>
+                  <input type="text" class="form-control" id="album-name">
+              </div>
+              <div class="form-group">
+                  <label for="album-description" class="control-label">
+                      Album description:
+                  </label>
+                  <textarea class="form-control" id="album-description">
+                  </textarea>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="editAlbum()">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 {% set form = panel_forms.add_album_form %}
 <div class="container">
     <form class="form-inline" method="POST">
@@ -38,7 +71,9 @@
                 data-sortable="true">
                 Count of pictures
             </th>
-            <th class="col-xs-2" data-align="center" data-field="delete">Delete album</th>
+            <th class="col-xs-2" data-align="center" data-field="actions">
+                Actions
+            </th>
         </tr>
         </thead>
     </table>

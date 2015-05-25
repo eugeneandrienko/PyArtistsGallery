@@ -11,8 +11,6 @@ from flask_wtf.form import ValidationError
 from wtforms import PasswordField, SubmitField, StringField
 from wtforms.validators import DataRequired, EqualTo
 
-from pagapp.models.albums import Albums
-
 
 class ChangePasswordForm(Form):
     """Form for changing password for current user."""
@@ -53,10 +51,3 @@ class AddAlbumForm(Form):
         validators=[DataRequired()],
         description="Short description")
     submit_button = SubmitField("Create")
-
-    @staticmethod
-    def validate_album_name(form, field):
-        """Check, is given album name does not exists."""
-        if Albums.query.filter_by(album_name=field.data).count() != 0:
-            raise ValidationError("album {} already exists!".format(field.data))
-        del form

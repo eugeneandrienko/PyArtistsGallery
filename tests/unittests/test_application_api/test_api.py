@@ -7,16 +7,20 @@ from unittest.mock import patch
 from unittest.mock import MagicMock
 
 from pagapp.models.users import Users
-from pagapp.application_api.api import get_albums_list, delete_album
+from pagapp.application_api.api import get_albums_list, delete_album, \
+    edit_album
 from tests.unittests.flask_test import FlaskApplicationContextTestCase
 
 
 class GetAlbumsListTestCase(unittest.TestCase):
     """Tests for /api/get-albums-list API call."""
 
+    @patch(
+        'pagapp.application_api.api._generate_album_table_item')
     @patch('pagapp.application_api.api.Pictures')
     @patch('pagapp.application_api.api.Albums')
-    def test_get_albums_list(self, mock_albums, mock_pictures):
+    def test_get_albums_list(self, mock_albums, mock_pictures,
+                             mock_generate_album_table_item):
         """Test for /api/get-album-list API call.
 
         Test case:
@@ -29,17 +33,14 @@ class GetAlbumsListTestCase(unittest.TestCase):
         mock_album.id = 1
 
         mock_pictures.query.filter_by.return_value.count.return_value = 1
+        mock_generate_album_table_item.return_value = {'test1': 'test2'}
 
         mock_albums.query.all.return_value = [mock_album]
 
         expected_result = json.dumps(
             [
                 {
-                    'name': 'test_name',
-                    'pics_count': 1,
-                    'description': 'test description',
-                    'delete': u'<button class="btn btn-danger" ' +
-                              'onclick="deleteAlbum(1)">Delete album</button>'
+                    'test1': 'test2'
                 }
             ]
         )
@@ -75,6 +76,37 @@ class DeleteAlbumTestCase(FlaskApplicationContextTestCase):
             self.assertEqual(delete_album(), ('', 200))
             del mock_db
         del mock_request
+
+
+class EditAlbumTestCase(FlaskApplicationContextTestCase):
+    """Tests for /api/edit-album API call."""
+
+    @patch('pagapp.application_api.api.db')
+    @patch('pagapp.application_api.api.request')
+    @patch('pagapp.application_api.api.Albums')
+    def test_edit_album(self, mock_albums, mock_request, mock_db):
+        """Test for edit_album() function.
+
+        Test cases:
+        If count of albums with given ID is not equal with one - function
+        should return 404 error.
+        Otherwise it should rename album and return code 200.
+        """
+        login_user(Users('nickname', 'password', True))
+        mocked_album = MagicMock()
+
+        mocked_album.count.return_value = 0
+        mock_albums.query.filter_by.return_value = mocked_album
+        self.assertEqual(edit_album(), ('Album does not exists!', 404))
+
+        mocked_album.count.return_value = 2
+        self.assertEqual(
+            edit_album(), ('Cannot delete album, error with ID!', 404))
+
+        mocked_album.count.return_value = 1
+        mock_request.form['album_name'] = 'test name'
+        mock_request.form['album_description'] = 'test description'
+        self.assertEqual(edit_album(), ('', 200))
 
 
 if __name__ == '__main__':

@@ -43,36 +43,5 @@ class ChangePasswordFormTestCase(FlaskApplicationContextTestCase):
                           mock_form, mock_field)
 
 
-class AddAlbumFormTestCase(FlaskApplicationContextTestCase):
-    """Tests for AddAlbumForm.
-
-    Test cases:
-    test_validate_album_name() - test for validate_album_name()
-    validator.
-    """
-
-    @patch('pagapp.admin_panel.forms.Albums')
-    def test_validate_album_name(self, mock_albums):
-        """Test for validate_album_name().
-
-        Test cases:
-        We should raise ValidationError if count of albums with album
-        name == field.data is not zero.
-        And else, we should not raise any exceptions.
-        """
-        mock_add_album_form = AddAlbumForm()
-        mock_form = MagicMock()
-        mock_field = MagicMock()
-        mock_field.data = 'test'
-
-        mock_albums.query.filter_by.return_value.count.return_value = 0
-        mock_add_album_form.validate_album_name(mock_form, mock_field)
-
-        mock_albums.query.filter_by.return_value.count.return_value = 1
-        self.assertRaises(
-            ValidationError, mock_add_album_form.validate_album_name,
-            mock_form, mock_field)
-
-
 if __name__ == '__main__':
     unittest.main()
