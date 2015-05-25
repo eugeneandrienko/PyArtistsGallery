@@ -32,7 +32,7 @@ def get_albums_list():
                 'pics_count': Pictures.query.filter_by(
                     album_id=album.id).count(),
                 'description': album.album_description,
-                'delete': u'<button class="btn btn-danger" ' +
+                'delete': u'<button class="btn-xs btn-danger" ' +
                           'onclick="deleteAlbum(' +
                           str(album.id) +
                           ')">Delete album</button>'
