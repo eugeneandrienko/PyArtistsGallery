@@ -1,12 +1,14 @@
 """Tests for various support functions."""
 
+from flask import Markup
 import unittest
 from unittest.mock import patch
 from unittest.mock import MagicMock
 from sqlalchemy.orm.exc import ObjectDeletedError
 from sqlalchemy.exc import OperationalError
 
-from pagapp.support_functions import load_user, flash_form_errors, is_first_run
+from pagapp.support_functions import load_user, flash_form_errors, \
+    is_first_run, remove_danger_symbols
 
 
 class LoadUserTestCase(unittest.TestCase):
@@ -141,6 +143,16 @@ class IsFirstRunTestCase(unittest.TestCase):
             del mock_albums
             del mock_configuration
             del mock_pictures
+
+
+class RemoveDangerSymbolsTestCase(unittest.TestCase):
+    """Test(s) for remove_danger_symbols() function."""
+
+    def test_remove_danger_symbols(self):
+        test_string = '<test>string&=test?пример><</test>'
+        expected_string = Markup(test_string).striptags()
+        expected_string = Markup.escape(expected_string).__str__()
+        self.assertEqual(remove_danger_symbols(test_string), expected_string)
 
 
 if __name__ == '__main__':

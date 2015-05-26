@@ -13,7 +13,7 @@ from flask_login import current_user
 
 from pagapp.models import db
 from pagapp.models.albums import Albums
-from pagapp.support_functions import flash_form_errors
+from pagapp.support_functions import flash_form_errors, remove_danger_symbols
 
 
 def change_password(form):
@@ -22,7 +22,8 @@ def change_password(form):
         return
 
     if request.method == 'POST' and form.validate():
-        current_user.set_new_password(form.new_password.data)
+        new_password = remove_danger_symbols(form.new_password.data)
+        current_user.set_new_password(new_password)
         db.session.commit()
         flash("Password successfully changed", category='success')
     else:
@@ -35,7 +36,10 @@ def add_new_album(form):
         return
 
     if request.method == 'POST' and form.validate():
-        url_part = form.album_name.data.lower()
+        album_name = remove_danger_symbols(form.album_name.data)
+        album_description = remove_danger_symbols(form.album_description.data)
+
+        url_part = album_name.lower()
         url_part = url_part.strip(string.punctuation)
         whitespace_re = re.compile('[' + string.whitespace + ']')
         url_part = whitespace_re.sub('-', url_part)
@@ -46,9 +50,7 @@ def add_new_album(form):
                     string.ascii_letters + string.digits
                 ) for _ in range(5))
 
-        new_album = Albums(url_part,
-                           form.album_name.data,
-                           form.album_description.data)
+        new_album = Albums(url_part, album_name, album_description)
 
         db.session.add(new_album)
         db.session.commit()

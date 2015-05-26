@@ -38,7 +38,6 @@ class LoginFormTestCase(FlaskApplicationContextTestCase):
         filter_by_result.first.return_value = test_data
         mock_users.query.filter_by.return_value = filter_by_result
         test_login_form.validate_login(None, mock_field)
-        mock_users.query.filter_by.assert_called_with(nickname=mock_field.data)
 
         filter_by_result.first.return_value = None
         mock_users.query.filter_by.return_value = filter_by_result

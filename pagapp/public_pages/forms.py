@@ -9,6 +9,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 
 from pagapp.models.users import Users
+from pagapp.support_functions import remove_danger_symbols
 
 
 class LoginForm(Form):
@@ -47,8 +48,9 @@ class LoginForm(Form):
         If given password does not match with user's password from
         database - send warning to user.
         """
-        user = Users.query.filter_by(
-            nickname=form.login.data).first()
+        username = remove_danger_symbols(form.login.data)
+        password = remove_danger_symbols(field.data)
+        user = Users.query.filter_by(nickname=username).first()
         if user is not None:
-            if user.check_password(field.data) is False:
+            if user.check_password(password) is False:
                 raise ValidationError('Given password is wrong')

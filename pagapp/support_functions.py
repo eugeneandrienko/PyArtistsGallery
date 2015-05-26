@@ -6,7 +6,7 @@ blueprint or widely use with all blueprints.
 
 from sqlalchemy.orm.exc import ObjectDeletedError
 from sqlalchemy.exc import OperationalError
-from flask import flash
+from flask import flash, Markup
 from flask_login import LoginManager
 
 from pagapp.models.albums import Albums
@@ -73,3 +73,10 @@ def is_first_run():
         return True
 
     return False
+
+
+def remove_danger_symbols(string):
+    """Removes possibly dangerous HTML/JS code from given string."""
+    safe_string = Markup(string).striptags()
+    safe_string = Markup.escape(safe_string).__str__()
+    return safe_string

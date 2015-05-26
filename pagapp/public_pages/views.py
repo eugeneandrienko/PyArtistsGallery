@@ -17,7 +17,8 @@ from pagapp.models.users import Users
 from pagapp.models.configuration import Configuration
 from pagapp.public_pages import public_pages
 from pagapp.public_pages.forms import LoginForm
-from pagapp.support_functions import flash_form_errors, is_first_run
+from pagapp.support_functions import flash_form_errors, is_first_run, \
+    remove_danger_symbols
 
 
 @public_pages.route('/')
@@ -44,6 +45,7 @@ def album(album_url):
     album_url -- unique string, by which album can be accessed via web
     interface.
     """
+    album_url = remove_danger_symbols(album_url)
     try:
         matched_album = Albums.query.filter_by(
             url_part=album_url).first()
@@ -74,8 +76,8 @@ def login():
     login_form = LoginForm(request.form)
 
     if request.method == 'POST' and login_form.validate():
-        user = Users.query.filter_by(
-            nickname=login_form.login.data).first()
+        username = remove_danger_symbols(login_form.login.data)
+        user = Users.query.filter_by(nickname=username).first()
         login_user(user)
         return redirect(url_for('admin_panel.panel'))
     else:

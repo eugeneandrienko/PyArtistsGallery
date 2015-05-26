@@ -11,7 +11,8 @@ from flask import render_template, abort, request, \
     redirect, url_for
 from sqlalchemy.exc import OperationalError
 
-from pagapp.support_functions import flash_form_errors, is_first_run
+from pagapp.support_functions import flash_form_errors, is_first_run, \
+    remove_danger_symbols
 from pagapp.database_functions import create_database
 from pagapp.service_pages import service_pages
 from pagapp.service_pages.forms import FirstRunForm
@@ -41,18 +42,20 @@ def first_run():
         pass
 
     if request.method == 'POST' and form.validate():
+        gallery_title = remove_danger_symbols(form.gallery_title.data)
+        username = remove_danger_symbols(form.username.data)
+        password = remove_danger_symbols(form.password.data)
         try:
-            Configuration.query.first().gallery_title = form.gallery_title.data
+            Configuration.query.first().gallery_title = gallery_title
         except AttributeError:
-            new_configuration = Configuration(form.gallery_title.data)
+            new_configuration = Configuration(gallery_title)
             db.session.add(new_configuration)
 
         try:
-            Users.query.first().nickname = form.username.data
-            Users.query.first().set_new_password(form.password.data)
+            Users.query.first().nickname = username
+            Users.query.first().set_new_password(password)
         except AttributeError:
-            new_administrator = Users(
-                form.username.data, form.password.data, True)
+            new_administrator = Users(username, password, True)
             db.session.add(new_administrator)
 
         db.session.commit()

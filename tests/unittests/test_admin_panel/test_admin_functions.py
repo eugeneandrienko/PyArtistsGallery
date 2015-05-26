@@ -7,6 +7,7 @@ from unittest.mock import patch
 from unittest.mock import MagicMock
 
 from pagapp.admin_panel.admin_functions import change_password, add_new_album
+from pagapp.support_functions import remove_danger_symbols
 
 
 class ChangePasswordTestCase(unittest.TestCase):
@@ -34,7 +35,7 @@ class ChangePasswordTestCase(unittest.TestCase):
             mock_request.method = 'POST'
             change_password(mock_form)
             mock_current_user.set_new_password.assert_called_with(
-                mock_form.new_password.data)
+                remove_danger_symbols(mock_form.new_password.data))
 
             self.assertTrue(mock_db.session.commit.called)
             self.assertTrue(mock_flash.called)
@@ -172,7 +173,9 @@ class AddNewAlbumTestCase(unittest.TestCase):
 
             add_new_album(mock_form)
             mock_albums.assert_called_with(
-                url_part, test_album_name, test_album_description)
+                remove_danger_symbols(url_part),
+                remove_danger_symbols(test_album_name),
+                remove_danger_symbols(test_album_description))
 
             del mock_db
             del mock_flash
@@ -209,13 +212,16 @@ class AddNewAlbumTestCase(unittest.TestCase):
             url_part = url_part.strip(string.punctuation)
             whitespace_re = re.compile('[' + string.whitespace + ']')
             url_part = whitespace_re.sub('-', url_part)
+            url_part = remove_danger_symbols(url_part)
 
             mock_random.choice.return_value = 'x'
             url_part += 'xxxxx'
 
             add_new_album(mock_form)
             mock_albums.assert_called_with(
-                url_part, test_album_name, test_album_description)
+                url_part,
+                remove_danger_symbols(test_album_name),
+                remove_danger_symbols(test_album_description))
 
             del mock_db
             del mock_flash

@@ -4,6 +4,7 @@ import json
 from flask import request
 from flask_login import login_required
 
+from pagapp.support_functions import remove_danger_symbols
 from pagapp.application_api import application_api
 from pagapp.models import db
 from pagapp.models.albums import Albums
@@ -66,7 +67,8 @@ def get_albums_list():
 @login_required
 def delete_album():
     """Deletes album with given ID if it is one album in database."""
-    album = Albums.query.filter_by(id=request.form['album_id'])
+    album_id = remove_danger_symbols(request.form['album_id'])
+    album = Albums.query.filter_by(id=album_id)
     if album.count() != 1:
         return '', 404
     else:
@@ -79,13 +81,15 @@ def delete_album():
 @login_required
 def edit_album():
     """Edit album with given ID, name and description."""
-    album = Albums.query.filter_by(id=request.form['album_id'])
+    album_id = remove_danger_symbols(request.form['album_id'])
+    album = Albums.query.filter_by(id=album_id)
     if album.count() == 0:
         return 'Album does not exists!', 404
     if album.count() != 1:
         return 'Cannot delete album, error with ID!', 404
-    # TODO: remove HTML from given input.
-    album.first().album_name = request.form['album_name']
-    album.first().album_description = request.form['album_description']
+    album_name = remove_danger_symbols(request.form['album_name'])
+    album_description = remove_danger_symbols(request.form['album_description'])
+    album.first().album_name = album_name
+    album.first().album_description = album_description
     db.session.commit()
     return '', 200
