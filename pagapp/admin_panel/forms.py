@@ -69,3 +69,4 @@ class UploadForm(Form):
         "Select album:",
         choices=[],
         description="Select album")
+    submit_button = SubmitField("Upload")
