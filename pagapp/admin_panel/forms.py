@@ -64,6 +64,7 @@ class UploadForm(Form):
     file_names = FileField(
         "Select files:",
         # validators=None,
+        id='inputFiles',
         description="Select files")
     album = SelectField(
         "Select album:",
