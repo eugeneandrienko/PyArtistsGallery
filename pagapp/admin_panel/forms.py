@@ -3,13 +3,15 @@
 List of forms:
 ChangePasswordForm -- providing form for password change.
 AddAlbumForm -- providing form for adding new album.
+UploadForm -- providing form for uploading new pictures.
 """
 
 from flask import current_app
 from flask_login import current_user
 from flask_wtf import Form
 from flask_wtf.form import ValidationError
-from wtforms import PasswordField, SubmitField, StringField
+from wtforms import PasswordField, SubmitField, StringField, FileField, \
+    SelectField
 from wtforms.validators import DataRequired, EqualTo
 
 
@@ -54,3 +56,16 @@ class AddAlbumForm(Form):
         validators=[DataRequired()],
         description="Short description")
     submit_button = SubmitField("Create")
+
+
+class UploadForm(Form):
+    """Form for uploading new pictures to the given album."""
+
+    file_names = FileField(
+        "Select files:",
+        # validators=None,
+        description="Select files")
+    album = SelectField(
+        "Select album:",
+        choices=[],
+        description="Select album")

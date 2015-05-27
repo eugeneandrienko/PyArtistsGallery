@@ -87,7 +87,7 @@ def login():
         username = remove_danger_symbols(login_form.login.data)
         user = Users.query.filter_by(nickname=username).first()
         login_user(user)
-        return redirect(url_for('admin_panel.panel'))
+        return redirect(url_for('admin_panel.panel') + '#upload')
     else:
         flash_form_errors(login_form)
 

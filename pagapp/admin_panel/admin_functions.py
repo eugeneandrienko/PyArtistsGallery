@@ -76,3 +76,7 @@ def add_new_album(form):
     # Clear form input fields to show placeholders.
     form.album_name.data = ''
     form.album_description.data = ''
+
+
+def upload_files(form):
+    pass
