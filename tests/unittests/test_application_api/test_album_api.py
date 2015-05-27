@@ -26,6 +26,7 @@ class GetAlbumsListTestCase(unittest.TestCase):
         In every case we should return json with list
         of albums.
         """
+        login_user(Users('nickname', 'password', True))
         mock_album = MagicMock()
         mock_album.album_name = 'test_name'
         mock_album.album_description = 'test description'

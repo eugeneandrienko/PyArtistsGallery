@@ -45,6 +45,7 @@ def _generate_album_table_item(album):
 
 
 @application_api.route('/get-albums-list')
+@login_required
 def get_albums_list():
     """Returns list of albums.
 
