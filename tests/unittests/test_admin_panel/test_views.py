@@ -20,10 +20,12 @@ class AdminPanelViewsTestCase(FlaskApplicationContextTestCase):
     test_panel() - tests for panel() function.
     """
 
+    @patch('pagapp.admin_panel.views.current_app')
     @patch('pagapp.admin_panel.views.url_for')
     @patch('pagapp.admin_panel.views.redirect')
     @patch('pagapp.admin_panel.views.logout_user')
-    def test_logout(self, mock_logout_user, mock_redirect, mock_url_for):
+    def test_logout(self, mock_logout_user, mock_redirect, mock_url_for,
+                    mock_app):
         """Tests for logout() function.
 
         Test cases:
@@ -38,10 +40,12 @@ class AdminPanelViewsTestCase(FlaskApplicationContextTestCase):
                          msg="redirect() should be called!")
         self.assertTrue(mock_url_for.called)
         self.assertTrue(mock_logout_user.called)
+        del mock_app
 
+    @patch('pagapp.admin_panel.views.current_app')
     @patch('pagapp.admin_panel.views.abort')
     @patch('pagapp.admin_panel.views.render_template')
-    def test_panel(self, mock_render_template, mock_abort):
+    def test_panel(self, mock_render_template, mock_abort, mock_app):
         """Tests for panel() function.
 
         Test cases:
@@ -66,6 +70,7 @@ class AdminPanelViewsTestCase(FlaskApplicationContextTestCase):
             panel()
             self.assertTrue(mock_change_password_form.called)
             self.assertTrue(mock_abort.called)
+        del mock_app
 
 
 if __name__ == '__main__':

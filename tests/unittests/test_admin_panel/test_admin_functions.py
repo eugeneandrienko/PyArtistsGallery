@@ -13,9 +13,10 @@ from pagapp.support_functions import remove_danger_symbols
 class ChangePasswordTestCase(unittest.TestCase):
     """Tests for change_password() function."""
 
+    @patch('pagapp.admin_panel.admin_functions.current_app')
     @patch('pagapp.admin_panel.admin_functions.flash')
     @patch('pagapp.admin_panel.admin_functions.request')
-    def test_change_password(self, mock_request, mock_flash):
+    def test_change_password(self, mock_request, mock_flash, mock_app):
         """Test for change_password().
 
         Test case:
@@ -41,8 +42,10 @@ class ChangePasswordTestCase(unittest.TestCase):
             self.assertTrue(mock_flash.called)
             mock_flash.assert_called_with('Password successfully changed',
                                           category='success')
+        del mock_app
 
-    def test_change_password_submission(self):
+    @patch('pagapp.admin_panel.admin_functions.current_app')
+    def test_change_password_submission(self, mock_app):
         """Test for change password.
 
         Test case:
@@ -53,11 +56,13 @@ class ChangePasswordTestCase(unittest.TestCase):
         mock_form.submit_button.data = False
         change_password(mock_form)
         self.assertFalse(mock_form.validate.called)
+        del mock_app
 
+    @patch('pagapp.admin_panel.admin_functions.current_app')
     @patch('pagapp.admin_panel.admin_functions.flash_form_errors')
     @patch('pagapp.admin_panel.admin_functions.request')
     def test_change_password_not_post(self, mock_request,
-                                      mock_flash_form_errors):
+                                      mock_flash_form_errors, mock_app):
         """Test for change_password().
 
         Test case:
@@ -70,11 +75,13 @@ class ChangePasswordTestCase(unittest.TestCase):
         mock_request.method = 'GET'
         change_password(mock_form)
         self.assertTrue(mock_flash_form_errors.called)
+        del mock_app
 
+    @patch('pagapp.admin_panel.admin_functions.current_app')
     @patch('pagapp.admin_panel.admin_functions.flash_form_errors')
     @patch('pagapp.admin_panel.admin_functions.request')
     def test_change_password_not_validated(self, mock_request,
-                                           mock_flash_form_errors):
+                                           mock_flash_form_errors, mock_app):
         """Tests for change_password().
 
         Test case:
@@ -87,11 +94,14 @@ class ChangePasswordTestCase(unittest.TestCase):
         mock_request.method = 'POST'
         change_password(mock_form)
         self.assertTrue(mock_flash_form_errors.called)
+        del mock_app
 
+    @patch('pagapp.admin_panel.admin_functions.current_app')
     @patch('pagapp.admin_panel.admin_functions.flash_form_errors')
     @patch('pagapp.admin_panel.admin_functions.request')
     def test_change_password_not_post_not_valid(self, mock_request,
-                                                mock_flash_form_errors):
+                                                mock_flash_form_errors,
+                                                mock_app):
         """Tests for change_password().
 
         Test case:
@@ -104,12 +114,14 @@ class ChangePasswordTestCase(unittest.TestCase):
         mock_request.method = 'GET'
         change_password(mock_form)
         self.assertTrue(mock_flash_form_errors.called)
+        del mock_app
 
 
 class AddNewAlbumTestCase(unittest.TestCase):
     """Tests for add_new_album() function."""
 
-    def test_add_new_album_submission(self):
+    @patch('pagapp.admin_panel.admin_functions.current_app')
+    def test_add_new_album_submission(self, mock_app):
         """Test for add_new_album() function.
 
         Test case:
@@ -120,11 +132,13 @@ class AddNewAlbumTestCase(unittest.TestCase):
         mock_form.submit_button.data = False
         add_new_album(mock_form)
         self.assertFalse(mock_form.validate.called)
+        del mock_app
 
+    @patch('pagapp.admin_panel.admin_functions.current_app')
     @patch('pagapp.admin_panel.admin_functions.request')
     @patch('pagapp.admin_panel.admin_functions.flash_form_errors')
     def test_add_new_album_flash_errors(
-            self, mock_flash_form_errors, mock_request):
+            self, mock_flash_form_errors, mock_request, mock_app):
         """Test for add_new_album() function.
 
         Test case:
@@ -139,9 +153,11 @@ class AddNewAlbumTestCase(unittest.TestCase):
 
         add_new_album(mock_form)
         self.assertTrue(mock_flash_form_errors.called)
+        del mock_app
 
+    @patch('pagapp.admin_panel.admin_functions.current_app')
     @patch('pagapp.admin_panel.admin_functions.Albums')
-    def test_add_new_album(self, mock_albums):
+    def test_add_new_album(self, mock_albums, mock_app):
         """Test for add_new_album() function.
 
         Test case:
@@ -179,10 +195,12 @@ class AddNewAlbumTestCase(unittest.TestCase):
 
             del mock_db
             del mock_flash
+        del mock_app
 
+    @patch('pagapp.admin_panel.admin_functions.current_app')
     @patch('pagapp.admin_panel.admin_functions.random')
     @patch('pagapp.admin_panel.admin_functions.Albums')
-    def test_add_new_album_url_exists(self, mock_albums, mock_random):
+    def test_add_new_album_url_exists(self, mock_albums, mock_random, mock_app):
         """Test for add_new_album() function.
 
         Test case:
@@ -225,6 +243,7 @@ class AddNewAlbumTestCase(unittest.TestCase):
 
             del mock_db
             del mock_flash
+        del mock_app
 
 
 if __name__ == '__main__':

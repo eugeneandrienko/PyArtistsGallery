@@ -1,7 +1,7 @@
 """Views specific to admin panel."""
 
 from jinja2 import TemplateNotFound
-from flask import abort, render_template
+from flask import abort, render_template, current_app
 from flask import redirect, url_for
 from flask_login import logout_user, login_required
 
@@ -15,6 +15,7 @@ from pagapp.models.configuration import Configuration
 @login_required
 def logout():
     """Performs user logout if (s)he go to corresponding URL."""
+    current_app.logger.debug("Performing logout.")
     logout_user()
     return redirect(url_for('public_pages.index'))
 
@@ -45,4 +46,5 @@ def panel():
             title=Configuration.query.first().gallery_title,
             panel_forms=panel_forms)
     except TemplateNotFound:
+        current_app.logger.error("Couldn't find HTML template: panel.html")
         abort(404)

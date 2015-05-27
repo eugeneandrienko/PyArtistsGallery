@@ -5,6 +5,7 @@ ChangePasswordForm -- providing form for password change.
 AddAlbumForm -- providing form for adding new album.
 """
 
+from flask import current_app
 from flask_login import current_user
 from flask_wtf import Form
 from flask_wtf.form import ValidationError
@@ -36,6 +37,8 @@ class ChangePasswordForm(Form):
         """Check, is given current password is not wrong."""
         del form
         if current_user.check_password(field.data) is False:
+            current_app.logger.error(
+                "User provided wrong password, when (s)he tried to change it.")
             raise ValidationError("Given password is wrong")
 
 

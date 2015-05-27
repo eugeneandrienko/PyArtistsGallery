@@ -36,9 +36,11 @@ class IndexTestCase(unittest.TestCase):
             self.assertEqual(index(), test_render_template,
                              msg="render_template() should be called!")
 
+    @patch('pagapp.public_pages.views.current_app')
     @patch('pagapp.public_pages.views.abort')
     @patch('pagapp.public_pages.views.render_template')
-    def test_index_no_template(self, mock_render_template, mock_abort):
+    def test_index_no_template(self, mock_render_template, mock_abort,
+                               mock_app):
         """Test for index() function.
 
         Test case:
@@ -62,6 +64,7 @@ class IndexTestCase(unittest.TestCase):
             index()
             self.assertTrue(mock_abort.called,
                             msg="abort(404) should be called!")
+        del mock_app
 
 
 class AlbumTestCase(unittest.TestCase):
@@ -97,9 +100,11 @@ class AlbumTestCase(unittest.TestCase):
             self.assertEqual(album(test_album_url), test_render_template_result,
                              msg="render_template() should be called!")
 
+    @patch('pagapp.public_pages.views.current_app')
     @patch('pagapp.public_pages.views.abort')
     @patch('pagapp.public_pages.views.render_template')
-    def test_album_no_template(self, mock_render_template, mock_abort):
+    def test_album_no_template(self, mock_render_template, mock_abort,
+                               mock_app):
         """Test for album() function.
 
         Test case:
@@ -126,11 +131,14 @@ class AlbumTestCase(unittest.TestCase):
             mock_render_template.side_effect = TemplateNotFound(name='test')
             album(test_album_url)
             self.assertTrue(mock_abort.called, msg="abort() not called!")
+        del mock_app
 
+    @patch('pagapp.public_pages.views.current_app')
     @patch('pagapp.public_pages.views.url_for')
     @patch('pagapp.public_pages.views.redirect')
     @patch('pagapp.public_pages.views.flash')
-    def test_album_not_exists(self, mock_flash, mock_redirect, mock_url_for):
+    def test_album_not_exists(self, mock_flash, mock_redirect, mock_url_for,
+                              mock_app):
         """Test for album() function.
 
         Test case:
@@ -159,17 +167,19 @@ class AlbumTestCase(unittest.TestCase):
             self.assertEqual(album(test_album_url), redirect_result,
                              msg="redirect() should be called!")
             self.assertTrue(mock_flash.called, msg="flash() does not called!")
+        del mock_app
 
 
 class LoginTestCase(unittest.TestCase):
     """Tests for login() function."""
 
+    @patch('pagapp.public_pages.views.current_app')
     @patch('pagapp.public_pages.views.redirect')
     @patch('pagapp.public_pages.views.url_for')
     @patch('pagapp.public_pages.views.login_user')
     @patch('pagapp.public_pages.views.request')
     def test_login(self, mock_request, mock_login_user, mock_url_for,
-                   mock_redirect):
+                   mock_redirect, mock_app):
         """Test for login() function.
 
         Test case:
@@ -197,12 +207,14 @@ class LoginTestCase(unittest.TestCase):
                             msg="login_user() should be called!")
             self.assertTrue(mock_url_for.called,
                             msg="url_for() should be called!")
+        del mock_app
 
+    @patch('pagapp.public_pages.views.current_app')
     @patch('pagapp.public_pages.views.render_template')
     @patch('pagapp.public_pages.views.flash_form_errors')
     @patch('pagapp.public_pages.views.request')
     def test_login_not_post(self, mock_request, mock_flash_form_errors,
-                            mock_render_template):
+                            mock_render_template, mock_app):
         """Test for login() function.
 
         Test case:
@@ -231,12 +243,14 @@ class LoginTestCase(unittest.TestCase):
             self.assertEqual(login(), render_template_result,
                              msg="render_template() should be called")
             self.assertTrue(mock_flash_form_errors.called)
+        del mock_app
 
+    @patch('pagapp.public_pages.views.current_app')
     @patch('pagapp.public_pages.views.render_template')
     @patch('pagapp.public_pages.views.flash_form_errors')
     @patch('pagapp.public_pages.views.request')
     def test_login_not_validate(self, mock_request, mock_flash_form_errors,
-                                mock_render_template):
+                                mock_render_template, mock_app):
         """Test for login() function.
 
         Test case:
@@ -265,12 +279,14 @@ class LoginTestCase(unittest.TestCase):
             self.assertEqual(login(), render_template_result,
                              msg="render_template() should be called")
             self.assertTrue(mock_flash_form_errors.called)
+        del mock_app
 
+    @patch('pagapp.public_pages.views.current_app')
     @patch('pagapp.public_pages.views.render_template')
     @patch('pagapp.public_pages.views.flash_form_errors')
     @patch('pagapp.public_pages.views.request')
     def test_login_not_post_validate(self, mock_request, mock_flash_form_errors,
-                                     mock_render_template):
+                                     mock_render_template, mock_app):
         """Test for login() function.
 
         Test case:
@@ -300,13 +316,15 @@ class LoginTestCase(unittest.TestCase):
             self.assertEqual(login(), render_template_result,
                              msg="render_template() should be called")
             self.assertTrue(mock_flash_form_errors.called)
+        del mock_app
 
+    @patch('pagapp.public_pages.views.current_app')
     @patch('pagapp.public_pages.views.abort')
     @patch('pagapp.public_pages.views.render_template')
     @patch('pagapp.public_pages.views.flash_form_errors')
     @patch('pagapp.public_pages.views.request')
     def test_login_no_template(self, mock_request, mock_flash_form_errors,
-                               mock_render_template, mock_abort):
+                               mock_render_template, mock_abort, mock_app):
         """Test for login() function.
 
         Test case:
@@ -335,6 +353,7 @@ class LoginTestCase(unittest.TestCase):
             login()
             self.assertTrue(mock_abort.called, msg="abort() should be called!")
             self.assertTrue(mock_flash_form_errors.called)
+        del mock_app
 
 
 if __name__ == '__main__':

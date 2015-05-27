@@ -29,8 +29,9 @@ class CreateDatabaseTestCase(FlaskApplicationContextTestCase):
 class UpgradeDatabaseTestCase(FlaskApplicationContextTestCase):
     """Tests for upgrade_database() functuion."""
 
+    @patch('pagapp.database_functions.current_app')
     @patch('pagapp.database_functions.upgrade')
-    def test_upgrade_database(self, mock_upgrade):
+    def test_upgrade_database(self, mock_upgrade, mock_app):
         """Test for upgrade_database() function.
 
         Test case:
@@ -39,6 +40,7 @@ class UpgradeDatabaseTestCase(FlaskApplicationContextTestCase):
         """
         upgrade_database()
         self.assertTrue(mock_upgrade.called)
+        del mock_app
 
 
 if __name__ == '__main__':

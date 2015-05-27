@@ -1,6 +1,8 @@
 """Functions which instantiate web application."""
 
 from flask import Flask
+from logging import ERROR, Formatter, getLogger, DEBUG
+from logging.handlers import RotatingFileHandler
 
 from pagapp.models import db
 from pagapp.support_functions import lm
@@ -10,13 +12,56 @@ from pagapp.service_pages import service_pages
 from pagapp.application_api import application_api
 
 
-def create_pagapp(path_to_config):
+def setup_logging(app):
+    """Setup logging facility.
+
+    This function switch logging output to the file
+    if application does not in debug mode.
+    """
+    if app.debug is False:
+        # Application log.
+        handler = RotatingFileHandler(
+            app.config['APP_LOG_FILE'],
+            mode='a',
+            maxBytes=app.config['APP_LOG_FILE_MAX_BYTES'],
+            backupCount=app.config['APP_LOG_FILE_BACKUP_COUNT'],
+            encoding=None,
+            delay=False)
+        handler.setLevel(ERROR)
+        handler.setFormatter(Formatter(
+            '[%(asctime)s] %(filename)s:%(lineno)s ' +
+            '- %(levelname)s - %(message)s'))
+        app.logger.addHandler(handler)
+
+        # HTTP queries log.
+        handler = RotatingFileHandler(
+            app.config['HTTP_LOG_FILE'],
+            mode='a',
+            maxBytes=app.config['HTTP_LOG_FILE_MAX_BYTES'],
+            backupCount=app.config['HTTP_LOG_FILE_BACKUP_COUNT'],
+            encoding=None,
+            delay=False)
+        log = getLogger('werkzeug')
+        log.setLevel(DEBUG)
+        log.addHandler(handler)
+
+
+def register_blueprints(app):
+    """Register application's blueprints"""
+    app.register_blueprint(public_pages)
+    app.register_blueprint(admin_panel)
+    app.register_blueprint(service_pages)
+    app.register_blueprint(application_api)
+
+
+def create_pagapp(path_to_config, debug):
     """Flask application creator.
 
     Creates PyArtistsGallery application with configuration,
     red from given path_to_config.
     """
     app = Flask(__name__)
+    app.debug = debug
     app.config.from_object(path_to_config)
     app.static_folder = app.config['STATIC_FOLDER']
     app.template_folder = app.config['TEMPLATES_FOLDER']
@@ -24,9 +69,8 @@ def create_pagapp(path_to_config):
     db.init_app(app)
     lm.init_app(app)
 
-    app.register_blueprint(public_pages)
-    app.register_blueprint(admin_panel)
-    app.register_blueprint(service_pages)
-    app.register_blueprint(application_api)
+    register_blueprints(app)
+    setup_logging(app)
 
+    app.logger.info("Application starting...")
     return app

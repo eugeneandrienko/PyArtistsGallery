@@ -19,8 +19,9 @@ class ChangePasswordFormTestCase(FlaskApplicationContextTestCase):
     function.
     """
 
+    @patch('pagapp.admin_panel.forms.current_app')
     @patch('pagapp.admin_panel.forms.current_user')
-    def test_validate_old_password(self, mock_current_user):
+    def test_validate_old_password(self, mock_current_user, mock_app):
         """Tests for validate_old_password() function.
 
         Test cases:
@@ -41,6 +42,7 @@ class ChangePasswordFormTestCase(FlaskApplicationContextTestCase):
         self.assertRaises(ValidationError,
                           test_check_password_form.validate_old_password,
                           mock_form, mock_field)
+        del mock_app
 
 
 if __name__ == '__main__':

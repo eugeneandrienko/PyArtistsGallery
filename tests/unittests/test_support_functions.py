@@ -14,8 +14,9 @@ from pagapp.support_functions import load_user, flash_form_errors, \
 class LoadUserTestCase(unittest.TestCase):
     """Tests for load_user() function."""
 
+    @patch('pagapp.support_functions.current_app')
     @patch('pagapp.support_functions.Users')
-    def test_load_user(self, mock_users):
+    def test_load_user(self, mock_users, mock_app):
         """Test for load_user() function.
 
         Test case:
@@ -25,9 +26,11 @@ class LoadUserTestCase(unittest.TestCase):
         test_value = 'test1233321'
         mock_users.query.get.return_value = test_value
         self.assertEqual(load_user(1), test_value)
+        del mock_app
 
+    @patch('pagapp.support_functions.current_app')
     @patch('pagapp.support_functions.Users')
-    def test_load_user(self, mock_users):
+    def test_load_user(self, mock_users, mock_app):
         """Test for load_user() function.
 
         Test case:
@@ -42,6 +45,7 @@ class LoadUserTestCase(unittest.TestCase):
         mock_users.query.get.side_effect = ObjectDeletedError(
             state=mock_state)
         self.assertEqual(load_user(1), None)
+        del mock_app
 
 
 class FlashFormErrorsTestCase(unittest.TestCase):

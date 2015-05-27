@@ -1,7 +1,7 @@
 """Handlers for API calls."""
 
 import json
-from flask import request
+from flask import request, current_app
 from flask_login import login_required
 
 from pagapp.support_functions import remove_danger_symbols
@@ -70,8 +70,12 @@ def delete_album():
     album_id = remove_danger_symbols(request.form['album_id'])
     album = Albums.query.filter_by(id=album_id)
     if album.count() != 1:
+        current_app.logger.error(
+            "Count of albums with given ID ({}) is more than 1.".format(
+                album_id))
         return '', 404
     else:
+        current_app.logger.debug("Deleting album with ID {}.".format(album_id))
         db.session.delete(album.first())
         db.session.commit()
     return '', 200
@@ -83,12 +87,23 @@ def edit_album():
     """Edit album with given ID, name and description."""
     album_id = remove_danger_symbols(request.form['album_id'])
     album = Albums.query.filter_by(id=album_id)
+
     if album.count() == 0:
+        current_app.logger.error(
+            "Album with given ID ({}) does not exists.".format(album_id))
         return 'Album does not exists!', 404
     if album.count() != 1:
+        current_app.logger.error(
+            "Count of albums with given ID ({}) is more than 1.".format(
+                album_id))
         return 'Cannot delete album, error with ID!', 404
+
     album_name = remove_danger_symbols(request.form['album_name'])
     album_description = remove_danger_symbols(request.form['album_description'])
+
+    current_app.logger.debug(
+        "Editing album with ID {}. New name: {}. New description: {}.".format(
+            album_id, album_name, album_description))
     album.first().album_name = album_name
     album.first().album_description = album_description
     db.session.commit()

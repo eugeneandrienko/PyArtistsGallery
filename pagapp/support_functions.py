@@ -6,7 +6,7 @@ blueprint or widely use with all blueprints.
 
 from sqlalchemy.orm.exc import ObjectDeletedError
 from sqlalchemy.exc import OperationalError
-from flask import flash, Markup
+from flask import flash, Markup, current_app
 from flask_login import LoginManager
 
 from pagapp.models.albums import Albums
@@ -26,6 +26,7 @@ def load_user(uid):
     Result:
     User object from database.
     """
+    current_app.logger.debug("User with ID {} tried to login.".format(uid))
     try:
         result = Users.query.get(int(uid))
     except ObjectDeletedError:

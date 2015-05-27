@@ -18,8 +18,9 @@ class LoginFormTestCase(FlaskApplicationContextTestCase):
     test_validate_password(): tests for validate_password() method.
     """
 
+    @patch('pagapp.public_pages.forms.current_app')
     @patch('pagapp.public_pages.forms.Users')
-    def test_validate_login(self, mock_users):
+    def test_validate_login(self, mock_users, mock_app):
         """Tests for validate_login() method.
 
         Test cases:
@@ -43,9 +44,11 @@ class LoginFormTestCase(FlaskApplicationContextTestCase):
         mock_users.query.filter_by.return_value = filter_by_result
         self.assertRaises(ValidationError, test_login_form.validate_login,
                           None, mock_field)
+        del mock_app
 
+    @patch('pagapp.public_pages.forms.current_app')
     @patch('pagapp.public_pages.forms.Users')
-    def test_validate_password(self, mock_users):
+    def test_validate_password(self, mock_users, mock_app):
         """Tests for validate_password() method.
 
         Test cases:
@@ -77,6 +80,7 @@ class LoginFormTestCase(FlaskApplicationContextTestCase):
         filter_by_result.first.return_value = mock_user
         self.assertRaises(ValidationError, test_login_form.validate_password,
                           mock_form, mock_field)
+        del mock_app
 
 
 if __name__ == '__main__':

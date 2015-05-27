@@ -16,8 +16,9 @@ class FirstRunTestCase(unittest.TestCase):
     a first run, user should be redirected to /index.
     """
 
+    @patch('pagapp.service_pages.views.current_app')
     @patch('pagapp.service_pages.views.is_first_run')
-    def test_first_run_false(self, mock_is_first_run):
+    def test_first_run_false(self, mock_is_first_run, mock_app):
         """Tests redirection to /index if it is not a first run."""
         mock_is_first_run.return_value = False
         path_to_redirect = 'pagapp.service_pages.views.redirect'
@@ -29,10 +30,13 @@ class FirstRunTestCase(unittest.TestCase):
             mock_redirect.return_value = redirect_result
             self.assertEqual(first_run(), redirect_result,
                              msg="redirect() should be called")
+        del mock_app
 
+    @patch('pagapp.service_pages.views.current_app')
     @patch('pagapp.service_pages.views.create_database')
     @patch('pagapp.service_pages.views.is_first_run')
-    def test_first_run_true(self, mock_is_first_run, mock_create_database):
+    def test_first_run_true(self, mock_is_first_run, mock_create_database,
+                            mock_app):
         """Tests, is database create on the first run of application.
 
         Test case:
@@ -74,11 +78,13 @@ class FirstRunTestCase(unittest.TestCase):
             self.assertEqual(first_run(), render_template_result)
             self.assertTrue(mock_create_database.called)
             self.assertTrue(mock_flash_form_errors.called)
+        del mock_app
 
+    @patch('pagapp.service_pages.views.current_app')
     @patch('pagapp.service_pages.views.create_database')
     @patch('pagapp.service_pages.views.is_first_run')
     def test_add_data_from_database(
-            self, mock_is_first_run, mock_create_database):
+            self, mock_is_first_run, mock_create_database, mock_app):
         """Tests, how function add data from database.
 
         Test cases:
@@ -118,10 +124,13 @@ class FirstRunTestCase(unittest.TestCase):
             self.assertTrue(mock_flash_form_errors.called)
             self.assertEqual(mock_form.gallery_title.data, test_result)
             self.assertEqual(mock_form.username.data, test_result)
+        del mock_app
 
+    @patch('pagapp.service_pages.views.current_app')
     @patch('pagapp.service_pages.views.Configuration')
     @patch('pagapp.service_pages.views.Users')
-    def test_write_new_data_to_database(self, mock_users, mock_configuration):
+    def test_write_new_data_to_database(self, mock_users, mock_configuration,
+                                        mock_app):
         """Tests, how function write data from form to database.
 
         Test cases:
@@ -158,10 +167,13 @@ class FirstRunTestCase(unittest.TestCase):
             self.assertTrue(mock_db.session.commit.called)
             del mock_create_database
             del mock_url_for
+        del mock_app
 
+    @patch('pagapp.service_pages.views.current_app')
     @patch('pagapp.service_pages.views.create_database')
     @patch('pagapp.service_pages.views.is_first_run')
-    def test_first_run_true(self, mock_is_first_run, mock_create_database):
+    def test_first_run_true(self, mock_is_first_run, mock_create_database,
+                            mock_app):
         """Tests, is abort() called if template not found."""
         mock_is_first_run.return_value = True
 
@@ -197,6 +209,7 @@ class FirstRunTestCase(unittest.TestCase):
                             msg="Should be called abort(404)!")
             self.assertTrue(mock_create_database.called)
             self.assertTrue(mock_flash_form_errors.called)
+        del mock_app
 
 
 if __name__ == '__main__':

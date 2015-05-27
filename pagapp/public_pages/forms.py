@@ -3,6 +3,7 @@
 This module contains simple login form.
 """
 
+from flask import current_app
 from flask_wtf import Form
 from flask_wtf.form import ValidationError
 from wtforms import StringField, PasswordField, SubmitField
@@ -35,9 +36,12 @@ class LoginForm(Form):
     def validate_login(form, field):
         """Login field validator."""
         del form
-        user = Users.query.filter_by(
-            nickname=field.data).first()
+        username = remove_danger_symbols(field.data)
+        user = Users.query.filter_by(nickname=username).first()
         if user is None:
+            current_app.logger.error(
+                "User {} does not exists in the database [{}].".format(
+                    username, LoginForm.__name__))
             raise ValidationError('User %s does not exists in the database' %
                                   field.data)
 
@@ -53,4 +57,7 @@ class LoginForm(Form):
         user = Users.query.filter_by(nickname=username).first()
         if user is not None:
             if user.check_password(password) is False:
+                current_app.logger.error(
+                    "Given password and password from database are not " +
+                    "match [{}]".format(LoginForm.__name__))
                 raise ValidationError('Given password is wrong')

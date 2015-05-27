@@ -7,7 +7,7 @@ Anonymous user should be able to view next pages:
 """
 
 from jinja2 import TemplateNotFound
-from flask import render_template, abort
+from flask import render_template, abort, current_app
 from flask import redirect, url_for, request, flash
 from flask_login import login_user
 
@@ -27,6 +27,8 @@ def index():
     """Renders main page of art gallery."""
     try:
         if is_first_run() is True:
+            current_app.logger.info(
+                "Seems, there is first run of the application.")
             return redirect(url_for('service_pages.first_run'))
         else:
             return render_template(
@@ -34,6 +36,7 @@ def index():
                 title=Configuration.query.first().gallery_title,
                 albums=Albums.get_albums_list())
     except TemplateNotFound:
+        current_app.logger.error("Couldn't find HTML template: index.html")
         abort(404)
 
 
@@ -52,6 +55,8 @@ def album(album_url):
         matched_pictures = Pictures.query.filter_by(
             album_id=matched_album.id)
     except AttributeError:
+        current_app.logger.error(
+            "Album with URL does not found in the database.".format(album_url))
         flash('Album does not exists!', category='danger')
         return redirect(url_for('.index'))
 
@@ -63,6 +68,7 @@ def album(album_url):
             albums=Albums.get_albums_list(),
             pictures=matched_pictures)
     except TemplateNotFound:
+        current_app.logger.error("Couldn't find template: album.html")
         abort(404)
 
 
@@ -76,6 +82,8 @@ def login():
     login_form = LoginForm(request.form)
 
     if request.method == 'POST' and login_form.validate():
+        current_app.logger.debug(
+            "Form within {} function validated".format(login.__name__))
         username = remove_danger_symbols(login_form.login.data)
         user = Users.query.filter_by(nickname=username).first()
         login_user(user)
@@ -89,4 +97,5 @@ def login():
             title=Configuration.query.first().gallery_title,
             form=login_form)
     except TemplateNotFound:
+        current_app.logger.error("Couldn't find template: login.html")
         abort(404)

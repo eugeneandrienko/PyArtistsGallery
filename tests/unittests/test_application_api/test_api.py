@@ -51,9 +51,10 @@ class GetAlbumsListTestCase(unittest.TestCase):
 class DeleteAlbumTestCase(FlaskApplicationContextTestCase):
     """Tests for delete_album() function."""
 
+    @patch('pagapp.application_api.api.current_app')
     @patch('pagapp.application_api.api.request')
     @patch('pagapp.application_api.api.Albums')
-    def test_delete_album(self, mock_albums, mock_request):
+    def test_delete_album(self, mock_albums, mock_request, mock_app):
         """Test for /delete-album API call.
 
         Test cases:
@@ -76,15 +77,17 @@ class DeleteAlbumTestCase(FlaskApplicationContextTestCase):
             self.assertEqual(delete_album(), ('', 200))
             del mock_db
         del mock_request
+        del mock_app
 
 
 class EditAlbumTestCase(FlaskApplicationContextTestCase):
     """Tests for /api/edit-album API call."""
 
+    @patch('pagapp.application_api.api.current_app')
     @patch('pagapp.application_api.api.db')
     @patch('pagapp.application_api.api.request')
     @patch('pagapp.application_api.api.Albums')
-    def test_edit_album(self, mock_albums, mock_request, mock_db):
+    def test_edit_album(self, mock_albums, mock_request, mock_db, mock_app):
         """Test for edit_album() function.
 
         Test cases:
@@ -107,6 +110,9 @@ class EditAlbumTestCase(FlaskApplicationContextTestCase):
         mock_request.form['album_name'] = 'test name'
         mock_request.form['album_description'] = 'test description'
         self.assertEqual(edit_album(), ('', 200))
+
+        del mock_db
+        del mock_app
 
 
 if __name__ == '__main__':
