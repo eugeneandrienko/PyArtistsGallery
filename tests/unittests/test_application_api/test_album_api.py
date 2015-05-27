@@ -7,7 +7,7 @@ from unittest.mock import patch
 from unittest.mock import MagicMock
 
 from pagapp.models.users import Users
-from pagapp.application_api.api import get_albums_list, delete_album, \
+from pagapp.application_api.album_api import get_albums_list, delete_album, \
     edit_album
 from tests.unittests.flask_test import FlaskApplicationContextTestCase
 
@@ -15,10 +15,9 @@ from tests.unittests.flask_test import FlaskApplicationContextTestCase
 class GetAlbumsListTestCase(unittest.TestCase):
     """Tests for /api/get-albums-list API call."""
 
-    @patch(
-        'pagapp.application_api.api._generate_album_table_item')
-    @patch('pagapp.application_api.api.Pictures')
-    @patch('pagapp.application_api.api.Albums')
+    @patch('pagapp.application_api.album_api._generate_album_table_item')
+    @patch('pagapp.application_api.album_api.Pictures')
+    @patch('pagapp.application_api.album_api.Albums')
     def test_get_albums_list(self, mock_albums, mock_pictures,
                              mock_generate_album_table_item):
         """Test for /api/get-album-list API call.
@@ -51,9 +50,9 @@ class GetAlbumsListTestCase(unittest.TestCase):
 class DeleteAlbumTestCase(FlaskApplicationContextTestCase):
     """Tests for delete_album() function."""
 
-    @patch('pagapp.application_api.api.current_app')
-    @patch('pagapp.application_api.api.request')
-    @patch('pagapp.application_api.api.Albums')
+    @patch('pagapp.application_api.album_api.current_app')
+    @patch('pagapp.application_api.album_api.request')
+    @patch('pagapp.application_api.album_api.Albums')
     def test_delete_album(self, mock_albums, mock_request, mock_app):
         """Test for /delete-album API call.
 
@@ -71,7 +70,7 @@ class DeleteAlbumTestCase(FlaskApplicationContextTestCase):
         mock_albums.query.filter_by.return_value = mock_album
         self.assertEqual(delete_album(), ('', 404))
 
-        with patch('pagapp.application_api.api.db') as mock_db:
+        with patch('pagapp.application_api.album_api.db') as mock_db:
             mock_album.count.return_value = 1
             mock_albums.query.filter_by.return_value = mock_album
             self.assertEqual(delete_album(), ('', 200))
@@ -83,10 +82,10 @@ class DeleteAlbumTestCase(FlaskApplicationContextTestCase):
 class EditAlbumTestCase(FlaskApplicationContextTestCase):
     """Tests for /api/edit-album API call."""
 
-    @patch('pagapp.application_api.api.current_app')
-    @patch('pagapp.application_api.api.db')
-    @patch('pagapp.application_api.api.request')
-    @patch('pagapp.application_api.api.Albums')
+    @patch('pagapp.application_api.album_api.current_app')
+    @patch('pagapp.application_api.album_api.db')
+    @patch('pagapp.application_api.album_api.request')
+    @patch('pagapp.application_api.album_api.Albums')
     def test_edit_album(self, mock_albums, mock_request, mock_db, mock_app):
         """Test for edit_album() function.
 
