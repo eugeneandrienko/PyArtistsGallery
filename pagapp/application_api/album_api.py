@@ -64,6 +64,26 @@ def get_albums_list():
         [_generate_album_table_item(album) for album in Albums.query.all()])
 
 
+@application_api.route('/get-albums-list-short')
+def get_albums_list_short():
+    """Returns short list of albums.
+
+    Returns JSON array, which looks like next example:
+    [
+        {
+            'id': 1,
+            'name': 'Test album name'
+        }
+    ]
+    """
+    return json.dumps(
+        [
+            {
+                'id': album.id,
+                'name': album.album_name
+            } for album in Albums.query.all()])
+
+
 @application_api.route('/delete-album', methods=['POST'])
 @login_required
 def delete_album():

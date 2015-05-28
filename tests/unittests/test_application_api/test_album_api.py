@@ -7,13 +7,14 @@ from unittest.mock import patch
 from unittest.mock import MagicMock
 
 from pagapp.models.users import Users
-from pagapp.application_api.album_api import get_albums_list, delete_album, \
-    edit_album
+from pagapp.application_api.album_api import get_albums_list
+from pagapp.application_api.album_api import get_albums_list_short
+from pagapp.application_api.album_api import delete_album, edit_album
 from tests.unittests.flask_test import FlaskApplicationContextTestCase
 
 
-class GetAlbumsListTestCase(unittest.TestCase):
-    """Tests for /api/get-albums-list API call."""
+class GetAlbumsListTestCase(FlaskApplicationContextTestCase):
+    """Tests for /api/get-albums-list(-short) API calls."""
 
     @patch('pagapp.application_api.album_api._generate_album_table_item')
     @patch('pagapp.application_api.album_api.Pictures')
@@ -46,6 +47,32 @@ class GetAlbumsListTestCase(unittest.TestCase):
         )
 
         self.assertEqual(get_albums_list(), expected_result)
+
+    @patch('pagapp.application_api.album_api.Albums')
+    def test_get_albums_list_short(self, mock_albums):
+        """Test for /api/get-albums-list-short API call.
+
+        Test case:
+        Function should return JSON array with list of albums in any case.
+        """
+        test_album_name = 'test_name'
+        test_album_id = 1
+
+        mock_album = MagicMock()
+        mock_album.album_name = test_album_name
+        mock_album.id = test_album_id
+        mock_albums.query.all.return_value = [mock_album]
+
+        expected_result = json.dumps(
+            [
+                {
+                    'id': test_album_id,
+                    'name': test_album_name
+                }
+            ]
+        )
+
+        self.assertEqual(get_albums_list_short(), expected_result)
 
 
 class DeleteAlbumTestCase(FlaskApplicationContextTestCase):

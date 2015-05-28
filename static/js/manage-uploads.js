@@ -12,3 +12,11 @@ $("#inputFiles").fileinput(
         'removeLabel': 'Clear'
     }
 );
+
+// Populate select (list of albums) with values
+$.getJSON("/api/get-albums-list-short", function(data) {
+    var items = [];
+    $.each(data, function(key, val) {
+        $("#selectAlbum").append('<option value=' + val.id.toString() + '>' + val.name + '</option>');
+    });
+});
