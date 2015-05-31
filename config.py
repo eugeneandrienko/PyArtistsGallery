@@ -27,7 +27,7 @@ class Config:
     _BASEDIR = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
                               os.path.join(_BASEDIR, 'pagapp.db')
-    SQLALCHEMY_DATABASE_VERSION = '2615e2b854'
+    SQLALCHEMY_DATABASE_VERSION = '425ac7b3d58'
     STATIC_FOLDER = os.path.join(_BASEDIR, 'static/')
     TEMPLATES_FOLDER = os.path.join(_BASEDIR, 'templates/')
 
@@ -44,7 +44,8 @@ class Config:
     ############################################################
     # Upload settings.
     ############################################################
-    UPLOAD_FOLDER = os.path.join(_BASEDIR, 'uploads/')
+    UPLOAD_FOLDER_RELATIVE = 'uploads/'
+    UPLOAD_FOLDER = os.path.join(_BASEDIR, UPLOAD_FOLDER_RELATIVE)
     ALLOWED_EXTENSIONS = ['png', 'bmp', 'tiff', 'jpg', 'jpeg']
 
     ############################################################

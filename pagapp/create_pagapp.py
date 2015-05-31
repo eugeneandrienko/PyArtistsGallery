@@ -14,6 +14,32 @@ from pagapp.service_pages import service_pages
 from pagapp.application_api import application_api
 
 
+def check_folders(app):
+    """Checks is folders exists and creates it if not.
+
+    This function checks for upload folders.
+    """
+    upload_directory = dirname(app.config['UPLOAD_FOLDER'])
+    if not exists(upload_directory):
+        app.logger.error(
+            "Directory for uploads ({}) does not exists! ".format(
+                app.config['UPLOAD_FOLDER']) +
+            "Trying to create new one...")
+        makedirs(upload_directory)
+    else:
+        app.logger.info("Directory for uploads exists.")
+
+    thumbnail_directory = dirname(app.config['UPLOAD_FOLDER'] + 'thumbnails/')
+    if not exists(thumbnail_directory):
+        app.logger.error(
+            "Directory for thumbnails ({}) does not exists! ".format(
+                app.config['UPLOAD_FOLDER'] + 'thumbnails/') +
+            "Trying to create new one...")
+        makedirs(thumbnail_directory)
+    else:
+        app.logger.info("Directory for thumbnails exists.")
+
+
 def setup_logging(app):
     """Setup logging facility.
 
@@ -73,16 +99,7 @@ def create_pagapp(path_to_config, debug):
 
     register_blueprints(app)
     setup_logging(app)
-
-    upload_directory = dirname(app.config['UPLOAD_FOLDER'])
-    if not exists(upload_directory):
-        app.logger.error(
-            "Directory for uploads ({}) does not exists! ".format(
-                app.config['UPLOAD_FOLDER']) +
-            "Trying to create new one...")
-        makedirs(upload_directory)
-    else:
-        app.logger.info("Directory for uploads exists.")
+    check_folders(app)
 
     app.logger.info("Application starting...")
     return app

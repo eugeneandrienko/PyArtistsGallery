@@ -13,7 +13,7 @@ from flask_login import current_user
 from flask_wtf import Form
 from flask_wtf.form import ValidationError
 from wtforms import PasswordField, SubmitField, StringField, FileField, \
-    SelectField
+    SelectField, TextAreaField
 from wtforms.validators import DataRequired, EqualTo
 
 
@@ -72,6 +72,14 @@ class UploadForm(Form):
         choices=[],
         id='selectAlbum',
         description="Select album")
+    name = StringField(
+        "Picture name:",
+        validators=[DataRequired()],
+        description="Picture name")
+    description = TextAreaField(
+        "Picture description:",
+        validators=[DataRequired()],
+        description="Picture description")
     submit_button = SubmitField("Upload")
 
     @staticmethod

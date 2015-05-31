@@ -10,12 +10,11 @@ import re
 
 from flask import request, flash, current_app
 from flask_login import current_user
-from werkzeug.utils import secure_filename
-from os.path import join
 
 from pagapp.models import db
 from pagapp.models.albums import Albums
 from pagapp.support_functions import flash_form_errors, remove_danger_symbols
+from pagapp.admin_panel.save_picture_functions import save_file
 
 
 def change_password(form):
@@ -100,11 +99,8 @@ def upload_files(form):
     current_app.logger.debug("form.validate(): " + str(form.validate()))
 
     if request.method == 'POST' and form.validate():
-        filename = secure_filename(form.file_name.data.filename)
-        current_app.logger.info("Saving file: " + filename)
-        form.file_name.data.save(
-            join(current_app.config['UPLOAD_FOLDER'], filename))
-        flash("File " + filename + " uploaded.", category='success')
+        save_file(form.file_name, form.album.data, form.name.data,
+                  form.description.data)
     else:
         current_app.logger.debug(
             "Form within {} function didn't validated.".format(

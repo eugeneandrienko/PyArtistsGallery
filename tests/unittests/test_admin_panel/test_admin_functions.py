@@ -275,25 +275,20 @@ class UploadFilesTestCase(unittest.TestCase):
             self.assertEqual(mock_form.album.choices[0],
                              (str(test_id), test_album_name))
 
-    def test_upload_files(self):
+    @patch('pagapp.admin_panel.admin_functions.save_file')
+    def test_upload_files(self, mock_save_file):
         """Test for upload_files().
 
         Test case:
-        Form validated successfully - we should save file and
-        call flash() function.
+        Form validated successfully - we should save file.
         """
         mock_form = MagicMock()
         mock_form.submit_button.data = True
 
         path_to_current_app = 'pagapp.admin_panel.admin_functions.current_app'
-        path_to_secure_filename = \
-            'pagapp.admin_panel.admin_functions.secure_filename'
-        path_to_flash = 'pagapp.admin_panel.admin_functions.flash'
         path_to_albums = 'pagapp.admin_panel.admin_functions.Albums'
         path_to_request = 'pagapp.admin_panel.admin_functions.request'
         with patch(path_to_current_app) as mock_current_app, \
-                patch(path_to_secure_filename) as mock_secure_filename, \
-                patch(path_to_flash) as mock_flash, \
                 patch(path_to_albums) as mock_albums, \
                 patch(path_to_request) as mock_request:
             mock_album = MagicMock()
@@ -304,13 +299,9 @@ class UploadFilesTestCase(unittest.TestCase):
             mock_albums.query.all.return_value = [mock_album]
 
             mock_request.method = 'POST'
-            mock_secure_filename.return_value = 'test'
             mock_current_app.config['UPLOAD_FOLDER'] = 'test'
             upload_files(mock_form)
-            self.assertTrue(mock_secure_filename.called)
-            self.assertTrue(mock_current_app.logger.info.called)
-            self.assertTrue(mock_form.file_name.data.save.called)
-            self.assertTrue(mock_flash.called)
+            self.assertTrue(mock_save_file.called)
 
     def test_upload_files_not_valid(self):
         """Test for upload_files().
