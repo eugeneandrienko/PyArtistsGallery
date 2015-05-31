@@ -21,12 +21,19 @@ import string
 
 
 class Config:
+    ############################################################
+    # Base settings.
+    ############################################################
     _BASEDIR = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
                               os.path.join(_BASEDIR, 'pagapp.db')
     SQLALCHEMY_DATABASE_VERSION = '2615e2b854'
     STATIC_FOLDER = os.path.join(_BASEDIR, 'static/')
     TEMPLATES_FOLDER = os.path.join(_BASEDIR, 'templates/')
+
+    ############################################################
+    # Log files.
+    ############################################################
     APP_LOG_FILE = os.path.join(_BASEDIR, 'pagapp.log')
     APP_LOG_FILE_MAX_BYTES = 102400
     APP_LOG_FILE_BACKUP_COUNT = 10
@@ -34,7 +41,15 @@ class Config:
     HTTP_LOG_FILE_MAX_BYTES = 102400
     HTTP_LOG_FILE_BACKUP_COUNT = 10
 
+    ############################################################
+    # Upload settings.
+    ############################################################
+    UPLOAD_FOLDER = os.path.join(_BASEDIR, 'uploads/')
+    ALLOWED_EXTENSIONS = ['png', 'bmp', 'tiff', 'jpg', 'jpeg']
+
+    ############################################################
     # Specific settings for Flask-WTForm. Do not edit!
+    ############################################################
     WTF_CSRF_ENABLED = True
     SECRET_KEY_LENGTH = 30
     SECRET_KEY = ''.join(

@@ -26,7 +26,7 @@ def load_user(uid):
     Result:
     User object from database.
     """
-    current_app.logger.debug("User with ID {} tried to login.".format(uid))
+    current_app.logger.debug("load_user({}) called.".format(uid))
     try:
         result = Users.query.get(int(uid))
     except ObjectDeletedError:

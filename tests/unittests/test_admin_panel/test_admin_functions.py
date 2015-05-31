@@ -6,7 +6,8 @@ import unittest
 from unittest.mock import patch
 from unittest.mock import MagicMock
 
-from pagapp.admin_panel.admin_functions import change_password, add_new_album
+from pagapp.admin_panel.admin_functions import change_password, add_new_album, \
+    upload_files
 from pagapp.support_functions import remove_danger_symbols
 
 
@@ -244,6 +245,104 @@ class AddNewAlbumTestCase(unittest.TestCase):
             del mock_db
             del mock_flash
         del mock_app
+
+
+class UploadFilesTestCase(unittest.TestCase):
+    """Tests for upload_files() function."""
+
+    def test_upload_files_submit_false(self):
+        """Test for upload_files().
+
+        Test case:
+        If form is not submitted - function should return
+        immediately. Before, it should update form.album.choices
+        array anyway.
+        Also, in this test checks form.album.choices updating.
+        """
+        mock_form = MagicMock()
+        mock_form.submit_button.data = False
+
+        path_to_albums = 'pagapp.admin_panel.admin_functions.Albums'
+        with patch(path_to_albums) as mock_albums:
+            mock_album = MagicMock()
+            test_id = 1
+            test_album_name = 'test1'
+            mock_album.id = test_id
+            mock_album.album_name = test_album_name
+            mock_albums.query.all.return_value = [mock_album]
+
+            upload_files(mock_form)
+            self.assertEqual(mock_form.album.choices[0],
+                             (str(test_id), test_album_name))
+
+    def test_upload_files(self):
+        """Test for upload_files().
+
+        Test case:
+        Form validated successfully - we should save file and
+        call flash() function.
+        """
+        mock_form = MagicMock()
+        mock_form.submit_button.data = True
+
+        path_to_current_app = 'pagapp.admin_panel.admin_functions.current_app'
+        path_to_secure_filename = \
+            'pagapp.admin_panel.admin_functions.secure_filename'
+        path_to_flash = 'pagapp.admin_panel.admin_functions.flash'
+        path_to_albums = 'pagapp.admin_panel.admin_functions.Albums'
+        path_to_request = 'pagapp.admin_panel.admin_functions.request'
+        with patch(path_to_current_app) as mock_current_app, \
+                patch(path_to_secure_filename) as mock_secure_filename, \
+                patch(path_to_flash) as mock_flash, \
+                patch(path_to_albums) as mock_albums, \
+                patch(path_to_request) as mock_request:
+            mock_album = MagicMock()
+            test_id = 1
+            test_album_name = 'test1'
+            mock_album.id = test_id
+            mock_album.album_name = test_album_name
+            mock_albums.query.all.return_value = [mock_album]
+
+            mock_request.method = 'POST'
+            mock_secure_filename.return_value = 'test'
+            mock_current_app.config['UPLOAD_FOLDER'] = 'test'
+            upload_files(mock_form)
+            self.assertTrue(mock_secure_filename.called)
+            self.assertTrue(mock_current_app.logger.info.called)
+            self.assertTrue(mock_form.file_name.data.save.called)
+            self.assertTrue(mock_flash.called)
+
+    def test_upload_files_not_valid(self):
+        """Test for upload_files().
+
+        Test case:
+        Form not validated or request.method is not 'POST' or both.
+        Logger function debug() should be called and flash_form_errors()
+        should be called too.
+        """
+        mock_form = MagicMock()
+        mock_form.submit_button.data = True
+
+        path_to_current_app = 'pagapp.admin_panel.admin_functions.current_app'
+        path_to_flash_form_errors = \
+            'pagapp.admin_panel.admin_functions.flash_form_errors'
+        path_to_albums = 'pagapp.admin_panel.admin_functions.Albums'
+        path_to_request = 'pagapp.admin_panel.admin_functions.request'
+        with patch(path_to_current_app) as mock_current_app, \
+                patch(path_to_flash_form_errors) as mock_flash_form_errors, \
+                patch(path_to_albums) as mock_albums, \
+                patch(path_to_request) as mock_request:
+            mock_album = MagicMock()
+            test_id = 1
+            test_album_name = 'test1'
+            mock_album.id = test_id
+            mock_album.album_name = test_album_name
+            mock_albums.query.all.return_value = [mock_album]
+
+            mock_request.method = 'GET'
+            upload_files(mock_form)
+            self.assertTrue(mock_current_app.logger.debug.called)
+            self.assertTrue(mock_flash_form_errors.called)
 
 
 if __name__ == '__main__':

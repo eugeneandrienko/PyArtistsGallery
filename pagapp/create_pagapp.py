@@ -1,5 +1,7 @@
 """Functions which instantiate web application."""
 
+from os import makedirs
+from os.path import dirname, exists
 from flask import Flask
 from logging import ERROR, Formatter, getLogger, DEBUG
 from logging.handlers import RotatingFileHandler
@@ -71,6 +73,16 @@ def create_pagapp(path_to_config, debug):
 
     register_blueprints(app)
     setup_logging(app)
+
+    upload_directory = dirname(app.config['UPLOAD_FOLDER'])
+    if not exists(upload_directory):
+        app.logger.error(
+            "Directory for uploads ({}) does not exists! ".format(
+                app.config['UPLOAD_FOLDER']) +
+            "Trying to create new one...")
+        makedirs(upload_directory)
+    else:
+        app.logger.info("Directory for uploads exists.")
 
     app.logger.info("Application starting...")
     return app

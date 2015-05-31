@@ -10,6 +10,8 @@ import re
 
 from flask import request, flash, current_app
 from flask_login import current_user
+from werkzeug.utils import secure_filename
+from os.path import join
 
 from pagapp.models import db
 from pagapp.models.albums import Albums
@@ -70,7 +72,7 @@ def add_new_album(form):
     else:
         current_app.logger.debug(
             "Form within {} function didn't validated.".format(
-                change_password.__name__))
+                add_new_album.__name__))
         flash_form_errors(form)
 
     # Clear form input fields to show placeholders.
@@ -79,4 +81,32 @@ def add_new_album(form):
 
 
 def upload_files(form):
-    pass
+    """Uploads file to gallery.
+
+    This function uploads file to the gallery and updates field 'album'
+    of UploadForm. We should have up-to-date list of albums in select
+    dropdown and in field 'album' to pass throw form's validation.
+    """
+    form.album.choices = [
+        (
+            str(album.id),
+            album.album_name
+        ) for album in Albums.query.all()]
+
+    if form.submit_button.data is False:
+        return
+
+    current_app.logger.debug("Starting file upload...")
+    current_app.logger.debug("form.validate(): " + str(form.validate()))
+
+    if request.method == 'POST' and form.validate():
+        filename = secure_filename(form.file_name.data.filename)
+        current_app.logger.info("Saving file: " + filename)
+        form.file_name.data.save(
+            join(current_app.config['UPLOAD_FOLDER'], filename))
+        flash("File " + filename + " uploaded.", category='success')
+    else:
+        current_app.logger.debug(
+            "Form within {} function didn't validated.".format(
+                upload_files.__name__))
+        flash_form_errors(form)

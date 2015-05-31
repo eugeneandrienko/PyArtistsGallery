@@ -1,4 +1,4 @@
-$("#inputFiles").fileinput(
+$("#inputFile").fileinput(
     {
         'allowedFileTypes': ['image'],
         'allowedPreviewTypes': ['image'],
@@ -16,7 +16,8 @@ $("#inputFiles").fileinput(
 // Populate select (list of albums) with values
 $.getJSON("/api/get-albums-list-short", function(data) {
     var items = [];
+    $("#selectAlbum").empty();
     $.each(data, function(key, val) {
-        $("#selectAlbum").append('<option value=' + val.id.toString() + '>' + val.name + '</option>');
+        $("#selectAlbum").append('<option value="' + val.id.toString() + '">' + val.name + '</option>');
     });
 });

@@ -6,6 +6,8 @@ AddAlbumForm -- providing form for adding new album.
 UploadForm -- providing form for uploading new pictures.
 """
 
+import re
+
 from flask import current_app
 from flask_login import current_user
 from flask_wtf import Form
@@ -61,14 +63,28 @@ class AddAlbumForm(Form):
 class UploadForm(Form):
     """Form for uploading new pictures to the given album."""
 
-    file_names = FileField(
-        "Select files:",
-        # validators=None,
-        id='inputFiles',
-        description="Select files")
+    file_name = FileField(
+        "Select file:",
+        id='inputFile',
+        description="Select file")
     album = SelectField(
         "Select album:",
         choices=[],
         id='selectAlbum',
         description="Select album")
     submit_button = SubmitField("Upload")
+
+    @staticmethod
+    def validate_file_name(form, field):
+        """file_name field validator.
+
+        It checks - is given filename has allowed extension.
+        """
+        allowed_extensions = current_app.config['ALLOWED_EXTENSIONS']
+        regexp = '|'.join(map(
+            lambda x: '(.*\\.{}$)'.format(x), allowed_extensions))
+        regexp = re.compile(regexp, re.IGNORECASE)
+        if regexp.search(field.data.filename) is None:
+            raise ValidationError('{} has not allowed exception!'.format(
+                field.data.filename))
+        del form
