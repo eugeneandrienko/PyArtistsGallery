@@ -4,6 +4,11 @@
 language: python
 python:
   - "3.4"
+branches:
+  only:
+    - master
+    - flask
+    - develop
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y python3-dev
@@ -14,3 +19,6 @@ install:
   - pip install coveralls
 script: coverage run --source pagapp -m unittest discover
 after_success: coveralls
+
+# TODO: do not forget add deployment to the PyPI: http://docs.travis-ci.com/user/deployment/pypi/
+# TODO: do not forget add uploading GitHum Releases: http://docs.travis-ci.com/user/deployment/releases/
