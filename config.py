@@ -30,6 +30,7 @@ class Config:
     SQLALCHEMY_DATABASE_VERSION = '425ac7b3d58'
     STATIC_FOLDER = os.path.join(_BASEDIR, 'static/')
     TEMPLATES_FOLDER = os.path.join(_BASEDIR, 'templates/')
+    THUMBNAIL_SIZE = {'x': 75, 'y': 75}  # in px
 
     ############################################################
     # Log files.

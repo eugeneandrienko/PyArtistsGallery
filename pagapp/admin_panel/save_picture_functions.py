@@ -5,9 +5,33 @@ from flask import current_app, flash
 from flask_login import current_user
 from werkzeug.utils import secure_filename
 from os.path import join
+from PIL import Image
 
 from pagapp.models import db
 from pagapp.models.pictures import Pictures
+
+
+def _create_thumbnail(path_to_image, path_to_thumbnail):
+    """Creates thumbnail from given image.
+
+    Idea of this function was taken from:
+    http://united-coders.com/christian-harms/image-resiz
+    ing-tips-every-coder-should-know/
+    """
+    image = Image.open(path_to_image)
+
+    # preresize image with factor 2, 4, 8 and fast algorithm
+    factor = 1
+    size = current_app.config['THUMBNAIL_SIZE']
+    while image.size[0] / factor > 2 * size['x'] and \
+            image.size[1] / factor > 2 * size['y']:
+        factor *= 2
+    if factor > 1:
+        image.thumbnail(
+            (image.size[0] / factor, image.size[1] / factor), Image.NEAREST)
+
+    image.thumbnail((size['x'], size['y']), Image.ANTIALIAS)
+    image.save(path_to_thumbnail)
 
 
 def save_file(filename_field, album_id, name, description):
@@ -32,7 +56,7 @@ def save_file(filename_field, album_id, name, description):
         return
 
     filename_field.data.save(file_path)
-    # TODO: create thumbnail here.
+    _create_thumbnail(file_path, thumbnail_path)
     current_app.logger.info('Thumbnail saved in: {}.'.format(thumbnail_path))
 
     picture_row_data = {
