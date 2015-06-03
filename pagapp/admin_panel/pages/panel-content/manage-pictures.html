@@ -1,0 +1,61 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="container">
+            <select class="form-control" id="selectAlbumMPics">
+                <option value="" selected disabled style='display:none;'>
+                    Select album...
+                </option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="container">
+            <table id="pictures-table"
+                   data-toggle="table"
+                   data-url="/"
+                   data-sort-name="name"
+                   data-sort-order="asc"
+                   data-striped="true">
+                <thead>
+                <tr>
+                    <th class="col-xs-2"
+                        data-field="thumbnail">
+                        Image
+                    </th>
+                    <th class="col-xs-2"
+                        data-field="name"
+                        data-sortable="true">
+                        Name
+                    </th>
+                    <th class="col-xs-3"
+                        data-field="description"
+                        data-sortable="true">
+                        Description
+                    </th>
+                    <th class="col-xs-2"
+                        data-field="upload_date"
+                        data-sortable="true">
+                        Date of upload
+                    </th>
+                    <th class="col-xs-1"
+                        data-field="size"
+                        data-sortable="true">
+                        Size
+                    </th>
+                    <th class="col-xs-2"
+                        data-field="actions">
+                        Actions
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="../static/js/ajax-post.js"></script>
+<script src="../static/js/bootstrap-table.min.js"></script>
+<script src="../static/js/manage-pictures.js"></script>
