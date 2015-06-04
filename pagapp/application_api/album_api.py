@@ -1,4 +1,4 @@
-"""Handlers for API calls."""
+"""Handlers for albums' API calls."""
 
 import json
 from flask import request, current_app
