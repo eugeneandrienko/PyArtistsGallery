@@ -1,4 +1,4 @@
-"""Tests for API calls."""
+"""Tests for albums' API calls."""
 
 from flask_login import login_user
 import json
@@ -86,7 +86,7 @@ class DeleteAlbumTestCase(FlaskApplicationContextTestCase):
 
         Test cases:
         If count of albums with given id is not equal with one - function
-        should return tuple ('', 404).
+        should return tuple ('some text', 404).
         Else, if count of albums equals with one - function should
         return tuple ('', 200).
         """
@@ -96,7 +96,8 @@ class DeleteAlbumTestCase(FlaskApplicationContextTestCase):
         mock_album.first.return_value = 'test'
         mock_album.count.return_value = 2
         mock_albums.query.filter_by.return_value = mock_album
-        self.assertEqual(delete_album(), ('', 404))
+        self.assertEqual(delete_album(), (
+            'Cannot delete album, too much IDs!', 404))
 
         with patch('pagapp.application_api.album_api.db') as mock_db:
             mock_album.count.return_value = 1
@@ -131,7 +132,7 @@ class EditAlbumTestCase(FlaskApplicationContextTestCase):
 
         mocked_album.count.return_value = 2
         self.assertEqual(
-            edit_album(), ('Cannot delete album, error with ID!', 404))
+            edit_album(), ('Cannot edit album, too much IDs!', 404))
 
         mocked_album.count.return_value = 1
         mock_request.form['album_name'] = 'test name'

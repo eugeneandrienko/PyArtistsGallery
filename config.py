@@ -46,7 +46,7 @@ class Config:
     # Upload settings.
     ############################################################
     UPLOAD_FOLDER_RELATIVE = 'uploads/'
-    UPLOAD_FOLDER = os.path.join(_BASEDIR, UPLOAD_FOLDER_RELATIVE)
+    UPLOAD_FOLDER = os.path.join(STATIC_FOLDER, UPLOAD_FOLDER_RELATIVE)
     ALLOWED_EXTENSIONS = ['png', 'bmp', 'tiff', 'jpg', 'jpeg']
 
     ############################################################
