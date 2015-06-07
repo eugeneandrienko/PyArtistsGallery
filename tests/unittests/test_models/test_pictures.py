@@ -33,7 +33,8 @@ class PicturesTableTestCase(unittest.TestCase):
             'path_to_image': 'fake_path',
             'path_to_thumbnail': 'fake_path_thumbnail',
             'name': 'fake name',
-            'description': 'fake_description'
+            'description': 'fake_description',
+            'size': 22
         }
         test_picture = Pictures(test_arguments)
         self.assertEqual(
@@ -44,7 +45,8 @@ class PicturesTableTestCase(unittest.TestCase):
                 'path_to_image': test_picture.path_to_image,
                 'path_to_thumbnail': test_picture.path_to_thumbnail,
                 'name': test_picture.name,
-                'description': test_picture.description
+                'description': test_picture.description,
+                'size': test_picture.size
             },
             test_arguments,
             msg="Album ID, date and etc should be equal!")
@@ -54,15 +56,16 @@ class PicturesTableTestCase(unittest.TestCase):
             'uploader_id': 2,
             'upload_date': datetime.datetime(2009, 1, 2, 12, 14, 22, 34),
             'path_to_image': 'fake_path',
-            'path_to_thumbnail': 'fake_path_thumbnail'
+            'path_to_thumbnail': 'fake_path_thumbnail',
+            'size': 22
         }
         test_picture = Pictures(test_arguments)
         repr_result = test_picture.__repr__()
         expected_repr_result = \
             'Album ID: {}, Uploader ID: {}, Date: {}, Path: {}|{}, ' \
-            'Name: {}, Description: {}'.format(
+            'Name: {}, Description: {}, Size: {} KB'.format(
                 1, 2, datetime.datetime(2009, 1, 2, 12, 14, 22, 34),
-                'fake_path', 'fake_path_thumbnail', '', '')
+                'fake_path', 'fake_path_thumbnail', '', '', 22)
         self.assertEqual(repr_result, expected_repr_result)
 
     def test_wrong_parameters(self):
@@ -73,13 +76,14 @@ class PicturesTableTestCase(unittest.TestCase):
         parameters are not strings.
         """
         wrong_arguments_array = \
-            [('error', 2, datetime.datetime.now(), 'path', 'path', 'name', '-'),
-             (1, 'error', datetime.datetime.now(), 'path', 'path', 'name', '-'),
-             (1, 2, 'error', 'path', 'path', 'name', '-'),
-             (1, 2, datetime.datetime.now(), 1, 'path', 'name', '-'),
-             (1, 2, datetime.datetime.now(), 'path', 1, 'name', '-'),
-             (1, 2, datetime.datetime.now(), 'path', 'path', 1, '-'),
-             (1, 2, datetime.datetime.now(), 'path', 'path', 'name', 1)]
+            [('error', 2, datetime.datetime.now(), 'path', 'path', 'name', '-', 1),
+             (1, 'error', datetime.datetime.now(), 'path', 'path', 'name', '-', 1),
+             (1, 2, 'error', 'path', 'path', 'name', '-', 1),
+             (1, 2, datetime.datetime.now(), 1, 'path', 'name', '-', 1),
+             (1, 2, datetime.datetime.now(), 'path', 1, 'name', '-', 1),
+             (1, 2, datetime.datetime.now(), 'path', 'path', 1, '-', 1),
+             (1, 2, datetime.datetime.now(), 'path', 'path', 'name', 1, 1),
+             (1, 2, datetime.datetime.now(), 'path', 'path', 'name', 1, 'error')]
         arguments_keys = ('album_id', 'uploader_id', 'upload_date',
                           'path_to_image', 'path_to_thumbnail', 'name',
                           'description')

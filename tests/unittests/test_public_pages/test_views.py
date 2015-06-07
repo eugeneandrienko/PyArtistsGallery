@@ -23,9 +23,11 @@ class IndexTestCase(unittest.TestCase):
         path_to_configuration = 'pagapp.public_pages.views.Configuration'
         path_to_albums = 'pagapp.public_pages.views.Albums'
         path_first_run = 'pagapp.public_pages.views.is_first_run'
+        path_is_upgrade_ready = 'pagapp.public_pages.views.is_upgrade_ready'
         with patch(path_to_configuration) as mock_configuration, \
                 patch(path_to_albums) as mock_albums, \
-                patch(path_first_run) as mock_first_run:
+                patch(path_first_run) as mock_first_run, \
+                patch(path_is_upgrade_ready) as mock_is_upgrade_ready:
             mock_first_result = MagicMock()
             mock_first_result.gallery_title = 'test'
             mock_configuration.query.first.return_value = mock_first_result
@@ -33,6 +35,7 @@ class IndexTestCase(unittest.TestCase):
             mock_render_template.return_value = test_render_template
             mock_albums.get_albums_list.return_value = 'test'
             mock_first_run.return_value = False
+            mock_is_upgrade_ready.return_value = False
             self.assertEqual(index(), test_render_template,
                              msg="render_template() should be called!")
 
@@ -53,18 +56,69 @@ class IndexTestCase(unittest.TestCase):
         path_to_configuration = 'pagapp.public_pages.views.Configuration'
         path_to_albums = 'pagapp.public_pages.views.Albums'
         path_to_first_run = 'pagapp.public_pages.views.is_first_run'
+        path_is_upgrade_ready = 'pagapp.public_pages.views.is_upgrade_ready'
         with patch(path_to_albums) as mock_albums, \
                 patch(path_to_configuration) as mock_configuration, \
-                patch(path_to_first_run) as mock_first_run:
+                patch(path_to_first_run) as mock_first_run, \
+                patch(path_is_upgrade_ready) as mock_is_upgrade_ready:
             mock_first_result = MagicMock()
             mock_first_result.gallery_title = 'test'
             mock_configuration.query.first.return_value = mock_first_result
             mock_albums.get_albums_list.return_value = 'test'
             mock_first_run.return_value = False
+            mock_is_upgrade_ready.return_value = False
             index()
             self.assertTrue(mock_abort.called,
                             msg="abort(404) should be called!")
         del mock_app
+
+    def test_index_first_run(self):
+        """Test for index() function.
+
+        Test case:
+        Function should make redirect to corresponding service page
+        if it is first run of function.
+        """
+        path_to_first_run = 'pagapp.public_pages.views.is_first_run'
+        path_to_app = 'pagapp.public_pages.views.current_app'
+        path_to_url_for = 'pagapp.public_pages.views.url_for'
+        path_to_redirect = 'pagapp.public_pages.views.redirect'
+        with patch(path_to_first_run) as mock_first_run, \
+                patch(path_to_app) as mock_app, \
+                patch(path_to_url_for) as mock_url_for, \
+                patch(path_to_redirect) as mock_redirect:
+            mock_first_run.return_value = True
+            index()
+            self.assertTrue(mock_app.logger.info.called)
+            self.assertTrue(mock_url_for.called)
+            self.assertTrue(mock_redirect.called)
+
+    @patch('pagapp.public_pages.views.Configuration')
+    @patch('pagapp.public_pages.views.Albums')
+    def test_index_update_db(self, mock_configuration, mock_albums):
+        """Test for index() function.
+
+        Test case:
+        Function should perform database update if it is ready.
+        """
+        path_to_first_run = 'pagapp.public_pages.views.is_first_run'
+        path_to_upgrade_database = 'pagapp.public_pages.views.upgrade_database'
+        path_to_render_template = 'pagapp.public_pages.views.render_template'
+        path_to_flash = 'pagapp.public_pages.views.flash'
+        path_to_is_upgrade_ready = 'pagapp.public_pages.views.is_upgrade_ready'
+        with patch(path_to_first_run) as mock_first_run, \
+                patch(path_to_upgrade_database) as mock_upgrade_database, \
+                patch(path_to_render_template) as mock_render_template, \
+                patch(path_to_flash) as mock_flash, \
+                patch(path_to_is_upgrade_ready) as mock_is_upgrade_ready:
+            mock_first_run.return_value = False
+            mock_is_upgrade_ready.return_value = True
+            index()
+            self.assertTrue(mock_upgrade_database.called)
+            self.assertTrue(mock_flash.called)
+            self.assertTrue(mock_render_template.called)
+        del mock_configuration
+        del mock_albums
 
 
 class AlbumTestCase(unittest.TestCase):

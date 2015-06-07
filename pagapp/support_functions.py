@@ -9,8 +9,6 @@ from sqlalchemy.exc import OperationalError
 from flask import flash, Markup, current_app
 from flask_login import LoginManager
 
-from pagapp.models.albums import Albums
-from pagapp.models.pictures import Pictures
 from pagapp.models.users import Users
 from pagapp.models.configuration import Configuration
 
@@ -51,8 +49,7 @@ def flash_form_errors(form):
 def is_first_run():
     """Is application running first time or not.
 
-    Function returns True if schema is broken.
-    Also. function returns True if some config fields do
+    Function returns True if some config fields do
     not filled - in this case we consider, what application
     run at first time.
     Function returns False if all configuration fields in database
@@ -60,17 +57,12 @@ def is_first_run():
     """
 
     try:
-        Albums.query.first()
-        Configuration.query.first()
-        Pictures.query.first()
-        Users.query.first()
+        if len(Configuration.query.all()) == 0:
+            return True
+
+        if len(Users.query.all()) == 0:
+            return True
     except OperationalError:
-        return True
-
-    if len(Configuration.query.all()) == 0:
-        return True
-
-    if len(Users.query.all()) == 0:
         return True
 
     return False

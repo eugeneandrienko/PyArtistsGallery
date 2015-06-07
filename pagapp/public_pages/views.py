@@ -19,6 +19,7 @@ from pagapp.public_pages import public_pages
 from pagapp.public_pages.forms import LoginForm
 from pagapp.support_functions import flash_form_errors, is_first_run, \
     remove_danger_symbols
+from pagapp.database_functions import is_upgrade_ready, upgrade_database
 
 
 @public_pages.route('/')
@@ -30,11 +31,13 @@ def index():
             current_app.logger.info(
                 "Seems, there is first run of the application.")
             return redirect(url_for('service_pages.first_run'))
-        else:
-            return render_template(
-                'index.html',
-                title=Configuration.query.first().gallery_title,
-                albums=Albums.get_albums_list())
+        elif is_upgrade_ready():
+            upgrade_database()
+            flash('Database updated successfully!', category='success')
+        return render_template(
+            'index.html',
+            title=Configuration.query.first().gallery_title,
+            albums=Albums.get_albums_list())
     except TemplateNotFound:
         current_app.logger.error("Couldn't find HTML template: index.html")
         abort(404)
