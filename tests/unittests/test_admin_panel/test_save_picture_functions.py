@@ -70,21 +70,19 @@ class SaveFileTestCase(unittest.TestCase):
         Test case:
         File already saved (according to the database).
         """
-        path_to_secure_filename = \
-            'pagapp.admin_panel.save_picture_functions.secure_filename'
         path_to_app = 'pagapp.admin_panel.save_picture_functions.current_app'
         path_to_flash = 'pagapp.admin_panel.save_picture_functions.flash'
-        with patch(path_to_secure_filename) as mock_secure_filename, \
-                patch(path_to_app) as mock_app, \
+        with patch(path_to_app) as mock_app, \
                 patch(path_to_flash) as mock_flash:
             mock_app.config = {
                 'UPLOAD_FOLDER': 'test',
-                'UPLOAD_FOLDER_RELATIVE': 'test'}
-            mock_secure_filename.return_value = 'test'
+                'UPLOAD_FOLDER_RELATIVE': 'test',
+                'ALLOWED_EXTENSIONS': ['jpg']
+            }
             mock_pictures.query.filter_by.return_value.count.return_value = 1
 
             mock_filename_field = MagicMock()
-            mock_filename_field.data.filename = 'test'
+            mock_filename_field.data.filename = 'test.jpg'
 
             save_file(mock_filename_field, 1, 'test', 'test')
 
@@ -102,27 +100,25 @@ class SaveFileTestCase(unittest.TestCase):
         File not saved already (according to the database) and function
         tries to save it.
         """
-        path_to_secure_filename = \
-            'pagapp.admin_panel.save_picture_functions.secure_filename'
         path_to_app = 'pagapp.admin_panel.save_picture_functions.current_app'
         path_to_flash = 'pagapp.admin_panel.save_picture_functions.flash'
         path_to_current_user = \
             'pagapp.admin_panel.save_picture_functions.current_user'
         path_to_os = 'pagapp.admin_panel.save_picture_functions.os'
-        with patch(path_to_secure_filename) as mock_secure_filename, \
-                patch(path_to_app) as mock_app, \
+        with patch(path_to_app) as mock_app, \
                 patch(path_to_flash) as mock_flash, \
                 patch(path_to_current_user) as mock_current_user, \
                 patch(path_to_os) as mock_os:
             mock_app.config = {
                 'UPLOAD_FOLDER': 'test',
-                'UPLOAD_FOLDER_RELATIVE': 'test'}
-            mock_secure_filename.return_value = 'test'
+                'UPLOAD_FOLDER_RELATIVE': 'test',
+                'ALLOWED_EXTENSIONS': ['jpg']
+            }
             mock_pictures.query.filter_by.return_value.count.return_value = 0
             mock_current_user.id = 1
 
             mock_filename_field = MagicMock()
-            mock_filename_field.data.filename = 'test'
+            mock_filename_field.data.filename = 'test.jpg'
 
             mock_os.stat.return_value.st_size = 2049
 

@@ -1,11 +1,12 @@
 """Functions, which help save uploaded files."""
 
 import os
+import random
+import string
 
 from datetime import datetime
 from flask import current_app, flash
 from flask_login import current_user
-from werkzeug.utils import secure_filename
 from os.path import join
 from PIL import Image
 
@@ -37,7 +38,16 @@ def _create_thumbnail(path_to_image, path_to_thumbnail):
 
 
 def save_file(filename_field, album_id, name, description):
-    file_name = secure_filename(filename_field.data.filename)
+    extension = filename_field.data.filename.split(sep='.')[-1].lower()
+    if extension not in current_app.config['ALLOWED_EXTENSIONS']:
+        current_app.logger.error(
+            'User tried to upload file with unsupported extension: {}'.format(
+                extension))
+        flash('Unupported extension!', category='error')
+        return
+    file_name = ''.join(random.choice(
+        string.ascii_letters + string.digits
+    ) for _ in range(20)) + '.{}'.format(extension)
 
     file_path = join(current_app.config['UPLOAD_FOLDER'], file_name)
     file_path_web = join(
@@ -76,4 +86,4 @@ def save_file(filename_field, album_id, name, description):
     db.session.add(new_picture)
     db.session.commit()
 
-    flash("File " + file_name + " uploaded.", category='success')
+    flash("File successfully uploaded.", category='success')
