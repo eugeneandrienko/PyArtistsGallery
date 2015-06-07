@@ -1,4 +1,4 @@
-"""Handlers for API calls."""
+"""Handlers for albums' API calls."""
 
 import json
 from flask import request, current_app
@@ -9,30 +9,7 @@ from pagapp.application_api import application_api
 from pagapp.models import db
 from pagapp.models.albums import Albums
 from pagapp.models.pictures import Pictures
-
-
-def _generate_action_buttons(album):
-    edit_button = '<button {}>Edit</button>'.format(
-        'type="button" ' +
-        'class="btn-xs btn-default" ' +
-        'data-toggle="modal" ' +
-        'data-target="#editAlbumModal" ' +
-        'data-id="' + str(album.id) + '" ' +
-        'data-name="' + str(album.album_name) + '" ' +
-        'data-description="' + str(album.album_description) + '" ')
-    delete_button = '<button {}>Delete</button>'.format(
-        'class="btn-xs btn-danger" ' +
-        'onclick="deleteAlbum(' + str(album.id) + ')"')
-    return '<div class="container-fluid">' + \
-           '<div class="btn-toolbar" role="toolbar">' + \
-           '<div class="btn-group" role="group">' + \
-           edit_button + \
-           '</div>' + \
-           '<div class="btn-group" role="group">' + \
-           delete_button + \
-           '</div>' + \
-           '</div>' + \
-           '</div>'
+from pagapp.application_api.html_generators import generate_action_buttons_html
 
 
 def _generate_album_table_item(album):
@@ -40,7 +17,10 @@ def _generate_album_table_item(album):
         'name': album.album_name,
         'pics_count': Pictures.query.filter_by(album_id=album.id).count(),
         'description': album.album_description,
-        'actions': _generate_action_buttons(album)
+        'actions': generate_action_buttons_html(
+            album.id, album.album_name, album.album_description,
+            'editAlbumModal', 'deleteAlbum'
+        )
     }
 
 
@@ -94,7 +74,7 @@ def delete_album():
         current_app.logger.error(
             "Count of albums with given ID ({}) is more than 1.".format(
                 album_id))
-        return '', 404
+        return 'Cannot delete album, too much IDs!', 404
     else:
         current_app.logger.debug("Deleting album with ID {}.".format(album_id))
         db.session.delete(album.first())
@@ -117,7 +97,7 @@ def edit_album():
         current_app.logger.error(
             "Count of albums with given ID ({}) is more than 1.".format(
                 album_id))
-        return 'Cannot delete album, error with ID!', 404
+        return 'Cannot edit album, too much IDs!', 404
 
     album_name = remove_danger_symbols(request.form['album_name'])
     album_description = remove_danger_symbols(request.form['album_description'])

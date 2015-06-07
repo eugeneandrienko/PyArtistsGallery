@@ -39,15 +39,16 @@ def save_file(filename_field, album_id, name, description):
 
     file_path = join(current_app.config['UPLOAD_FOLDER'], file_name)
     file_path_web = join(
-        '../' + current_app.config['UPLOAD_FOLDER_RELATIVE'], file_name)
+        '../static/' + current_app.config['UPLOAD_FOLDER_RELATIVE'], file_name)
 
     thumbnail_path = join(current_app.config['UPLOAD_FOLDER'] + 'thumbnails/',
                           file_name)
     thumbnail_path_web = join(
-        '../' + current_app.config['UPLOAD_FOLDER_RELATIVE'] + 'thumbnails/',
-        file_name)
+        '../static/' +
+        current_app.config['UPLOAD_FOLDER_RELATIVE'] +
+        'thumbnails/', file_name)
 
-    current_app.logger.info("Saving file: " + file_name)
+    current_app.logger.info("Saving file: " + file_name + " to: " + file_path)
 
     if Pictures.query.filter_by(path_to_image=file_path_web).count() != 0:
         warn_message = 'File already saved in {}.'.format(file_path)

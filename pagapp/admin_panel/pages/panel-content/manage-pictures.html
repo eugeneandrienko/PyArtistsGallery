@@ -1,0 +1,89 @@
+<div class="modal fade" id="editPictureModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Edit picture</h4>
+      </div>
+      <div class="modal-body">
+          <form>
+              <input type="hidden" id="picture-id">
+              <div class="form-group">
+                  <label for="picture-name" class="control-label">
+                      Picture name:
+                  </label>
+                  <input type="text" class="form-control" id="picture-name">
+              </div>
+              <div class="form-group">
+                  <label for="picture-description" class="control-label">
+                      Picture description:
+                  </label>
+                  <textarea class="form-control" id="picture-description">
+                  </textarea>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="editPicture()">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="container">
+            <select class="form-control" id="selectAlbumMPics"></select>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="container">
+            <table id="pictures-table"
+                   data-toggle="table"
+                   data-method="post"
+                   data-sort-name="name"
+                   data-sort-order="asc"
+                   data-striped="true">
+                <thead>
+                <tr>
+                    <th class="col-xs-2"
+                        data-field="thumbnail">
+                        Image
+                    </th>
+                    <th class="col-xs-2"
+                        data-field="name"
+                        data-sortable="true">
+                        Name
+                    </th>
+                    <th class="col-xs-3"
+                        data-field="description"
+                        data-sortable="true">
+                        Description
+                    </th>
+                    <th class="col-xs-2"
+                        data-field="upload_date"
+                        data-sortable="true">
+                        Date of upload
+                    </th>
+                    <th class="col-xs-1"
+                        data-field="size"
+                        data-sortable="true">
+                        Size
+                    </th>
+                    <th class="col-xs-2"
+                        data-field="actions">
+                        Actions
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="../static/js/bootstrap-table.min.js"></script>
+<script src="../static/js/manage-pictures.js"></script>

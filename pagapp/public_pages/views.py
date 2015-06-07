@@ -79,6 +79,7 @@ def login():
     Function renders login page and raise messages for user if (s)he
     successfully logged in or not.
     """
+    # TODO: if user already logged in - redirect to the admin's panel.
     login_form = LoginForm(request.form)
 
     if request.method == 'POST' and login_form.validate():
