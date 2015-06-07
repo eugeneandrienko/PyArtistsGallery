@@ -99,8 +99,10 @@ def upload_files(form):
     current_app.logger.debug("form.validate(): " + str(form.validate()))
 
     if request.method == 'POST' and form.validate():
-        save_file(form.file_name, form.album.data, form.name.data,
-                  form.description.data)
+        save_file(form.file_name,
+                  form.album.data,
+                  remove_danger_symbols(form.name.data),
+                  remove_danger_symbols(form.description.data))
     else:
         current_app.logger.debug(
             "Form within {} function didn't validated.".format(
