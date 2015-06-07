@@ -108,10 +108,12 @@ class SaveFileTestCase(unittest.TestCase):
         path_to_flash = 'pagapp.admin_panel.save_picture_functions.flash'
         path_to_current_user = \
             'pagapp.admin_panel.save_picture_functions.current_user'
+        path_to_os = 'pagapp.admin_panel.save_picture_functions.os'
         with patch(path_to_secure_filename) as mock_secure_filename, \
                 patch(path_to_app) as mock_app, \
                 patch(path_to_flash) as mock_flash, \
-                patch(path_to_current_user) as mock_current_user:
+                patch(path_to_current_user) as mock_current_user, \
+                patch(path_to_os) as mock_os:
             mock_app.config = {
                 'UPLOAD_FOLDER': 'test',
                 'UPLOAD_FOLDER_RELATIVE': 'test'}
@@ -121,6 +123,8 @@ class SaveFileTestCase(unittest.TestCase):
 
             mock_filename_field = MagicMock()
             mock_filename_field.data.filename = 'test'
+
+            mock_os.stat.return_value.st_size = 2049
 
             save_file(mock_filename_field, 1, 'test', 'test')
 

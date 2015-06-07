@@ -29,6 +29,7 @@ class Pictures(db.Model):
     description = db.Column(db.String(), index=True, nullable=False)
     upload_date = db.Column(db.DateTime(), index=True, nullable=False)
     uploader_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    size = db.Column(db.Integer, index=True)
 
     def __init__(self, row_data):
         """Saves picture data in internal structures.
@@ -47,6 +48,7 @@ class Pictures(db.Model):
         should be inserted.
             description -- description of the picture. If description is
         omitted - empty string should be inserted.
+            size -- size of uploaded file
         """
         self.album_id = row_data['album_id']
         self.path_to_image = row_data['path_to_image']
@@ -61,14 +63,17 @@ class Pictures(db.Model):
             self.description = row_data['description']
         except KeyError:
             self.description = ''
+        self.size = row_data['size']
 
     def __repr__(self):
         """Prints instance contents in debug session."""
         return 'Album ID: {}, Uploader ID: {}, Date: {}, Path: {}|{}, ' \
-               'Name: {}, Description: {}'.format(str(self.album_id),
-                                                  str(self.uploader_id),
-                                                  str(self.upload_date),
-                                                  self.path_to_image,
-                                                  self.path_to_thumbnail,
-                                                  self.name,
-                                                  self.description)
+               'Name: {}, Description: {}, Size: {} KB'. \
+            format(str(self.album_id),
+                   str(self.uploader_id),
+                   str(self.upload_date),
+                   self.path_to_image,
+                   self.path_to_thumbnail,
+                   self.name,
+                   self.description,
+                   self.size)

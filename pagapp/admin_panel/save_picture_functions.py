@@ -1,5 +1,7 @@
 """Functions, which help save uploaded files."""
 
+import os
+
 from datetime import datetime
 from flask import current_app, flash
 from flask_login import current_user
@@ -67,7 +69,8 @@ def save_file(filename_field, album_id, name, description):
         'path_to_image': file_path_web,
         'path_to_thumbnail': thumbnail_path_web,
         'name': name,
-        'description': description
+        'description': description,
+        'size': round(os.stat(file_path).st_size / 1024, 3)
     }
     new_picture = Pictures(picture_row_data)
     db.session.add(new_picture)

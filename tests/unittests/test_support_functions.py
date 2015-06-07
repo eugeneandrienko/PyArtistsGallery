@@ -78,19 +78,13 @@ class IsFirstRunTestCase(unittest.TestCase):
         If all is ok and all database tables is
         existing - function should return False.
         """
-        path_to_albums = 'pagapp.support_functions.Albums'
         path_to_configuration = 'pagapp.support_functions.Configuration'
-        path_to_pictures = 'pagapp.support_functions.Pictures'
         path_to_users = 'pagapp.support_functions.Users'
-        with patch(path_to_albums) as mock_albums, \
-                patch(path_to_configuration) as mock_configuration, \
-                patch(path_to_pictures) as mock_pictures, \
+        with patch(path_to_configuration) as mock_configuration, \
                 patch(path_to_users) as mock_users:
             mock_configuration.query.all.return_value = ['test']
             mock_users.query.all.return_value = ['test']
             self.assertFalse(is_first_run())
-            del mock_albums
-            del mock_pictures
 
     def test_table_not_exists(self):
         """Test for is_next_run() with non-existent tables.
@@ -99,54 +93,36 @@ class IsFirstRunTestCase(unittest.TestCase):
         If one table of database schema does not
         exists - function should return True.
         """
-        path_to_albums = 'pagapp.support_functions.Albums'
         path_to_configuration = 'pagapp.support_functions.Configuration'
-        path_to_pictures = 'pagapp.support_functions.Pictures'
         path_to_users = 'pagapp.support_functions.Users'
-        with patch(path_to_albums) as mock_albums, \
-                patch(path_to_configuration) as mock_configuration, \
-                patch(path_to_pictures) as mock_pictures, \
+        with patch(path_to_configuration) as mock_configuration, \
                 patch(path_to_users) as mock_users:
-            mock_albums.query.first.side_effect = OperationalError(
+            mock_users.query.first.side_effect = OperationalError(
                 statement='test',
                 params='test',
                 orig='test')
             self.assertTrue(is_first_run())
             del mock_configuration
-            del mock_pictures
-            del mock_users
 
     def test_configuration_empty(self):
         """Test for is_first_run() with empty configuration."""
-        path_to_albums = 'pagapp.support_functions.Albums'
         path_to_configuration = 'pagapp.support_functions.Configuration'
-        path_to_pictures = 'pagapp.support_functions.Pictures'
         path_to_users = 'pagapp.support_functions.Users'
-        with patch(path_to_albums) as mock_albums, \
-                patch(path_to_configuration) as mock_configuration, \
-                patch(path_to_pictures) as mock_pictures, \
+        with patch(path_to_configuration) as mock_configuration, \
                 patch(path_to_users) as mock_users:
             mock_configuration.query.all.return_value = []
             self.assertTrue(is_first_run())
-            del mock_albums
-            del mock_pictures
             del mock_users
 
     def test_users_table_empty(self):
         """Test for is_first_run() with empty users table."""
-        path_to_albums = 'pagapp.support_functions.Albums'
         path_to_configuration = 'pagapp.support_functions.Configuration'
-        path_to_pictures = 'pagapp.support_functions.Pictures'
         path_to_users = 'pagapp.support_functions.Users'
-        with patch(path_to_albums) as mock_albums, \
-                patch(path_to_configuration) as mock_configuration, \
-                patch(path_to_pictures) as mock_pictures, \
+        with patch(path_to_configuration) as mock_configuration, \
                 patch(path_to_users) as mock_users:
             mock_users.query.all.return_value = []
             self.assertTrue(is_first_run())
-            del mock_albums
             del mock_configuration
-            del mock_pictures
 
 
 class RemoveDangerSymbolsTestCase(unittest.TestCase):

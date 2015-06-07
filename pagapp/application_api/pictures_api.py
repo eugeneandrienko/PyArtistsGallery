@@ -16,11 +16,11 @@ def _generate_picture_table_item(picture):
     return {
         'thumbnail': generate_thumbnail_html(picture.path_to_thumbnail),
         'name': picture.name,
-        'description': 'desc',
+        'description': picture.description,
         'upload_date': picture.upload_date.strftime('%d.%m.%Y %H:%M:%S'),
-        'size': '',  # TODO: add size or FS filepath to the database.
+        'size': picture.size,
         'actions': generate_action_buttons_html(
-            picture.id, picture.name, 'desc',  # TODO: add normal description here
+            picture.id, picture.name, picture.description,
             'editPictureModal', 'deletePicture'
         )
     }
@@ -98,7 +98,6 @@ def edit_picture():
         "Editing picture with ID {}. New name: {}. New description: {}.".format(
             picture_id, picture_name, picture_description))
     picture.first().name = picture_name
-    # TODO: add description field to the database->Pictures table:
-    # picture.first().description = picture_description
+    picture.first().description = picture_description
     db.session.commit()
     return '', 200
