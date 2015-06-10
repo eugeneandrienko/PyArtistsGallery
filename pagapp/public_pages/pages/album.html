@@ -39,7 +39,7 @@
     <div id="links"></div>
     {% for picture in pictures %}
         <a href="{{ picture.path_to_image }}" title="{{ picture.name }}" data-gallery>
-            <img src="{{ picture.path_to_thumb }}" alt="{{ picture.name }}">
+            <img src="{{ picture.path_to_thumbnail }}" alt="{{ picture.name }}">
         </a>
     {% endfor %}
     <br>
