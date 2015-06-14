@@ -38,8 +38,12 @@
 
     <div id="links"></div>
     {% for picture in pictures %}
-        <a href="{{ picture.path_to_image }}" title="{{ picture.name }}" data-gallery>
-            <img src="{{ picture.path_to_thumbnail }}" alt="{{ picture.name }}">
+        <a href="{{ picture.path_to_image }}"
+           title="{{ picture.name }}"
+           data-gallery>
+            <img src="{{ picture.path_to_thumbnail }}"
+                 alt="{{ picture.name }}"
+                 title="{{ picture.name }} - {{ picture.description }}">
         </a>
     {% endfor %}
     <br>
@@ -47,3 +51,5 @@
 
 {{ super() }}
 {% endblock mainpage %}
+
+<script src="../static/js/albums.js"></script>
