@@ -243,12 +243,18 @@ class LoginTestCase(unittest.TestCase):
         """
         mock_filter_by_result = MagicMock()
         mock_filter_by_result.first.return_value = 'test'
+        path_to_users = 'pagapp.public_pages.views.Users'
+        path_to_current_user = 'pagapp.public_pages.views.current_user'
+        path_to_login_form = 'pagapp.public_pages.views.LoginForm'
 
-        with patch('pagapp.public_pages.views.Users') as mock_users, \
-                patch('pagapp.public_pages.views.LoginForm') as mock_login_form:
+        with patch(path_to_users) as mock_users, \
+                patch(path_to_current_user) as mock_user, \
+                patch(path_to_login_form) as mock_login_form:
             mock_request.method = 'POST'
             mock_login_form.return_value.validate.return_value = True
             mock_login_form.return_value.login.data = 'test'
+
+            mock_user.is_authenticated.return_value = False
 
             mock_users.query.filter_by.return_value = mock_filter_by_result
 
@@ -278,15 +284,19 @@ class LoginTestCase(unittest.TestCase):
         path_to_users = 'pagapp.public_pages.views.Users'
         path_to_configuration = 'pagapp.public_pages.views.Configuration'
         path_to_login_form = 'pagapp.public_pages.views.LoginForm'
+        path_to_current_user = 'pagapp.public_pages.views.current_user'
         with patch(path_to_users) as mock_users, \
                 patch(path_to_configuration) as mock_configuration, \
-                patch(path_to_login_form) as mock_login_form:
+                patch(path_to_login_form) as mock_login_form, \
+                patch(path_to_current_user) as mock_user:
             mock_filter_by_result = MagicMock()
             mock_first_result = MagicMock()
             mock_filter_by_result.first.return_value = 'test'
             mock_first_result.gallery_title = 'test'
             mock_users.query.filter_by.return_value = mock_filter_by_result
             mock_configuration.query.first.return_value = mock_first_result
+
+            mock_user.is_authenticated.return_value = False
 
             mock_request.method = 'GET'
             mock_login_form.return_value.validate.return_value = True
@@ -314,15 +324,19 @@ class LoginTestCase(unittest.TestCase):
         path_to_users = 'pagapp.public_pages.views.Users'
         path_to_login_form = 'pagapp.public_pages.views.LoginForm'
         path_to_configuration = 'pagapp.public_pages.views.Configuration'
+        path_to_current_user = 'pagapp.public_pages.views.current_user'
         with patch(path_to_users) as mock_users, \
                 patch(path_to_login_form) as mock_login_form, \
-                patch(path_to_configuration) as mock_configuration:
+                patch(path_to_configuration) as mock_configuration, \
+                patch(path_to_current_user) as mock_user:
             mock_first_result = MagicMock()
             mock_filter_by_result = MagicMock()
             mock_filter_by_result.first.return_value = 'test'
             mock_first_result.gallery_title = 'test'
             mock_users.query.filter_by.return_value = mock_filter_by_result
             mock_configuration.query.first.return_value = mock_first_result
+
+            mock_user.is_authenticated.return_value = False
 
             mock_request.method = 'POST'
             mock_login_form.return_value.validate.return_value = False
@@ -351,15 +365,19 @@ class LoginTestCase(unittest.TestCase):
         path_to_users = 'pagapp.public_pages.views.Users'
         path_to_configuration = 'pagapp.public_pages.views.Configuration'
         path_to_login_form = 'pagapp.public_pages.views.LoginForm'
+        path_to_current_user = 'pagapp.public_pages.views.current_user'
         with patch(path_to_users) as mock_users, \
                 patch(path_to_configuration) as mock_configuration, \
-                patch(path_to_login_form) as mock_login_form:
+                patch(path_to_login_form) as mock_login_form, \
+                patch(path_to_current_user) as mock_user:
             mock_filter_by_result = MagicMock()
             mock_first_result = MagicMock()
             mock_filter_by_result.first.return_value = 'test'
             mock_first_result.gallery_title = 'test'
             mock_users.query.filter_by.return_value = mock_filter_by_result
             mock_configuration.query.first.return_value = mock_first_result
+
+            mock_user.is_authenticated.return_value = False
 
             mock_request.method = 'GET'
             mock_login_form.return_value.validate.return_value = False
@@ -389,15 +407,19 @@ class LoginTestCase(unittest.TestCase):
         path_to_users = 'pagapp.public_pages.views.Users'
         path_to_configuration = 'pagapp.public_pages.views.Configuration'
         path_to_login_form = 'pagapp.public_pages.views.LoginForm'
+        path_to_current_user = 'pagapp.public_pages.views.current_user'
         with patch(path_to_users) as mock_users, \
                 patch(path_to_login_form) as mock_login_form, \
-                patch(path_to_configuration) as mock_configuration:
+                patch(path_to_configuration) as mock_configuration, \
+                patch(path_to_current_user) as mock_user:
             mock_filter_by_result = MagicMock()
             mock_first_result = MagicMock()
             mock_filter_by_result.first.return_value = 'test'
             mock_first_result.gallery_title = 'test'
             mock_users.query.filter_by.return_value = mock_filter_by_result
             mock_configuration.query.first.return_value = mock_first_result
+
+            mock_user.is_authenticated.return_value = False
 
             mock_request.method = 'GET'
             mock_login_form.return_value.validate.return_value = False
@@ -408,6 +430,23 @@ class LoginTestCase(unittest.TestCase):
             self.assertTrue(mock_abort.called, msg="abort() should be called!")
             self.assertTrue(mock_flash_form_errors.called)
         del mock_app
+
+    @patch('pagapp.public_pages.views.redirect')
+    @patch('pagapp.public_pages.views.url_for')
+    @patch('pagapp.public_pages.views.current_user')
+    def test_login_user_already_authenticated(self, mock_user, mock_url_for,
+                                              mock_redirect):
+        """Test for login() function.
+
+        Test case:
+        If user already logged in - user should be redirected to
+        the admin's panel.
+        """
+        mock_user.is_authenticated.return_value = True
+        login()
+        self.assertTrue(mock_url_for.called)
+        self.assertTrue(mock_redirect.called)
+        mock_url_for.assert_called_with('admin_panel.panel')
 
 
 if __name__ == '__main__':
