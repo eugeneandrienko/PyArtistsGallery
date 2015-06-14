@@ -9,7 +9,7 @@ Anonymous user should be able to view next pages:
 from jinja2 import TemplateNotFound
 from flask import render_template, abort, current_app
 from flask import redirect, url_for, request, flash
-from flask_login import login_user
+from flask_login import login_user, current_user
 
 from pagapp.models.albums import Albums
 from pagapp.models.pictures import Pictures
@@ -82,7 +82,9 @@ def login():
     Function renders login page and raise messages for user if (s)he
     successfully logged in or not.
     """
-    # TODO: if user already logged in - redirect to the admin's panel.
+    if current_user.is_authenticated() is True:
+        return redirect(url_for('admin_panel.panel') + '#upload')
+
     login_form = LoginForm(request.form)
 
     if request.method == 'POST' and login_form.validate():
