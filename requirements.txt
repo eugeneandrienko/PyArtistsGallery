@@ -5,3 +5,4 @@ flask-login
 flask-migrate
 flask-script
 Pillow
+uwsgi

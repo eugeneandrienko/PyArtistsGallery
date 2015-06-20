@@ -51,12 +51,12 @@ def save_file(filename_field, album_id, name, description):
 
     file_path = join(current_app.config['UPLOAD_FOLDER'], file_name)
     file_path_web = join(
-        '../static/' + current_app.config['UPLOAD_FOLDER_RELATIVE'], file_name)
+        '/static/' + current_app.config['UPLOAD_FOLDER_RELATIVE'], file_name)
 
     thumbnail_path = join(current_app.config['UPLOAD_FOLDER'] + 'thumbnails/',
                           file_name)
     thumbnail_path_web = join(
-        '../static/' +
+        '/static/' +
         current_app.config['UPLOAD_FOLDER_RELATIVE'] +
         'thumbnails/', file_name)
 
