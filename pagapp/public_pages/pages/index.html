@@ -36,10 +36,17 @@
 {% include "flash.html" %}
 
 <div class="container">
-    <h1>Bootstrap Image Gallery Demo</h1>
-    <blockquote>
-        <p>Bootstrap Image Gallery is an extension to <a href="https://blueimp.github.io/Gallery/">blueimp Gallery</a>, a touch-enabled, responsive and customizable image &amp; video gallery.<br>It displays images and videos in the modal dialog of the <a href="http://getbootstrap.com/">Bootstrap</a> framework, features swipe, mouse and keyboard navigation, transition effects, fullscreen support and on-demand content loading and can be extended to display additional content types.</p>
-    </blockquote>
+    <h1>{{ title }}</h1>
+    List of albums:
+    <ul>
+        {% for album in albums %}
+            <li>
+                <a href="/album/{{ album.url_part }}">
+                    {{ album.album_name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
     <br>
     <!-- The container for the list of example images -->
     <div id="links"></div>
