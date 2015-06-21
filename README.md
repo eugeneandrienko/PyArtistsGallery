@@ -5,7 +5,13 @@
 This is standalone web-gallery for arts and photos. Based on Python 3, Flask and
 SQLite.
 
-*TODO: write about problem, which I solve*
+I have searched for small standalone web-gallery without big monsters like
+MySQL in dependencies (because I cannot run MySQL in my RaspberryPi without
+liters of liquid nitrogen). I found bunch of galleries, like sfpg
+(https://sye.dk/sfpg/), but they looks not so nice for me or generate
+thumbnails for new pictures then user tries to load main page of gallery.
+
+That's why I wrote my own gallery, which looks like I want and do what I want.
 
 ## Repository status:
 
