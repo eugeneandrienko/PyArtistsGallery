@@ -1,5 +1,7 @@
 # PyArtistsGallery
 
+[![PyPI](https://img.shields.io/pypi/v/PyArtistsGallery.svg)](https://pypi.python.org/pypi/PyArtistsGallery/) [![PyPI](https://img.shields.io/pypi/status/PyArtistsGallery.svg)]() [![PyPI](https://img.shields.io/pypi/pyversions/PyArtistsGallery.svg)]() [![PyPI](https://img.shields.io/pypi/l/PyArtistsGallery.svg)]()
+
 ## About PyArtistsGallery
 
 There is standalone web-gallery for arts and photos. Based on Python 3, Flask
