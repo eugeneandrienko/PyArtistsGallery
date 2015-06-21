@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='PyArtistsGallery',
-    version='0.0.1',
+    version='0.0.2',
     author='Eugene Andrienko',
     author_email='h0rr0rrdrag@gmail.com',
     url='https://github.com/h0rr0rrdrag0n/PyArtistsGallery',
@@ -22,7 +22,6 @@ setup(
         'Intended Audience :: End Users/Desktop',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',
-        'Programming Language:: JavaScript',
         'Programming Language :: Python :: 3.4',
         'Operating System :: POSIX :: Linux',
         'Topic :: Artistic Software',
