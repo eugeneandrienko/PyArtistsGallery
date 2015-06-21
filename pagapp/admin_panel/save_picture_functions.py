@@ -14,7 +14,7 @@ from pagapp.models import db
 from pagapp.models.pictures import Pictures
 
 
-def _create_thumbnail(path_to_image, path_to_thumbnail):
+def create_thumbnail(path_to_image, path_to_thumbnail):
     """Creates thumbnail from given image.
 
     Idea of this function was taken from:
@@ -33,6 +33,17 @@ def _create_thumbnail(path_to_image, path_to_thumbnail):
         image.thumbnail(
             (image.size[0] / factor, image.size[1] / factor), Image.NEAREST)
 
+    x1 = y1 = 0
+    x2, y2 = image.size
+    width_ratio = 1.0 * x2 / size['x']
+    height_ratio = 1.0 * y2 / size['y']
+    if height_ratio > width_ratio:
+        y1 = int(y2 / 2 - size['y'] * width_ratio / 2)
+        y2 = int(y2 / 2 + size['y'] * width_ratio / 2)
+    else:
+        x1 = int(x2 / 2 - size['x'] * height_ratio / 2)
+        x2 = int(x2 / 2 + size['x'] * height_ratio / 2)
+    image = image.crop((x1, y1, x2, y2))
     image.thumbnail((size['x'], size['y']), Image.ANTIALIAS)
     image.save(path_to_thumbnail)
 
@@ -69,7 +80,7 @@ def save_file(filename_field, album_id, name, description):
         return
 
     filename_field.data.save(file_path)
-    _create_thumbnail(file_path, thumbnail_path)
+    create_thumbnail(file_path, thumbnail_path)
     current_app.logger.info('Thumbnail saved in: {}.'.format(thumbnail_path))
 
     picture_row_data = {
