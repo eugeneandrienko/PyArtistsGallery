@@ -41,15 +41,17 @@ as described below.
 ## Installation
 
 1. Install pip and virtualenv.
-2. Clone this repository. After that create virtualenv (`virtualenv -p
-python3.x .`), activate it (`source bin/activate`) and install all Python
-requirements, described above (`pip install -r requirements.txt`).
+2. Create virtualenv (`virtualenv -p python3.x .`), and activate it (`source
+bin/activate`).
+3. Install PyArtistsGallery via `pip install PyArtistsGallery`. Application
+will be installed in the `virtualenv/lib/python3.x/site-packages`. I will
+refer to this path as `/path/to/site-packages/`
 
 ### uWSGI
 
 Execute uWSGI server with next command (virtualenv should be activated):
 ```
-uwsgi --ini pagapp.ini
+uwsgi --ini /path/to/site-packages/pagapp.ini
 ```
 
 ### Nginx
@@ -65,7 +67,7 @@ server {
     error_log  /path/to/error.log;
 
     location /static {
-        alias /path/to/application/static;
+        alias /path/to/site-packages/static;
     }
 
     location / {
