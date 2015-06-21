@@ -62,6 +62,7 @@ the /usr/share/nginx/www/artgallery):
 server {
     listen      8080;
     server_name "server.example";
+    client_max_body_size 50M;
 
     access_log /path/to/access.log;
     error_log  /path/to/error.log;
