@@ -42,8 +42,9 @@ class LoginForm(Form):
             current_app.logger.error(
                 "User {} does not exists in the database [{}].".format(
                     username, LoginForm.__name__))
-            raise ValidationError('User %s does not exists in the database' %
-                                  field.data)
+            raise ValidationError(
+                'User \"%s\" does not exists in the database.' %
+                field.data)
 
     @staticmethod
     def validate_password(form, field):
@@ -60,4 +61,4 @@ class LoginForm(Form):
                 current_app.logger.error(
                     "Given password and password from database are not " +
                     "match [{}]".format(LoginForm.__name__))
-                raise ValidationError('Given password is wrong')
+                raise ValidationError('Wrong password.')

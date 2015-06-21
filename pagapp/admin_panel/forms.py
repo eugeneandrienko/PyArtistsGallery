@@ -50,11 +50,11 @@ class AddAlbumForm(Form):
     """Form for adding new album."""
 
     album_name = StringField(
-        "Name of the new album",
+        "Album name",
         validators=[DataRequired()],
-        description="Name of the new album")
+        description="Album name")
     album_description = StringField(
-        "Album's description",
+        "Album description",
         validators=[DataRequired()],
         description="Short description")
     submit_button = SubmitField("Create")
