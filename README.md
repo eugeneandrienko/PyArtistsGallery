@@ -2,8 +2,8 @@
 
 ## About PyArtistsGallery
 
-This is standalone web-gallery for arts and photos. Based on Python 3, Flask and
-SQLite.
+There is standalone web-gallery for arts and photos. Based on Python 3, Flask
+and SQLite.
 
 I have searched for small standalone web-gallery without big monsters like
 MySQL in dependencies (because I cannot run MySQL in my RaspberryPi without
@@ -15,15 +15,8 @@ That's why I wrote my own gallery, which looks like I want and do what I want.
 
 ## Repository status:
 
-* `master` branch:
-  - [![Build Status](https://travis-ci.org/h0rr0rrdrag0n/PyArtistsGallery.svg?branch=master)](https://travis-ci.org/h0rr0rrdrag0n/PyArtistsGallery)
-  - [![Coverage Status](https://coveralls.io/repos/h0rr0rrdrag0n/PyArtistsGallery/badge.svg?branch=master)](https://coveralls.io/r/h0rr0rrdrag0n/PyArtistsGallery?branch=master)
-  - [![Code Health](https://landscape.io/github/h0rr0rrdrag0n/PyArtistsGallery/master/landscape.svg?style=flat)](https://landscape.io/github/h0rr0rrdrag0n/PyArtistsGallery/master)
-* `develop` branch:
-  - [![Build Status](https://travis-ci.org/h0rr0rrdrag0n/PyArtistsGallery.svg?branch=develop)](https://travis-ci.org/h0rr0rrdrag0n/PyArtistsGallery)
-  - [![Coverage Status](https://coveralls.io/repos/h0rr0rrdrag0n/PyArtistsGallery/badge.svg?branch=develop)](https://coveralls.io/r/h0rr0rrdrag0n/PyArtistsGallery?branch=develop)
-  - [![Code Health](https://landscape.io/github/h0rr0rrdrag0n/PyArtistsGallery/develop/landscape.svg?style=flat)](https://landscape.io/github/h0rr0rrdrag0n/PyArtistsGallery/develop)
-
+* `master` branch: [![Build Status](https://travis-ci.org/h0rr0rrdrag0n/PyArtistsGallery.svg?branch=master)](https://travis-ci.org/h0rr0rrdrag0n/PyArtistsGallery) [![Coverage Status](https://coveralls.io/repos/h0rr0rrdrag0n/PyArtistsGallery/badge.svg?branch=master)](https://coveralls.io/r/h0rr0rrdrag0n/PyArtistsGallery?branch=master) [![Code Health](https://landscape.io/github/h0rr0rrdrag0n/PyArtistsGallery/master/landscape.svg?style=flat)](https://landscape.io/github/h0rr0rrdrag0n/PyArtistsGallery/master)
+* `develop` branch: [![Build Status](https://travis-ci.org/h0rr0rrdrag0n/PyArtistsGallery.svg?branch=develop)](https://travis-ci.org/h0rr0rrdrag0n/PyArtistsGallery) [![Coverage Status](https://coveralls.io/repos/h0rr0rrdrag0n/PyArtistsGallery/badge.svg?branch=develop)](https://coveralls.io/r/h0rr0rrdrag0n/PyArtistsGallery?branch=develop) [![Code Health](https://landscape.io/github/h0rr0rrdrag0n/PyArtistsGallery/develop/landscape.svg?style=flat)](https://landscape.io/github/h0rr0rrdrag0n/PyArtistsGallery/develop)
 
 ## Requirements
 
