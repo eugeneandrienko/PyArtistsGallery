@@ -1,6 +1,7 @@
 #
 # use http://lint.travis-ci.org/ to validate this file!
 #
+
 language: python
 python:
   - "3.4"
@@ -19,6 +20,10 @@ install:
   - pip install coveralls
 script: coverage run --source pagapp -m unittest discover
 after_success: coveralls
-
-# TODO: do not forget add deployment to the PyPI: http://docs.travis-ci.com/user/deployment/pypi/
-# TODO: do not forget add uploading GitHum Releases: http://docs.travis-ci.com/user/deployment/releases/
+deploy:
+  provider: pypi
+  user: h0rr0rrdrag0n
+  password:
+    secure: BoeUW6Kp6U0mxOkim8qSDWMoeq+n5ipAjLLr16O5cnTsS+f4ucttizGd4ayHKCFa6c2Yk164WY4cOdxK3L0pd/MHWGgWErlYpuh/eQRC8zQXYztgkXQXSh+xf2OHlAife1M5R6WYwtpuuYn482rgMsYHWJUGAihXO2gvIb8B4Rc=
+  on:
+    branch: master
