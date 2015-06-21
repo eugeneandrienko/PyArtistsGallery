@@ -7,6 +7,7 @@ setup(
     author_email='h0rr0rrdrag@gmail.com',
     url='https://github.com/h0rr0rrdrag0n/PyArtistsGallery',
     description='Image gallery for artists',
+    license='MIT',
     packages=[
         'pagapp',
         'pagapp.admin_panel',
