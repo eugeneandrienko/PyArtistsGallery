@@ -16,7 +16,7 @@ def _generate_picture_table_item(picture):
     return {
         'thumbnail': generate_thumbnail_html(picture.path_to_thumbnail),
         'name': picture.name,
-        'description': picture.description,
+        'description': str(picture.description),
         'upload_date': picture.upload_date.strftime('%d.%m.%Y %H:%M:%S'),
         'size': picture.size,
         'actions': generate_action_buttons_html(

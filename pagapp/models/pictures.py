@@ -26,7 +26,7 @@ class Pictures(db.Model):
     path_to_image = db.Column(db.String(), index=True, nullable=False)
     path_to_thumbnail = db.Column(db.String(), index=True, nullable=False)
     name = db.Column(db.String(), index=True, nullable=False)
-    description = db.Column(db.String(), index=True, nullable=False)
+    description = db.Column(db.String(), index=True, nullable=True)
     upload_date = db.Column(db.DateTime(), index=True, nullable=False)
     uploader_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     size = db.Column(db.Integer, index=True)
@@ -44,10 +44,9 @@ class Pictures(db.Model):
             upload_date -- date, when picture was uploaded.
             path_to_image -- path to file with picture.
             path_to_thumbnail -- path to file with thumbnail for picture.
-            name -- name of the picture. If name is omitted - empty string
-        should be inserted.
-            description -- description of the picture. If description is
-        omitted - empty string should be inserted.
+            name -- name of the picture.
+            description -- description of the picture. Description can be
+            omitted.
             size -- size of uploaded file
         """
         self.album_id = row_data['album_id']
@@ -55,14 +54,11 @@ class Pictures(db.Model):
         self.path_to_thumbnail = row_data['path_to_thumbnail']
         self.upload_date = row_data['upload_date']
         self.uploader_id = row_data['uploader_id']
-        try:
-            self.name = row_data['name']
-        except KeyError:
-            self.name = ''
+        self.name = row_data['name']
         try:
             self.description = row_data['description']
         except KeyError:
-            self.description = ''
+            pass
         self.size = row_data['size']
 
     def __repr__(self):
