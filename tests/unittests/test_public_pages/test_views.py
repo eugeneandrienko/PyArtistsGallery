@@ -251,6 +251,7 @@ class LoginTestCase(unittest.TestCase):
                 patch(path_to_current_user) as mock_user, \
                 patch(path_to_login_form) as mock_login_form:
             mock_request.method = 'POST'
+            mock_request.args.get.return_value = None
             mock_login_form.return_value.validate.return_value = True
             mock_login_form.return_value.login.data = 'test'
 
@@ -447,6 +448,42 @@ class LoginTestCase(unittest.TestCase):
         self.assertTrue(mock_url_for.called)
         self.assertTrue(mock_redirect.called)
         mock_url_for.assert_called_with('admin_panel.panel')
+
+    @patch('pagapp.public_pages.views.login_user')
+    @patch('pagapp.public_pages.views.current_app')
+    @patch('pagapp.public_pages.views.request')
+    def test_login_open_request(self, mock_request, mock_app, mock_login_user):
+        """Test for login() function.
+
+        Test case:
+        If someone passed some extra arguments to the request - function
+        should call abort() immediately.
+        """
+        mock_filter_by_result = MagicMock()
+        mock_filter_by_result.first.return_value = 'test'
+        path_to_users = 'pagapp.public_pages.views.Users'
+        path_to_current_user = 'pagapp.public_pages.views.current_user'
+        path_to_login_form = 'pagapp.public_pages.views.LoginForm'
+        path_to_abort = 'pagapp.public_pages.views.abort'
+
+        with patch(path_to_current_user) as mock_user, \
+                patch(path_to_login_form) as mock_login_form, \
+                patch(path_to_users) as mock_users, \
+                patch(path_to_abort) as mock_abort:
+            mock_request.method = 'POST'
+            mock_login_form.return_value.validate.return_value = True
+            mock_login_form.return_value.login.data = 'test'
+            mock_user.is_authenticated.return_value = False
+
+            mock_users.query.filter_by.return_value = mock_filter_by_result
+
+            mock_request.args.get.return_value = 'test'
+
+            login()
+            self.assertTrue(mock_abort.called)
+            mock_abort.assert_called_with(400)
+        del mock_app
+        del mock_login_user
 
 
 if __name__ == '__main__':

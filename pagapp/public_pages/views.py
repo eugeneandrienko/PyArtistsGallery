@@ -90,6 +90,12 @@ def login():
     if request.method == 'POST' and login_form.validate():
         current_app.logger.debug(
             "Form within {} function validated".format(login.__name__))
+        # Protects from open redirect issue.
+        next_argument = request.args.get('next')
+        if next_argument is not None:
+            current_app.logger.warning("Someone passed extra arguments!")
+            abort(400)
+            return
         username = remove_danger_symbols(login_form.login.data)
         user = Users.query.filter_by(nickname=username).first()
         login_user(user)
