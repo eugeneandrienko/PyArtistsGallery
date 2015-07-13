@@ -37,6 +37,7 @@ def index():
         return render_template(
             'index.html',
             title=Configuration.query.first().gallery_title,
+            description=Configuration.query.first().gallery_description,
             albums=Albums.get_albums_list())
     except TemplateNotFound:
         current_app.logger.error("Couldn't find HTML template: index.html")

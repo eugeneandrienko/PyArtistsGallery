@@ -36,18 +36,11 @@
 {% include "flash.html" %}
 
 <div class="container">
-    <h1>{{ title }}</h1>
-    List of albums:
-    <ul>
-        {% for album in albums %}
-            <li>
-                <a href="/album/{{ album.url_part }}">
-                    {{ album.album_name }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-    <br>
+    <div class="jumbotron">
+        <h1>{{ title }}</h1>
+        <br>
+        <p>{{ description }}</p>
+    </div>
     <!-- The container for the list of example images -->
     <div id="links"></div>
     <br>

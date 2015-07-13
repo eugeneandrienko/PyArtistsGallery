@@ -39,6 +39,10 @@ def first_run():
     except (OperationalError, AttributeError):
         pass
     try:
+        form.gallery_description.data = Configuration.query.first().gallery_description
+    except (OperationalError, AttributeError):
+        pass
+    try:
         form.username.data = Users.query.first().nickname
     except (OperationalError, AttributeError):
         pass
@@ -48,14 +52,19 @@ def first_run():
             "Form within {} function validated!".format(
                 first_run.__name__))
         gallery_title = remove_danger_symbols(form.gallery_title.data)
+        gallery_description = remove_danger_symbols(
+            form.gallery_description.data)
         username = remove_danger_symbols(form.username.data)
         password = remove_danger_symbols(form.password.data)
         try:
             current_app.logger.debug("Trying to edit current configuration.")
             Configuration.query.first().gallery_title = gallery_title
+            Configuration.query.first().gallery_description = \
+                gallery_description
         except AttributeError:
-            current_app.logger.debug("Trying do add new configuration.")
-            new_configuration = Configuration(gallery_title)
+            current_app.logger.debug("Trying to add new configuration.")
+            new_configuration = Configuration(
+                gallery_title, gallery_description)
             db.session.add(new_configuration)
 
         try:
