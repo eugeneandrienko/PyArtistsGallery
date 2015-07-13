@@ -30,6 +30,22 @@ def upgrade():
         batch_op.alter_column('description',
                               existing_type=sa.VARCHAR(),
                               nullable=True)
+    op.create_index(
+        op.f('ix_pictures_path_to_image'),
+        'pictures', ['path_to_image'], unique=False)
+    op.create_index(
+        op.f('ix_pictures_path_to_thumbnail'),
+        'pictures', ['path_to_thumbnail'], unique=False)
+    op.create_index(op.f('ix_pictures_name'), 'pictures', ['name'],
+                    unique=False)
+    op.create_index(op.f('ix_pictures_description'), 'pictures', ['description'],
+                    unique=False)
+    op.create_index(
+        op.f('ix_pictures_upload_date'),
+        'pictures',
+        ['upload_date'],
+        unique=False)
+    op.create_index(op.f('ix_pictures_size'), 'pictures', ['size'], unique=False)
 
 
 def downgrade():
