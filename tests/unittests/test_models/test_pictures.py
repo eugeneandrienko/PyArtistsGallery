@@ -23,8 +23,7 @@ class PicturesTableTestCase(unittest.TestCase):
         All constructor's parameters is ok.
         Return value of __repr__() function should contain parameters,
         given to constructor.
-        If name and description parameters is omitted - empty string should be
-        used.
+        If description parameter is omitted - null should be returned.
         """
         test_arguments = {
             'album_id': 1,
@@ -57,6 +56,7 @@ class PicturesTableTestCase(unittest.TestCase):
             'upload_date': datetime.datetime(2009, 1, 2, 12, 14, 22, 34),
             'path_to_image': 'fake_path',
             'path_to_thumbnail': 'fake_path_thumbnail',
+            'name': 'test_name',
             'size': 22
         }
         test_picture = Pictures(test_arguments)
@@ -65,7 +65,7 @@ class PicturesTableTestCase(unittest.TestCase):
             'Album ID: {}, Uploader ID: {}, Date: {}, Path: {}|{}, ' \
             'Name: {}, Description: {}, Size: {} KB'.format(
                 1, 2, datetime.datetime(2009, 1, 2, 12, 14, 22, 34),
-                'fake_path', 'fake_path_thumbnail', '', '', 22)
+                'fake_path', 'fake_path_thumbnail', 'test_name', None, 22)
         self.assertEqual(repr_result, expected_repr_result)
 
     def test_wrong_parameters(self):

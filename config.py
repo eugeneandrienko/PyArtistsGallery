@@ -27,7 +27,7 @@ class Config:
     _BASEDIR = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
                               os.path.join(_BASEDIR, 'pagapp.db')
-    SQLALCHEMY_DATABASE_VERSION = '3c73f5517a2'
+    SQLALCHEMY_DATABASE_VERSION = '28cfe4f393f'
     STATIC_FOLDER = os.path.join(_BASEDIR, 'static/')
     TEMPLATES_FOLDER = os.path.join(_BASEDIR, 'templates/')
     THUMBNAIL_SIZE = {'x': 75, 'y': 75}  # in px

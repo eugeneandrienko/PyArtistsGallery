@@ -1,7 +1,7 @@
 """Forms, which using in "first run" page."""
 
 from flask_wtf import Form
-from wtforms import SubmitField, StringField, PasswordField
+from wtforms import SubmitField, StringField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, EqualTo
 
 
@@ -16,6 +16,10 @@ class FirstRunForm(Form):
         "Gallery title:",
         validators=[DataRequired()],
         description="Gallery title name")
+    gallery_description = TextAreaField(
+        "Gallery description:",
+        validators=[DataRequired()],
+        description="Gallery description")
     username = StringField(
         "Administrator name:",
         validators=[DataRequired()],

@@ -103,6 +103,9 @@ def upload_files(form):
                   form.album.data,
                   remove_danger_symbols(form.name.data),
                   remove_danger_symbols(form.description.data))
+        # Clear form's input fields after upload.
+        form.name.data = ''
+        form.description.data = ''
     else:
         current_app.logger.debug(
             "Form within {} function didn't validated.".format(

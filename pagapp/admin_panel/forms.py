@@ -78,7 +78,6 @@ class UploadForm(Form):
         description="Picture name")
     description = TextAreaField(
         "Picture description:",
-        validators=[DataRequired()],
         description="Picture description")
     submit_button = SubmitField("Upload")
 
