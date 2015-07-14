@@ -8,7 +8,6 @@ python:
 branches:
   only:
     - master
-    - flask
     - develop
 before_install:
   - sudo apt-get update -qq
