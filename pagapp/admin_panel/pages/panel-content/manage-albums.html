@@ -51,40 +51,36 @@
     </div>
 </div>
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="container">
-            <table id="albums-table"
-                   data-toggle="table"
-                   data-url="/api/get-albums-list"
-                   data-sort-name="name"
-                   data-sort-order="asc"
-                   data-striped="true">
-                <thead>
-                <tr>
-                    <th class="col-xs-3"
-                        data-field="name"
-                        data-sortable="true">
-                        Album name
-                    </th>
-                    <th class="col-xs-5"
-                        data-field="description"
-                        data-sortable="true">
-                        Album description
-                    </th>
-                    <th class="col-xs-2"
-                        data-field="pics_count"
-                        data-sortable="true">
-                        Count of pictures
-                    </th>
-                    <th class="col-xs-2" data-align="center" data-field="actions">
-                        Actions
-                    </th>
-                </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
+<div class="row">
+    <table id="albums-table"
+           data-toggle="table"
+           data-url="/api/get-albums-list"
+           data-sort-name="name"
+           data-sort-order="asc"
+           data-striped="true">
+        <thead>
+        <tr>
+            <th class="col-xs-3"
+                data-field="name"
+                data-sortable="true">
+                Album name
+            </th>
+            <th class="col-xs-5"
+                data-field="description"
+                data-sortable="true">
+                Album description
+            </th>
+            <th class="col-xs-2"
+                data-field="pics_count"
+                data-sortable="true">
+                Count of pictures
+            </th>
+            <th class="col-xs-2" data-align="center" data-field="actions">
+                Actions
+            </th>
+        </tr>
+        </thead>
+    </table>
 </div>
 
 <script src="/static/js/ajax-post.js"></script>

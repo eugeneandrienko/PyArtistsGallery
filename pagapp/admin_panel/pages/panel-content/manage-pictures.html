@@ -33,56 +33,52 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <div class="container">
+        <form class="form">
             <select class="form-control" id="selectAlbumMPics"></select>
-        </div>
+        </form>
     </div>
 </div>
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="container">
-            <table id="pictures-table"
-                   data-toggle="table"
-                   data-method="post"
-                   data-sort-name="name"
-                   data-sort-order="asc"
-                   data-striped="true">
-                <thead>
-                <tr>
-                    <th class="col-xs-1"
-                        data-field="thumbnail">
-                        Image
-                    </th>
-                    <th class="col-xs-2"
-                        data-field="name"
-                        data-sortable="true">
-                        Name
-                    </th>
-                    <th class="col-xs-4"
-                        data-field="description"
-                        data-sortable="true">
-                        Description
-                    </th>
-                    <th class="col-xs-2"
-                        data-field="upload_date"
-                        data-sortable="true">
-                        Date of upload
-                    </th>
-                    <th class="col-xs-1"
-                        data-field="size"
-                        data-sortable="true">
-                        Size (KB)
-                    </th>
-                    <th class="col-xs-2"
-                        data-field="actions">
-                        Actions
-                    </th>
-                </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
+<div class="row">
+    <table id="pictures-table"
+           data-toggle="table"
+           data-method="post"
+           data-sort-name="name"
+           data-sort-order="asc"
+           data-striped="true">
+        <thead>
+        <tr>
+            <th class="col-xs-1"
+                data-field="thumbnail">
+                Image
+            </th>
+            <th class="col-xs-2"
+                data-field="name"
+                data-sortable="true">
+                Name
+            </th>
+            <th class="col-xs-4"
+                data-field="description"
+                data-sortable="true">
+                Description
+            </th>
+            <th class="col-xs-2"
+                data-field="upload_date"
+                data-sortable="true">
+                Date of upload
+            </th>
+            <th class="col-xs-1"
+                data-field="size"
+                data-sortable="true">
+                Size (KB)
+            </th>
+            <th class="col-xs-2"
+                data-field="actions">
+                Actions
+            </th>
+        </tr>
+        </thead>
+    </table>
 </div>
 
 <script src="/static/js/bootstrap-table.min.js"></script>
