@@ -3,6 +3,7 @@
 #
 
 language: python
+sudo: false
 python:
   - "3.4"
 branches:
@@ -10,11 +11,6 @@ branches:
     - master
     - flask
     - develop
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y python3-dev
-  - sudo apt-get install -y libjpeg-dev
-  - sudo apt-get install -y zlib1g-dev
 install:
   - pip install -r requirements.txt
   - pip install coveralls
@@ -27,3 +23,9 @@ deploy:
     secure: BoeUW6Kp6U0mxOkim8qSDWMoeq+n5ipAjLLr16O5cnTsS+f4ucttizGd4ayHKCFa6c2Yk164WY4cOdxK3L0pd/MHWGgWErlYpuh/eQRC8zQXYztgkXQXSh+xf2OHlAife1M5R6WYwtpuuYn482rgMsYHWJUGAihXO2gvIb8B4Rc=
   on:
     branch: master
+addons:
+  apt:
+    packages:
+      - python3-dev
+      - libjpeg-dev
+      - zlib1g-dev
