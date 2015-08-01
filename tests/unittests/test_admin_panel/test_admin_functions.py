@@ -7,7 +7,7 @@ from unittest.mock import patch
 from unittest.mock import MagicMock
 
 from pagapp.admin_panel.admin_functions import change_password, add_new_album, \
-    upload_files
+    upload_files, common_settings
 from pagapp.support_functions import remove_danger_symbols
 
 
@@ -334,6 +334,144 @@ class UploadFilesTestCase(unittest.TestCase):
             upload_files(mock_form)
             self.assertTrue(mock_current_app.logger.debug.called)
             self.assertTrue(mock_flash_form_errors.called)
+
+
+class CommonSettingsTestCase(unittest.TestCase):
+    """Tests for common_settings() function."""
+
+    @patch('pagapp.admin_panel.admin_functions.db')
+    @patch('pagapp.admin_panel.admin_functions.current_app')
+    @patch('pagapp.admin_panel.admin_functions.Configuration')
+    @patch('pagapp.admin_panel.admin_functions.request')
+    def test_common_settings_normal(self, mock_request, mock_configuration,
+                                    mock_app, mock_db):
+        """Test for common_settings() function.
+
+        Test case:
+        Function work in normal mode without exceptions and other fails.
+        """
+        mock_gallery_title = 'mock_gallery_title'
+        mock_gallery_description = 'mock_gellery_description'
+
+        mock_form = MagicMock()
+        mock_form.gallery_title.data = mock_gallery_title
+        mock_form.gallery_description.data = mock_gallery_description
+        mock_form.submit_button.data = True
+        mock_form.validate.return_value = True
+
+        mock_request.method = 'POST'
+
+        common_settings(mock_form)
+
+        self.assertTrue(mock_configuration.query.first.return_value
+                        .gallery_title, mock_gallery_title)
+
+        del mock_app
+        del mock_db
+
+    @patch('pagapp.admin_panel.admin_functions.Configuration')
+    def test_common_settings_nosubmit_dbconf(self, mock_configuration):
+        """Test for common_settings() function.
+
+        Test case:
+        Form not submitted and all necessary data loaded from database.
+        """
+        mock_form = MagicMock()
+        mock_form.submit_button.data = False
+
+        mock_configuration.query.first.return_value.gallery_title = 'test'
+        mock_configuration.query.first.return_value.gallery_description = 'test'
+
+        common_settings(mock_form)
+
+    @patch('pagapp.admin_panel.admin_functions.Configuration')
+    @patch('pagapp.admin_panel.admin_functions.current_app')
+    def test_common_settings_nosubmit_nodbconf(self, mock_app,
+                                               mock_configuration):
+        """Test for common_settings() function.
+
+        Test case:
+        Form is not submitted and data could not loaded from database.
+        """
+        mock_form = MagicMock()
+        mock_form.submit_button.data = False
+
+        mock_configuration.query.first.side_effect = AttributeError()
+
+        common_settings(mock_form)
+
+        self.assertTrue(mock_app.logger.error.called)
+
+    @patch('pagapp.admin_panel.admin_functions.flash_form_errors')
+    @patch('pagapp.admin_panel.admin_functions.current_app')
+    @patch('pagapp.admin_panel.admin_functions.request')
+    def test_common_settings_wrong_request(self, mock_request, mock_app,
+                                           mock_flash_form_errors):
+        """Test for common_settings() function.
+
+        Test case:
+        Given request is not POST request.
+        """
+        mock_form = MagicMock()
+        mock_form.__name__ = 'form'
+        mock_form.submit_button.data = True
+        mock_form.validate.return_value = True
+
+        mock_request.method = 'GET'
+
+        common_settings(mock_form)
+
+        self.assertTrue(mock_app.logger.debug.called)
+        self.assertTrue(mock_flash_form_errors.called)
+
+    @patch('pagapp.admin_panel.admin_functions.flash_form_errors')
+    @patch('pagapp.admin_panel.admin_functions.current_app')
+    @patch('pagapp.admin_panel.admin_functions.request')
+    def test_common_settings_form_not_valid(self, mock_request, mock_app,
+                                            mock_flash_form_errors):
+        """Test for common_settings() function.
+
+        Test case:
+        Form could not pass validation process.
+        """
+        mock_form = MagicMock()
+        mock_form.__name__ = 'form'
+        mock_form.submit_button.data = True
+        mock_form.validate.return_value = False
+
+        mock_request.method = 'POST'
+
+        common_settings(mock_form)
+
+        self.assertTrue(mock_app.logger.debug.called)
+        self.assertTrue(mock_flash_form_errors.called)
+
+    @patch('pagapp.admin_panel.admin_functions.flash')
+    @patch('pagapp.admin_panel.admin_functions.db')
+    @patch('pagapp.admin_panel.admin_functions.current_app')
+    @patch('pagapp.admin_panel.admin_functions.Configuration')
+    @patch('pagapp.admin_panel.admin_functions.request')
+    def test_common_settings_new_settings_not_saved_to_db(
+            self, mock_request, mock_configuration, mock_app, mock_db,
+            mock_flash):
+        """Test for common_settings() function.
+
+        Test case:
+        Got error, when saving new settings to the database.
+        """
+        mock_form = MagicMock()
+        mock_form.submit_button.data = True
+        mock_form.validate.return_value = True
+
+        mock_request.method = 'POST'
+
+        mock_configuration.query.first.side_effect = AttributeError()
+
+        common_settings(mock_form)
+
+        self.assertTrue(mock_flash.called)
+        del mock_app
+        del mock_db
 
 
 if __name__ == '__main__':

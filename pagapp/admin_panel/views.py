@@ -7,9 +7,9 @@ from flask_login import logout_user, login_required
 
 from pagapp.admin_panel import admin_panel
 from pagapp.admin_panel.admin_functions import change_password, add_new_album, \
-    upload_files
+    upload_files, common_settings
 from pagapp.admin_panel.forms import ChangePasswordForm, AddAlbumForm, \
-    UploadForm
+    UploadForm, CommonSettingsForm
 from pagapp.models.configuration import Configuration
 
 
@@ -28,12 +28,14 @@ def panel():
     panel_forms = {
         'change_password_form': ChangePasswordForm(prefix='change'),
         'add_album_form': AddAlbumForm(prefix='add_album'),
-        'upload_files_form': UploadForm(prefix='upload')
+        'upload_files_form': UploadForm(prefix='upload'),
+        'common_settings_form': CommonSettingsForm(prefix='common')
     }
     form_controllers = {
         'change_password_form': change_password,
         'add_album_form': add_new_album,
-        'upload_files_form': upload_files
+        'upload_files_form': upload_files,
+        'common_settings_form': common_settings
     }
 
     for form in panel_forms:

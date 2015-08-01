@@ -13,6 +13,7 @@ from flask_login import current_user
 
 from pagapp.models import db
 from pagapp.models.albums import Albums
+from pagapp.models.configuration import Configuration
 from pagapp.support_functions import flash_form_errors, remove_danger_symbols
 from pagapp.admin_panel.save_picture_functions import save_file
 
@@ -110,4 +111,47 @@ def upload_files(form):
         current_app.logger.debug(
             "Form within {} function didn't validated.".format(
                 upload_files.__name__))
+        flash_form_errors(form)
+
+
+def common_settings(form):
+    """Handler for changing common settings.
+
+    In this function next settings changes:
+      * gallery title
+      * gallery description
+    """
+    if form.submit_button.data is False:
+        try:
+            form.gallery_title.data = Configuration.query.first().gallery_title
+            form.gallery_description.data = Configuration.query.first(
+                ).gallery_description
+        except AttributeError:
+            current_app.logger.error("Cannot load configuration from DB.")
+        return
+
+    current_app.logger.debug("Start changing common settings...")
+
+    if request.method == 'POST' and form.validate():
+        current_app.logger.debug(
+            "Form within {} function validated!".format(
+                common_settings.__name__))
+        gallery_title = remove_danger_symbols(form.gallery_title.data)
+        gallery_description = remove_danger_symbols(
+            form.gallery_description.data)
+        try:
+            current_app.logger.debug("Trying to save new common settings.")
+            Configuration.query.first().gallery_title = gallery_title
+            Configuration.query.first().gallery_description = \
+                gallery_description
+        except AttributeError:
+            current_app.logger.debug("Cannot save new common settings!")
+            flash("Cannot save settings!", category='error')
+        db.session.commit()
+    else:
+        current_app.logger.debug(
+            "Form {} (title: {}, description: {}) didn\'t validated!".format(
+                form.__name__,
+                form.gallery_title.data,
+                form.gallery_description.data))
         flash_form_errors(form)

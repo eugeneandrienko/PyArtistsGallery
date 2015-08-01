@@ -4,6 +4,7 @@ List of forms:
 ChangePasswordForm -- providing form for password change.
 AddAlbumForm -- providing form for adding new album.
 UploadForm -- providing form for uploading new pictures.
+CommonSettingsForm -- providing form for changing common settings.
 """
 
 import re
@@ -95,3 +96,19 @@ class UploadForm(Form):
             raise ValidationError('{} has not allowed exception!'.format(
                 field.data.filename))
         del form
+
+
+class CommonSettingsForm(Form):
+    """Form for changing common settings."""
+
+    gallery_title = StringField(
+        "Gallery title:",
+        validators=[DataRequired()],
+        description="Gallery title name")
+    gallery_description = TextAreaField(
+        "Gallery description:",
+        validators=[DataRequired()],
+        description="Gallery description")
+    submit_button = SubmitField(
+        "Save settings",
+        description="Save settings")
