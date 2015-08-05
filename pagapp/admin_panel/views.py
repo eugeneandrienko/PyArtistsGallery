@@ -1,5 +1,7 @@
 """Views specific to admin panel."""
 
+import version
+
 from jinja2 import TemplateNotFound
 from flask import abort, render_template, current_app
 from flask import redirect, url_for
@@ -50,7 +52,9 @@ def panel():
         return render_template(
             'panel.html',
             title=Configuration.query.first().gallery_title,
-            panel_forms=panel_forms)
+            panel_forms=panel_forms,
+            application_version=version.VERSION,
+            database_version=current_app.config['SQLALCHEMY_DATABASE_VERSION'])
     except TemplateNotFound:
         current_app.logger.error("Couldn't find HTML template: panel.html")
         abort(404)

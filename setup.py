@@ -1,8 +1,11 @@
+import version
+
 from distutils.core import setup
+
 
 setup(
     name='PyArtistsGallery',
-    version='0.0.3',
+    version=version.VERSION,
     author='Eugene Andrienko',
     author_email='h0rr0rrdrag@gmail.com',
     url='https://github.com/h0rr0rrdrag0n/PyArtistsGallery',
