@@ -1,3 +1,5 @@
+__Repository moved to https://codeberg.org/evgandr/PyArtistsGallery__
+
 # PyArtistsGallery
 
 ## About PyArtistsGallery
