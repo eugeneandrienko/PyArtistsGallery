@@ -1,3 +1,5 @@
+__Repository moved to https://codeberg.org/evgandr/PyArtistsGallery__
+
 # PyArtistsGallery
 
 [![PyPI](https://img.shields.io/pypi/v/PyArtistsGallery.svg)](https://pypi.python.org/pypi/PyArtistsGallery/) [![PyPI](https://img.shields.io/pypi/status/PyArtistsGallery.svg)]() [![PyPI](https://img.shields.io/pypi/pyversions/PyArtistsGallery.svg)]() [![PyPI](https://img.shields.io/pypi/l/PyArtistsGallery.svg)]()
